@@ -28,7 +28,7 @@ JSP와 JAVA를 활용한 여행 위험도 관리/시각화 및 AI 국가 추천 
 
 ## ⚒️ Stack
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![JavaFX](https://img.shields.io/badge/-000000?style=for-the-badge&logo=java&logoColor=white)
+![JavaFX](https://img.shields.io/badge/JSP-000000?style=for-the-badge&logo=java&logoColor=white)
 ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 ![ERDCloud](https://img.shields.io/badge/ERDCloud-0066CC?style=for-the-badge&logo=data&logoColor=white)
 
