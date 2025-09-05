@@ -38,8 +38,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
 
-                <li class="nav-item"><a class="nav-link" href="#features">서비스</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about">소개</a></li>
+                <li><a class="dropdown-item" href="/post/list">게시판</a></li>
 
                 <!-- 로그인 버튼 (비로그인 상태) -->
                 <sec:authorize access="!isAuthenticated()">
@@ -58,8 +57,7 @@
                                 ${sessionScope.userName != null ? sessionScope.userName : sessionScope.userNickname}님
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/user/profile">프로필 관리</a></li>
-                            <li><a class="dropdown-item" href="/user/travel-history">여행 기록</a></li>
+                            <li><a class="dropdown-item" href="/post/list">게시판</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
                         </ul>
