@@ -2,7 +2,6 @@ package com.oneplane.user.controller;
 
 import com.oneplane.config.SecurityUtil;
 import com.oneplane.user.dto.ProfileCompleteRequestDto;
-import com.oneplane.user.dto.SignupRequestDto;
 import com.oneplane.user.service.CustomOAuth2UserService;
 import com.oneplane.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

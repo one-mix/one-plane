@@ -3,7 +3,6 @@ package com.oneplane.user.service;
 import com.oneplane.config.CustomUserDetails;
 import com.oneplane.user.dao.UserDao;
 import com.oneplane.user.domain.User;
-import com.oneplane.user.dto.SignupRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -163,52 +162,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             log.error("신규 사용자 생성 실패: {}", kakaoInfo.getEmail(), e);
             throw new OAuth2AuthenticationException("사용자 생성 중 오류가 발생했습니다: " + e.getMessage());
         }
-    }
-
-    /**
-     * 일반 회원가입용 사용자 생성
-     */
-    @Transactional
-    public User createNewUser(SignupRequestDto signupRequest) {
-        log.info("일반 회원가입 처리 시작 - 이름: {}", signupRequest.getName());
-
-        if (signupRequest.getEmail() != null) {
-            User existingUser = userDao.findByEmail(signupRequest.getEmail());
-            if (existingUser != null) {
-                throw new IllegalArgumentException("이미 가입된 이메일입니다.");
-            }
-        }
-
-        if (signupRequest.getNickname() != null &&
-                userDao.existsByNickname(signupRequest.getNickname())) {
-            throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
-        }
-
-        User user = User.builder()
-                .email(signupRequest.getEmail())
-                .name(signupRequest.getName())
-                .nickname(signupRequest.getNickname())
-                .age(signupRequest.getAge())
-                .role(ROLE_USER)
-                .grade(ECONOMY)
-                .gender(signupRequest.getGender())
-                .disease(signupRequest.getDisease())
-                .disability(signupRequest.getDisability())
-                .medication(signupRequest.getMedication())
-                .profileImg(signupRequest.getProfileImg())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        // 데이터베이스에 저장
-        int result = userDao.insertUser(user);
-        if (result <= 0) {
-            throw new RuntimeException("회원가입 처리 중 오류가 발생했습니다.");
-        }
-
-        User createdUser = userDao.findById(user.getUser_id());
-        log.info("일반 회원가입 완료 - 사용자 ID: {}, 이름: {}", createdUser.getUser_id(), createdUser.getName());
-        return createdUser;
     }
 
     private static class KakaoUserInfo {
