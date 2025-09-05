@@ -2,7 +2,25 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <typeAliases>
+    <!-- MyBatis 설정 -->
+    <settings>
+        <!-- 카멜 케이스 자동 변환 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 자동 생성 키 사용 -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!-- 기본 페치 사이즈 -->
+        <setting name="defaultFetchSize" value="100"/>
+        <!-- 기본 쿼리 타임아웃 (초) -->
+        <setting name="defaultStatementTimeout" value="30"/>
+        <!-- 로그 구현체 설정 -->
+        <setting name="logImpl" value="SLF4J"/>
+        <!-- NULL 값에 대한 JDBC 타입 설정 (Oracle 호환성) -->
+        <setting name="jdbcTypeForNull" value="VARCHAR"/>
+        <!-- 콜러블 스테이먼트 타임아웃 -->
+        <setting name="defaultExecutorType" value="SIMPLE"/>
+    </settings>
 
+    <typeAliases>
+        <typeAlias alias="user" type="com.oneplane.user.domain.User"/>
     </typeAliases>
 </configuration>
