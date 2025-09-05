@@ -25,10 +25,10 @@ public class MainController {
     }
 
     // 게시판 페이지
-    @GetMapping("/board")
-    public String board(Model model) {
-        model.addAttribute("contentPage", "board/content.jsp");
-        model.addAttribute("activeMenu", "board");
+    @GetMapping("/post")
+    public String post(Model model) {
+        model.addAttribute("contentPage", "post/content.jsp");
+        model.addAttribute("activeMenu", "post");
         return "layout/layout";
     }
 
