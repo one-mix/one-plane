@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.user.mapper.UserMapper">
+
+    <resultMap id="userResultMap" type="user">
+        <id property="user_id" column="user_id"/>
+        <result property="email" column="email"/>
+        <result property="name" column="name"/>
+        <result property="nickname" column="nickname"/>
+        <result property="age" column="age"/>
+        <result property="role" column="role"/>
+        <result property="grade" column="grade"/>
+        <result property="gender" column="gender"/>
+        <result property="disease" column="disease"/>
+        <result property="disability" column="disability"/>
+        <result property="medication" column="medication"/>
+        <result property="profileImg" column="profile_img"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- ============= 이메일로 회원 검색 ============ -->
+    <select id="findByEmail" parameterType="String" resultMap="userResultMap">
+        SELECT user_id, email, name, nickname, age, role, grade, gender,
+               disease, disability, medication, profile_img,
+               deleted_at, created_at, updated_at
+        FROM users
+        WHERE email = #{email}
+          AND deleted_at IS NULL
+    </select>
+
+    <!-- ============= ID로 사용자 조회 ============= -->
+    <select id="findById" parameterType="Integer" resultMap="userResultMap">
+        SELECT user_id, email, name, nickname, age, role, grade, gender,
+               disease, disability, medication, profile_img,
+               deleted_at, created_at, updated_at
+        FROM users
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </select>
+
+    <!-- ============= 회원가입 =============== -->
+    <insert id="insertUser" parameterType="user">
+        <selectKey keyProperty="user_id" resultType="int" order="BEFORE">
+            SELECT users_seq.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO users (
+        user_id, email, name, nickname, age, role, grade, gender,
+        disease, disability, medication, profile_img,
+        created_at, updated_at
+        ) VALUES (
+        #{user_id},#{email}, #{name}, #{nickname}, #{age},
+        #{role}, #{grade}, #{gender}, #{disease}, #{disability},
+        #{medication}, #{profileImg},
+        SYSDATE, SYSDATE
+        )
+    </insert>
+
+    <!-- ============= 사용자 정보 업데이트 ============= -->
+    <update id="updateUser" parameterType="user">
+        UPDATE users SET
+                         name = #{name},
+                         nickname = #{nickname},
+                         age = #{age},
+                         role = #{role},
+                         grade = #{grade},
+                         gender = #{gender},
+                         disease = #{disease},
+                         disability = #{disability},
+                         medication = #{medication},
+                         profile_img = #{profileImg},
+                         updated_at = SYSDATE
+        WHERE user_id = #{user_id}
+          AND deleted_at IS NULL
+    </update>
+
+    <!-- ============= 사용자 논리 삭제 ============= -->
+    <update id="deleteUser" parameterType="Integer">
+        UPDATE users SET
+                         deleted_at = SYSDATE,
+                         updated_at = SYSDATE
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </update>
+
+    <!-- ============= 이메일 중복 확인 ============= -->
+    <select id="countByEmail" parameterType="String" resultType="Integer">
+        SELECT COUNT(*)
+        FROM users
+        WHERE email = #{email}
+          AND deleted_at IS NULL
+    </select>
+
+    <!-- ============= 닉네임 중복 확인 ============= -->
+    <select id="countByNickname" parameterType="String" resultType="Integer">
+        SELECT COUNT(*)
+        FROM users
+        WHERE nickname = #{nickname}
+          AND deleted_at IS NULL
+    </select>
+
+</mapper>
