@@ -27,7 +27,7 @@
 
     <%-- 유저 --%>
     <div class="user">
-        <a href="/login">로그인</a>
+        <a href="/oauth2/authorization/kakao">로그인</a>
         <a href="/mypage">
             <img src="/images/profile.png" alt="Profile" class="profile-img" />
         </a>
