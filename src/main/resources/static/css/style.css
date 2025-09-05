@@ -2,6 +2,7 @@
 body {
     font-family: var(--font-main);
     background-color: var(--semantic-background);
+}
 
 /* 공통 헤더 */
 .header {
