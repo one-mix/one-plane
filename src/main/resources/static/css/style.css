@@ -1,25 +1,30 @@
 /* 전체 기본 세팅 */
 body {
-    margin: 0;
-    padding: 0;
     font-family: var(--font-main);
-    background-color: var(--background-color);
-}
+    background-color: var(--semantic-background);
 
 /* 공통 헤더 */
 .header {
+   padding: 24px 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    padding: 20px 20px;
 }
 
-/* 헤더 로고 */
+/* 헤더 로고 글씨 */
 .header .logo {
+    display: flex;
+    align-items: center;
     font-size: 20px;
     font-weight: var(--font-semibold);
     color: var(--main-700);
+}
+
+/* 헤더 로고 이미지 */
+.logo-img {
+    width: 65px;
+    height: 55px;
 }
 
 /* 네비게이션 탭 */
@@ -28,17 +33,30 @@ body {
     font-weight: var(--font-semibold);
     color: var(--gray-400);
     text-decoration: none;
-    margin: 0 10px;
+    margin: 0 20px;
 }
 
 /* 현재 활성화된 헤더 탭 */
 .header .nav a.active {
-    color: var(--main-700) !important;
+    color: var(--main-700);
     font-weight: var(--font-bold);
 }
 
+.header .logo {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: var(--font-semibold);
+    color: var(--main-700);
+}
 
 /* 헤더 로그인 */
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .header .user a {
     font-size: 16px;
     font-weight: var(--font-medium);
@@ -47,10 +65,10 @@ body {
     margin: 0 10px;
 }
 
-/* 전체 레이아웃 컨테이너 */
-.container {
-    display: flex;
-    min-height: calc(100vh -75px);
+/* 헤더 프로필 이미지 */
+.profile-img {
+    width: 48px;
+    height: 48px;
 }
 
 /* 사이드바 */
@@ -75,15 +93,20 @@ body {
 
 /* 메인 컨텐츠 */
 .content {
-    flex: 1;
-    padding: 20px;
-    background-color: white;
+    padding: 24px 80px;
+    min-height: calc(100vh - 95px);
+    background-color: var(--semantic-background);
 }
 
 /* 푸터 */
 .footer {
     background-color: white;
     text-align: center;
-    padding: 10px;
-    border-top: 1px solid #ccc;
+    padding: 24px 80px;
+
+    /* 항상 아래에 위치하도록 */
+    position: relative;
+    bottom: 0;
+    font-size: 14px;
+    color: var(--gray-500);
 }
