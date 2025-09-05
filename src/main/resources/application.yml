@@ -1,5 +1,21 @@
 server:
   port: 8080
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
+        path: /
+        http-only: true
+        secure: false
+        same-site: Lax
+  error:
+    include-message: always
+    include-binding-errors: always
+  web:
+    resources:
+      static-locations: classpath:/static/
+      cache:
+        period: 3600  # 1시간 캐싱
 
 spring:
   application:
@@ -8,23 +24,18 @@ spring:
   profiles:
     include: secret
 
-  # JSP ?? ??
+# JSP
   mvc:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
 
-# MyBatis ?? ??
+# MyBatis 설정
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.oneplane.dto
-  configuration:
-    map-underscore-to-camel-case: true
-    use-generated-keys: true
-    default-fetch-size: 100
-    default-statement-timeout: 30
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.oneplane.*.domain
 
-# ?? ?? ??
 logging:
   level:
     com.oneplane: DEBUG
