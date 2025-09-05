@@ -1,0 +1,97 @@
+body {
+    font-family: Pretendard, sans-serif;
+    background: linear-gradient(to right, #eaf4ff 0%, #fffbe6 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result {
+    text-align: center;
+    padding: 2rem;
+}
+
+.result h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+    transform-origin: center center;
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+    width: 220px;
+    height: 264px;
+    z-index: 0;
+}
+
+.card:hover {
+    transform: scale(1.2); /* 확대 */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 그림자 강조 */
+    border: 2px solid #8CB6E9;
+    z-index: 10;
+}
+
+.card-image {
+    background: #ddd;
+    height: 120px;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.country {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.place {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+
+.extra {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.actions {
+    margin-top: 1.5rem;
+}
+
+button {
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin: 0 0.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background: #fefefe;
+    color: #404040;
+}
+
+button.cancel {
+    background: #fefefe;
+    color: #404040;
+}
+
+button.save {
+    background: #151515;
+    color: #fefefe;
+
+}

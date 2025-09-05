@@ -1,0 +1,127 @@
+body {
+    font-family: Pretendard, sans-serif;
+    background: linear-gradient(to right, #eaf4ff 0%, #fffbe6 100%);
+    min-height: 100vh;
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0rem 16rem;
+}
+
+.intro h1 {
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 86.4px */
+}
+
+.highlight {
+    color: #30609d;
+}
+
+.intro p {
+    color: #555;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 46.8px */
+}
+
+.consent {
+    display: block;
+    font-size: 16px;
+    color: #888;
+}
+
+.notice {
+    line-height: 1.4;
+}
+
+.notice p {
+    font-size: 12px;
+    color: #c4c4c4;
+    line-height: 1.4;
+}
+
+.buttons {
+    margin-top: 0.3rem;
+}
+
+button {
+    padding: 0.8rem 1.4rem;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    cursor: pointer;
+    background: #fefefe;
+    color: #404040;
+    margin-right: 1rem;
+}
+
+button.secondary {
+    background: #151515;
+    color: #fefefe;
+}
+
+button:disabled {
+    background: #e1e1e1;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.hero-img img {
+    width: 250px;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem 15rem;
+    margin-top: 1rem;
+}
+
+.card {
+    flex: 1;
+    margin: 0 0.5rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.1); /* 살짝 확대 */
+    box-shadow: 0 6px 16px rgba(48, 96, 157, 0.25);
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    margin-bottom: 1rem;
+}
+
+.card-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    font-size: 0.8rem;
+    color: #666;
+}
