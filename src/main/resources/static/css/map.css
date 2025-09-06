@@ -69,6 +69,7 @@
     font-size: 18px;
     color: var(--gray-300);
     font-weight: var(--font-medium);
+    text-decoration: none;
 }
 
 .post-list {
@@ -175,6 +176,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     /* flex: <grow> <shrink> <basis> */
     flex: 0 0 calc((100% - 48px) / 3);
+    text-decoration: none;
 }
 
 /* 카드에 마우스 가져다댔을 때 */

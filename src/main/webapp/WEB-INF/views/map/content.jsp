@@ -45,7 +45,7 @@
            <%-- 최신글 + 더보기--%>
            <div class="title-and-more">
                <span class="title">최신글</span>
-               <span class="more"> 더보기 -></span>
+               <a href="http://localhost:8080/post/list" class="more">더보기 →</a>
            </div>
 
             <%-- 최신글 목록 (5개만 표시) --%>
@@ -94,7 +94,7 @@
            <%-- 인기글 + 더보기--%>
            <div class="title-and-more">
                <span class="title">인기글</span>
-               <span class="more"> 더보기 -></span>
+               <a href="http://localhost:8080/post/list" class="more">더보기 →</a>
            </div>
 
            <%-- 인기글 목록 (5개만 표시) --%>
@@ -151,82 +151,82 @@
                 <div class="carousel-track">
 
                 <%-- 슬라이드 1p (3개의 카드 표시) --%>
-                <div class="review-card">
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
-                <div class="review-card">
+                </a>
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
-                <div class="review-card">
+                </a>
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
+                </a>
 
                 <%-- 슬라이드 2p (3개의 카드 표시) --%>
-                <div class="review-card">
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
-                <div class="review-card">
+                </a>
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
-                <div class="review-card">
+                </a>
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
+                </a>
 
                 <%-- 슬라이드 3p (3개의 카드 표시) --%>
-                <div class="review-card">
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
-                <div class="review-card">
+                </a>
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
-                <div class="review-card">
+                </a>
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
                         <span class="title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
-                </div>
+                </a>
             </div>
 
         <%-- 인디케이터 --%>
