@@ -6,7 +6,7 @@ body {
 
 /* 공통 헤더 */
 .header {
-   padding: 24px 80px;
+    padding: 20px 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,21 +34,14 @@ body {
     font-weight: var(--font-semibold);
     color: var(--gray-400);
     text-decoration: none;
-    margin: 0 20px;
+    padding: 34px;
 }
 
 /* 현재 활성화된 헤더 탭 */
 .header .nav a.active {
     color: var(--main-700);
     font-weight: var(--font-bold);
-}
-
-.header .logo {
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-    font-weight: var(--font-semibold);
-    color: var(--main-700);
+    border-bottom: 2px solid var(--main-700);
 }
 
 /* 헤더 로그인 */
