@@ -3,12 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<!-- 게시판 전용 CSS 추가 -->
-<link href="/css/post/postList.css" rel="stylesheet">
+<link href="/css/postList.css" rel="stylesheet">
 
-<!-- Main Content -->
+
 <main class="main-container">
-    <!-- Top Tab Section -->
     <div class="top-tabs-wrapper">
         <div class="top-tabs">
             <a href="/post/list" class="top-tab ${empty selectedCategory ? 'active' : ''}">전체</a>
@@ -32,7 +30,6 @@
         </div>
     </div>
 
-    <!-- Results Section -->
     <div class="results-section">
         <c:choose>
             <c:when test="${not empty posts}">
@@ -110,10 +107,8 @@
         </c:choose>
     </div>
 
-    <!-- Pagination -->
     <c:if test="${totalPages > 1}">
         <div class="pagination-container">
-            <!-- 첫 페이지로 -->
             <c:choose>
                 <c:when test="${currentPage > 1}">
                     <a href="?page=1&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">«</a>
@@ -123,7 +118,6 @@
                 </c:otherwise>
             </c:choose>
 
-            <!-- 이전 페이지 -->
             <c:choose>
                 <c:when test="${hasPrevious}">
                     <a href="?page=${currentPage - 1}&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">‹</a>
@@ -133,7 +127,6 @@
                 </c:otherwise>
             </c:choose>
 
-            <!-- 페이지 번호들 -->
             <c:set var="startPage" value="${((currentPage - 1) / 5) * 5 + 1}" />
             <c:set var="endPage" value="${startPage + 4 > totalPages ? totalPages : startPage + 4}" />
 
@@ -148,7 +141,6 @@
                 </c:choose>
             </c:forEach>
 
-            <!-- 다음 페이지 -->
             <c:choose>
                 <c:when test="${hasNext}">
                     <a href="?page=${currentPage + 1}&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">›</a>
@@ -158,7 +150,6 @@
                 </c:otherwise>
             </c:choose>
 
-            <!-- 마지막 페이지로 -->
             <c:choose>
                 <c:when test="${currentPage < totalPages}">
                     <a href="?page=${totalPages}&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">»</a>
@@ -172,7 +163,6 @@
 </main>
 
 <script>
-    // 게시글 카드 호버 효과
     document.querySelectorAll('.result-card').forEach(card => {
         card.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-2px)';
@@ -183,11 +173,9 @@
         });
     });
 
-    // 검색 폼 유효성 검사
     document.querySelector('form').addEventListener('submit', function(e) {
         const searchInput = document.querySelector('input[name="search"]');
         if (searchInput && searchInput.value.trim() === '') {
-            // 검색어가 비어있어도 전체 검색으로 처리
             return true;
         }
     });
