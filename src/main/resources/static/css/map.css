@@ -1,0 +1,209 @@
+/* ===== 지도 ====== */
+.map {
+    width: 100%;
+    height: 600px;
+    background-color: var(--main-100);
+}
+
+/* ===== 카테고리 ===== */
+.category-list {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    padding: 40px 0px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.category {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: var(--gray-100);
+}
+
+.category.active {
+    background-color: var(--main-500);
+}
+
+/* ===== 최신글/인기글 (남는 공간 차지) ===== */
+.new-and-popular-posts {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 80px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.new-and-popular-posts .section {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 45%;
+}
+
+.title-and-more {
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 20px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+}
+
+.more {
+    font-size: 18px;
+    color: var(--gray-300);
+    font-weight: var(--font-medium);
+}
+
+.post-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.post-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--gray-100);
+    padding-bottom: 10px;
+}
+
+/* 나라 + 제목 */
+.country-and-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* 나라 */
+.country-and-title span:first-child {
+    font-size: 16px;
+    padding: 4px 16px;
+    border-radius: 5px;
+    align-items: center;
+    color: var(--main-700);
+    background-color: var(--main-50);
+    font-weight: var(--font-medium);
+}
+
+/* 제목 */
+.country-and-title span:nth-child(2) {
+    font-size: 16px;
+    color: var(--gray-700);
+    font-weight: var(--font-semibold);
+}
+
+/* 날짜 */
+.post-item > span {
+    font-size: 14px;
+    color: var(--gray-400);
+    font-weight: var(--font-medium);
+}
+
+/* ===== 인기 후기 ===== */
+.popular-reviews {
+    display: flex;
+    width: 100%;
+    padding: 40px 80px;
+    flex-direction: column;
+    background-color: var(--main-0);
+}
+
+/* 캐러셀 전체 */
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 카드 컨테이너 */
+.carousel-track-container {
+    overflow: hidden;
+    width: 60%;
+    box-shadow: none;
+    outline: none;
+}
+
+/* 트랙 */
+.carousel-track {
+    display: flex;
+    width: 100%;
+    gap: 24px;
+    margin: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* 버튼 */
+.carousel-btn {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin: 0px 16px;
+    font-size: 20px;
+    border-radius: 50%;
+    color: var(--main-700);
+    background-color: white;
+    border: 1px solid var(--main-700);
+}
+
+/* 카드 */
+.review-card {
+    padding: 16px;
+    width: 20%;
+    height: 265px;
+    border-radius: 8px;
+    display: flex;
+    cursor: pointer;
+    background-color: white;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    box-sizing: border-box;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    /* transform과 box-shadow가 부드럽게 변하는 애니메이션 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /*
+     * flex: <grow> <shrink> <basis>
+     * 0: 카드가 남는 공간을 늘리지 않음
+     * 0: 카드가 공간이 부족할 때 줄어들지 않음
+     * calc((100% - 2 * 24px) / 3): 카드의 기본 너비 계산
+     * -> 100%: 부모 컨테이너의 전체 너비
+     * -> - 2 * 24px: 카드 사이 간격 2개 제거 (카드가 3개니까)
+     * -> /3: 한 줄에 카드 3개 배치
+    */
+    flex: 0 0 calc((100% - 2 * 24px) / 3);
+}
+
+/* 카드에 마우스 가져다댔을 때 */
+.review-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 8px var(--main-500);
+}
+
+/* 인디케이터 */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--gray-200);
+}
+
+.dot.active {
+    background-color: var(--main-700);
+}

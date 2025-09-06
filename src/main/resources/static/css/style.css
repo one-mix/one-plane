@@ -1,7 +1,9 @@
-/* 전체 기본 세팅 */
-body {
+html, body {
+    height: 100%;
     font-family: var(--font-main);
     background-color: var(--semantic-background);
+    display: flex;
+    flex-direction: column;
 }
 
 /* 공통 헤더 */
@@ -65,10 +67,17 @@ body {
     height: 48px;
 }
 
-/* 메인 컨텐츠 */
+.container {
+    flex: 1; /* 헤더+푸터 빼고 남는 공간 전부 차지 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 컨텐츠 (컨텐츠가 상하로 공간 채우도록) */
 .content {
-    padding: 24px 80px;
-    min-height: calc(100vh - 95px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     background-color: var(--semantic-background);
 }
 
@@ -77,10 +86,6 @@ body {
     background-color: white;
     text-align: center;
     padding: 24px 80px;
-
-    /* 항상 아래에 위치하도록 */
-    position: relative;
-    bottom: 0;
     font-size: 14px;
     color: var(--gray-500);
 }
