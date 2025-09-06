@@ -2,253 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnePlane - 게시판</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        .nav-menu {
-            display: flex;
-            gap: 40px;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #6b7280;
-            font-size: 16px;
-            font-weight: 400;
-        }
-
-        .nav-menu a.active {
-            color: #2563eb;
-            border-bottom: 2px solid #2563eb;
-            padding-bottom: 12px;
-        }
-
-        .main-container {
-            /*padding: 20px 0;
-            /*margin: 0;
-            max-width: 100%;
-        }
-
-        .top-tabs-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .top-tabs {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            background: #f8fafc;
-            padding: 8px;
-            border-radius: 50px;
-            flex-shrink: 0;
-        }
-
-        .top-tab {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            background: transparent;
-            color: #64748b;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-width: 80px;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .top-tab:hover {
-            color: #334155;
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .top-tab.active {
-            background: #ffffff;
-            color: #1e293b;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e2e8f0;
-        }
-
-        .search-area {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            margin-left: auto;
-        }
-
-        .country-dropdown {
-            padding: 8px 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            background: white;
-            color: #6b7280;
-            font-size: 14px;
-            min-width: 80px;
-        }
-
-        .search-input-top {
-            padding: 8px 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            width: 200px;
-            font-size: 14px;
-        }
-
-        .search-btn-top {
-            padding: 8px 20px;
-            background: #205AA4;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .search-btn-top:hover {
-            background: #1845a0;
-            color: white;
-        }
-
-        /* Results Section */
-        .results-section {
-            margin-bottom: 40px;
-            padding: 0 20px;
-        }
-
-        .result-card {
-            background: white;
-            border: 1px solid #f3f4f6;
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .result-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-color: #e5e7eb;
-        }
-
-        .result-info h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0 0 8px 0;
-        }
-
-        .result-info p {
-            font-size: 14px;
-            color: #6b7280;
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        .result-details {
-            font-size: 12px;
-            color: #9ca3af;
-            margin-top: 12px;
-        }
-
-        .result-icon {
-            width: 24px;
-            height: 24px;
-            opacity: 0.3;
-        }
-
-        .category-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            margin-right: 8px;
-        }
-
-        .category-READY { background: #dbeafe; color: #1e40af; }
-        .category-REVIEW { background: #dcfce7; color: #166534; }
-        .category-ACCOMPANY { background: #fef3c7; color: #92400e; }
-        .category-FREE { background: #e5e7eb; color: #374151; }
-
-        /* Pagination */
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .pagination-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: none;
-            color: #6b7280;
-            cursor: pointer;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-
-        .pagination-btn:hover {
-            background: #f3f4f6;
-            color: #6b7280;
-        }
-
-        .pagination-btn.active {
-            background: #2563eb;
-            color: white;
-        }
-
-        .pagination-btn.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        /* 빈 상태 메시지 */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #6b7280;
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #374151;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-<!-- Header -->
+<!-- 게시판 전용 CSS 추가 -->
+<link href="/css/post/postList.css" rel="stylesheet">
 
 <!-- Main Content -->
 <main class="main-container">
@@ -263,14 +19,14 @@
         </div>
 
         <div class="search-area">
-            <form method="get" action="/post/list" style="display: flex; gap: 16px; align-items: center;">
+            <form method="get" action="/post/list" style="display: flex; gap: 12px; align-items: center;">
                 <input type="hidden" name="category" value="${selectedCategory}">
                 <select name="searchType" class="country-dropdown">
                     <option value="title" ${searchType eq 'title' ? 'selected' : ''}>제목</option>
                     <option value="content" ${searchType eq 'content' ? 'selected' : ''}>내용</option>
                     <option value="author" ${searchType eq 'author' ? 'selected' : ''}>작성자</option>
                 </select>
-                <input type="text" name="search" class="search-input-top" placeholder="입력해 주세요" value="${searchKeyword}">
+                <input type="text" name="search" class="search-input-top" placeholder="입력해 주세요" value="${searchKeyword}" onkeypress="if(event.keyCode==13) this.form.submit();">
                 <a href="/post/write" class="search-btn-top" style="text-decoration: none;">글쓰기</a>
             </form>
         </div>
@@ -324,11 +80,11 @@
                                 <img src="${post.thumbnailImage}" alt="thumbnail" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                             </div>
                         </c:if>
-                            <%-- 사진이 없다면 빈 사진으로 --%>
+                        <!-- 사진이 없다면 빈 사진으로 -->
                         <c:if test="${empty post.thumbnailImage}">
-                            <svg class="result-icon" viewBox="0 0 24 24" fill="currentColor">
-                                <img src="/images/aimg.png">
-                            </svg>
+                            <div class="result-icon">
+                                <img src="/images/aimg.png" alt="no image" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; opacity: 0.3;">
+                            </div>
                         </c:if>
                     </div>
                 </c:forEach>
@@ -415,7 +171,6 @@
     </c:if>
 </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script>
     // 게시글 카드 호버 효과
     document.querySelectorAll('.result-card').forEach(card => {
@@ -431,13 +186,9 @@
     // 검색 폼 유효성 검사
     document.querySelector('form').addEventListener('submit', function(e) {
         const searchInput = document.querySelector('input[name="search"]');
-        if (searchInput.value.trim() === '') {
-            e.preventDefault();
-            alert('검색어를 입력해주세요.');
-            searchInput.focus();
+        if (searchInput && searchInput.value.trim() === '') {
+            // 검색어가 비어있어도 전체 검색으로 처리
+            return true;
         }
     });
 </script>
-
-</body>
-</html>
