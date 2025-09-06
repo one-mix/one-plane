@@ -219,7 +219,7 @@
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card>
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
