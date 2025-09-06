@@ -1,48 +1,48 @@
 package com.oneplane;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@Slf4j
-public class mainController {
+public class MainController {
 
-    @GetMapping("/main")
-    public String main() {
-        return "index";
-    }
-
+    // 메인 페이지 (지도)
     @GetMapping("/")
-    public String root() {
-        return "index";
+    public String home(Model model) {
+        model.addAttribute("contentPage", "map/content.jsp");
+        model.addAttribute("activeMenu", "home");
+        return "layout/layout";
     }
 
-    @GetMapping("/index")
-    public String index() {
-        log.info("Index URL 접근");
-        return "index";
-    }
-
+    // 추천 페이지
     @GetMapping("/recommend")
-    public String recommendPage() {
-        return "recommend/main";
+    public String recommend(Model model) {
+        model.addAttribute("contentPage", "recommend/content.jsp");
+        model.addAttribute("activeMenu", "recommend");
+
+        return "layout/layout";
     }
 
-    @GetMapping("/recommend/input")
-    public String inputPage() {
-        return "recommend/input";
+    // 게시판 페이지
+    @GetMapping("/post")
+    public String post(Model model) {
+        model.addAttribute("contentPage", "post/content.jsp");
+        model.addAttribute("activeMenu", "post");
+        return "layout/layout";
     }
 
-    @GetMapping("/recommend/loading")
-    public String recommendLoadingPage() {
-        return "recommend/loading";
+    // 마이페이지
+    @GetMapping("/mypage")
+    public String mypage(Model model) {
+        model.addAttribute("contentPage", "mypage/content.jsp");
+        return "layout/layout";
     }
 
-    @GetMapping("/recommend/result")
-    public String recommendResultPage() {
-        return "recommend/result";
+    // 로그인 페이지
+    @GetMapping("/login")
+    public String login(Model model) {
+        model.addAttribute("contentPage", "login/content.jsp");
+        return "layout/layout";
     }
 }
