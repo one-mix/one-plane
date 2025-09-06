@@ -143,8 +143,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # yml 설정 파일
-/application-secret.yml
-/application-secret.properties
+/src/main/resources/application-secret.yml
+/src/main/resources/application-secret.properties
 
 # Upload directories
 uploads/
