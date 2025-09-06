@@ -19,7 +19,7 @@
             class="${activeMenu eq 'recommend' ? 'active' : ''}">
             추천
         </a>
-        <a href="/post"
+        <a href="/post/list"
             class="${activeMenu eq 'post' ? 'active' : ''}">
             게시판
         </a>
