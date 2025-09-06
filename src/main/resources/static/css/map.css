@@ -135,7 +135,7 @@
 /* 카드 컨테이너 */
 .carousel-track-container {
     overflow: hidden;
-    width: 50%;
+    width: 60%;
 }
 
 /* 트랙 */
@@ -183,25 +183,6 @@
     box-shadow: 0 0 8px var(--main-500);
 }
 
-/* 인디케이터 */
-.carousel-indicators {
-    display: flex;
-    justify-content: center;
-    margin-top: 12px;
-    gap: 8px;
-}
-
-.dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--gray-200);
-}
-
-.dot.active {
-    background-color: var(--main-700);
-}
-
 /* 카드 상단: 썸네일 */
 .review-card .thumbnail {
     width: 100%;
@@ -239,4 +220,23 @@
     margin-top: 10px;
     color: var(--gray-200);
     font-weight: var(--font-medium);
+}
+
+/* 인디케이터 */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    gap: 8px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--gray-200);
+}
+
+.dot.active {
+    background-color: var(--main-700);
 }
