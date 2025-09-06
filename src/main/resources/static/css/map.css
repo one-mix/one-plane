@@ -7,21 +7,29 @@
 
 /* ===== 카테고리 ===== */
 .category-list {
-    flex: 1;
-    width: 100%;
+    gap: 48px;
     display: flex;
-    padding: 40px 0px;
-    flex-direction: column;
+    padding: 48px 0px;
     align-items: center;
     justify-content: center;
     background-color: white;
 }
 
-.category {
-    width: 120px;
-    height: 120px;
+/* 각 카테고리 */
+.category-container {
+    gap: 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-container .category {
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    background-color: var(--gray-100);
+    object-fit: cover;
 }
 
 .category.active {
@@ -111,10 +119,9 @@
 
 /* ===== 인기 후기 ===== */
 .popular-reviews {
-    display: flex;
-    width: 100%;
     padding: 40px 80px;
     flex-direction: column;
+    box-sizing: border-box;
     background-color: var(--main-0);
 }
 
@@ -128,17 +135,14 @@
 /* 카드 컨테이너 */
 .carousel-track-container {
     overflow: hidden;
-    width: 60%;
-    box-shadow: none;
-    outline: none;
+    width: 50%;
 }
 
 /* 트랙 */
 .carousel-track {
     display: flex;
-    width: 100%;
-    gap: 24px;
-    margin: 20px;
+    gap: 36px;
+    margin: 40px;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -157,30 +161,20 @@
 
 /* 카드 */
 .review-card {
-    padding: 16px;
-    width: 20%;
-    height: 265px;
+    padding: 20px;
     border-radius: 8px;
-    display: flex;
     cursor: pointer;
-    background-color: white;
+    display: flex;
     flex-direction: column;
+    background-color: white;
     align-items: flex-start;
     justify-content: center;
     box-sizing: border-box;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
     /* transform과 box-shadow가 부드럽게 변하는 애니메이션 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /*
-     * flex: <grow> <shrink> <basis>
-     * 0: 카드가 남는 공간을 늘리지 않음
-     * 0: 카드가 공간이 부족할 때 줄어들지 않음
-     * calc((100% - 2 * 24px) / 3): 카드의 기본 너비 계산
-     * -> 100%: 부모 컨테이너의 전체 너비
-     * -> - 2 * 24px: 카드 사이 간격 2개 제거 (카드가 3개니까)
-     * -> /3: 한 줄에 카드 3개 배치
-    */
-    flex: 0 0 calc((100% - 2 * 24px) / 3);
+    /* flex: <grow> <shrink> <basis> */
+    flex: 0 0 calc((100% - 48px) / 3);
 }
 
 /* 카드에 마우스 가져다댔을 때 */
@@ -207,3 +201,126 @@
 .dot.active {
     background-color: var(--main-700);
 }
+/* ===== 인기 후기 ===== */
+.popular-reviews {
+    padding: 40px 80px;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-color: var(--main-0);
+}
+
+/* 캐러셀 전체 */
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 카드 컨테이너 */
+.carousel-track-container {
+    overflow: hidden;
+    width: 60%;
+}
+
+/* 트랙 */
+.carousel-track {
+    display: flex;
+    gap: 36px;
+    margin: 40px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* 후기 좌우 버튼 */
+.carousel-btn {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin: 0px 16px;
+    font-size: 20px;
+    border-radius: 50%;
+    color: var(--main-700);
+    background-color: white;
+    border: 1px solid var(--main-700);
+}
+
+/* 후기 카드 */
+.review-card {
+    padding: 0px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: flex-start;
+    justify-content: center;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    /* transform과 box-shadow가 부드럽게 변하는 애니메이션 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* flex: <grow> <shrink> <basis> */
+    flex: 0 0 calc((100% - 48px) / 3);
+}
+
+/* 카드에 마우스 가져다댔을 때 */
+.review-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 8px var(--main-500);
+}
+
+/* 카드 상단: 썸네일 */
+.review-card .thumbnail {
+    width: 100%;
+    height: 140px;
+    background-color: var(--gray-100);
+    object-fit: cover;
+}
+
+/* 카드 하단: 텍스트 영역 */
+.review-card .info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 나라 */
+.review-card .info .country {
+    font-size: 12px;
+    color: var(--gray-400);
+    font-weight: var(--font-medium);
+}
+
+/* 제목 */
+.review-card .info .title {
+    font-size: 16px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+}
+
+/* 날짜 */
+.review-card .info .date {
+    font-size: 12px;
+    margin-top: 10px;
+    color: var(--gray-200);
+    font-weight: var(--font-medium);
+}
+
+/* 인디케이터 */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--gray-200);
+}
+
+.dot.active {
+    background-color: var(--main-700);
+}
+
+

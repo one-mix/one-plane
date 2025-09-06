@@ -3,16 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevBtn = document.querySelector(".carousel-btn.prev");
     const nextBtn = document.querySelector(".carousel-btn.next");
     const dots = document.querySelectorAll(".dot");
+    const cards = track.querySelectorAll(".review-card");
 
-    /*
-    * rack.querySelector(".review-card"): .review-card 첫 번째 요소 선택
-    * .offsetWidth: 해당 카드의 실제 렌더링된 너비 (padding 포함, margin 제외)
-    * + 24: 카드와 카드 사이 간격 더함
-    */
-    const cardWidth = track.querySelector(".review-card").offsetWidth + 24; // 카드 너비 + gap
-
+    const cardWidth = cards[0].offsetWidth + 40; // 카드 너비 + gap
     let cardsPerPage = getCardsPerPage();
-    let currentIndex = 0;
+    let totalPages = Math.ceil(cards.length / cardsPerPage);
+    let currentPage = 0;
 
     function getCardsPerPage() {
         if (window.innerWidth < 600) return 1;
@@ -21,37 +17,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateCarousel() {
-        const moveX = -(currentIndex * cardWidth * cardsPerPage);
+        const moveX = -(currentPage * cardWidth * cardsPerPage);
         track.style.transform = `translateX(${moveX}px)`;
 
         dots.forEach((dot, idx) => {
-            dot.classList.toggle("active", idx === currentIndex);
+            dot.classList.toggle("active", idx === currentPage);
         });
     }
 
     nextBtn.addEventListener("click", () => {
-        if (currentIndex < dots.length - 1) {
-            currentIndex++;
+        if (currentPage < totalPages - 1) {
+            currentPage++;
             updateCarousel();
         }
     });
 
     prevBtn.addEventListener("click", () => {
-        if (currentIndex > 0) {
-            currentIndex--;
+        if (currentPage > 0) {
+            currentPage--;
             updateCarousel();
         }
     });
 
     dots.forEach((dot, idx) => {
         dot.addEventListener("click", () => {
-            currentIndex = idx;
+            currentPage = idx;
             updateCarousel();
         });
     });
 
     window.addEventListener("resize", () => {
         cardsPerPage = getCardsPerPage();
+        totalPages = Math.ceil(cards.length / cardsPerPage);
+        if (currentPage >= totalPages) currentPage = totalPages - 1;
         updateCarousel();
     });
 
