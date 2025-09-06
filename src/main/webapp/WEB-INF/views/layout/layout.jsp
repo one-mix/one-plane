@@ -10,8 +10,11 @@
         <%-- CSS 연결 --%>
         <link rel="stylesheet" href="/css/variables.css" />
         <link rel="stylesheet" href="/css/style.css" />
+        <c:if test="${activeMenu eq 'recommend'}">
+            <link rel="stylesheet" href="/css/recommend/style_recommend.css" />
+        </c:if>
     </head>
-    <body>
+    <body class="${activeMenu}">
         <%-- 공통 헤더 --%>
          <jsp:include page="header.jsp" />
          <div class="container">

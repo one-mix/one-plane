@@ -1,0 +1,77 @@
+/* input 페이지 전용 */
+body.input {
+    font-family: Pretendard, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 컨텐츠 영역 - 화면을 꽉 채움 */
+body.input .content {
+    flex: 1;
+    width: 100%;
+    background: linear-gradient(to right, #eaf4ff 0%, #fffbe6 100%);
+    display: flex;
+    align-items: center;   /* 수직 중앙 */
+    justify-content: center; /* 수평 중앙 */
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* input 메인 박스 */
+.input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 3rem 2rem;
+    box-sizing: border-box;
+}
+
+/* 내부 요소 */
+.input .top { margin-top: 1rem; }
+.plane-icon { width: 70px; margin-bottom: 1rem; }
+.input .top h2 { font-size: 1.6rem; font-weight: 600; margin: 0; }
+.input .bottom { margin-top: 2rem; margin-bottom: 4rem; }
+
+.question {
+    margin-bottom: 1.8rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #444;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.option {
+    flex: 1 1 calc(33% - 1rem);
+    min-width: 160px;
+    max-width: 200px;
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: #fefefe;
+    font-size: 1.05rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.option:hover {
+    background: #5a90d2;
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(48, 96, 157, 0.25);
+}

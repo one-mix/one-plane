@@ -6,7 +6,7 @@ body {
 
 /* 공통 헤더 */
 .header {
-   padding: 24px 80px;
+    padding: 24px 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
