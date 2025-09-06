@@ -15,8 +15,6 @@
         <%-- 공통 헤더 --%>
          <jsp:include page="header.jsp" />
          <div class="container">
-            <%-- 공통 사이드바 --%>
-            <jsp:include page="sidebar.jsp" />
             <%-- 컨텐츠 영역 --%>
             <div class="content">
                <c:import url="/WEB-INF/views/${contentPage}" />
