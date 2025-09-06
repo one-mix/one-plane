@@ -16,43 +16,6 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #ffffff;
-        }
-
-        /* Header */
-        .header {
-            background: white;
-            border-bottom: 1px solid #e9ecef;
-            padding: 12px 0;
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 20px;
-            font-weight: 600;
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .logo svg {
-            width: 24px;
-            height: 24px;
-            margin-right: 8px;
-            fill: #2563eb;
-        }
-
         .nav-menu {
             display: flex;
             gap: 40px;
@@ -71,20 +34,12 @@
             padding-bottom: 12px;
         }
 
-        .login-btn {
-            color: #6b7280;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        /* Main Content */
         .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
+            /*padding: 20px 0;
+            /*margin: 0;
+            max-width: 100%;
         }
 
-        /* Top Tab Section */
         .top-tabs-wrapper {
             display: flex;
             justify-content: space-between;
@@ -175,7 +130,7 @@
         /* Results Section */
         .results-section {
             margin-bottom: 40px;
-            padding: 0 100px;
+            padding: 0 20px;
         }
 
         .result-card {
@@ -294,38 +249,6 @@
 </head>
 <body>
 <!-- Header -->
-<header class="header">
-    <div class="header-container">
-        <a href="/" class="logo">
-            <svg viewBox="0 0 24 24">
-                <img src="/images/logo.png" alt="OnePlane Logo">
-            </svg>
-            OnePlane
-        </a>
-        <nav class="nav-menu">
-            <a href="/">지도</a>
-            <a href="/">추천</a>
-            <a href="/post/list" class="active">게시판</a>
-        </nav>
-
-        <!-- 로그인 상태에 따른 메뉴 -->
-        <sec:authorize access="!isAuthenticated()">
-            <a href="/oauth2/authorization/kakao" class="login-btn">로그인</a>
-        </sec:authorize>
-
-        <sec:authorize access="isAuthenticated()">
-            <div class="dropdown">
-                <a href="#" class="login-btn dropdown-toggle" data-bs-toggle="dropdown">
-                        ${sessionScope.userName != null ? sessionScope.userName : sessionScope.userNickname}님
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/user/profile">프로필</a></li>
-                    <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
-                </ul>
-            </div>
-        </sec:authorize>
-    </div>
-</header>
 
 <!-- Main Content -->
 <main class="main-container">
@@ -424,7 +347,7 @@
                         </c:choose>
                     </p>
                     <sec:authorize access="isAuthenticated()">
-                        <a href="/post/write" class="search-btn-top" style="margin-top: 20px; display: inline-block;">첫 글 작성하기</a>
+                        <a href="/post/write" class="search-btn-top" style="margin-top: 20px; display: inline-block;">글쓰기</a>
                     </sec:authorize>
                 </div>
             </c:otherwise>

@@ -38,7 +38,7 @@ public class PostListController {
         log.info("게시글 목록 페이지 요청 - 카테고리: {}, 페이지: {}, 크기: {}, 검색어: {}",
                 category, page, size, searchKeyword);
 
-        try {
+
             // 검색 조건 객체 생성
             PostSearchCondition condition = PostSearchCondition.builder()
                     .category(category != null && !category.isEmpty() ? Category.valueOf(category) : null)
@@ -74,16 +74,17 @@ public class PostListController {
             // 페이지네이션을 위한 추가 정보
             addPaginationInfo(model, condition, response.getTotalPages());
 
+            // Layout 연결
+            model.addAttribute("contentPage", "post/postList.jsp");
+            model.addAttribute("activeMenu", "post");
+
+
             log.info("게시글 목록 조회 완료 - 총 {}개, 현재페이지: {}/{}",
                     response.getTotalElements(), response.getCurrentPage(), response.getTotalPages());
 
-            return "post/postList";
+            return "layout/layout";
 
-        } catch (Exception e) {
-            log.error("게시글 목록 조회 중 오류 발생", e);
-            model.addAttribute("errorMessage", "게시글 목록을 불러오는데 실패했습니다.");
-            return "error/500";
-        }
+
     }
 
     /**
