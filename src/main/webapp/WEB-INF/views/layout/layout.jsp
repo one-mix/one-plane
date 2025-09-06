@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="/css/variables.css" />
         <link rel="stylesheet" href="/css/style.css" />
         <c:if test="${activeMenu eq 'recommend'}">
-            <link rel="stylesheet" href="/css/recommend/style_recommend.css" />
+            <link rel="stylesheet" href="/css/recommend/recommend.css" />
         </c:if>
     </head>
     <body class="${activeMenu}">

@@ -1,20 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>여행 추천 결과</title>
-    <link rel="stylesheet" href="<c:url value='/css/style_result.css'/>">
-</head>
-<body>
+
 <main class="result">
+    <link rel="stylesheet" href="<c:url value='/css/recommend/result.css'/>">
     <h2>
         <span class="username">홍길동</span>님을 위한 3개국,<br>
         어떤 곳이 마음에 드시나요?
     </h2>
 
     <div class="cards">
-        <div class="card">
+        <div class="card" data-country="아시아">
             <div class="card-image"></div>
             <div class="card-content">
                 <p class="country">나라</p>
@@ -23,7 +18,7 @@
                 <p class="extra">대륙: 아시아</p>
             </div>
         </div>
-        <div class="card">
+        <div class="card" data-country="유럽">
             <div class="card-image"></div>
             <div class="card-content">
                 <p class="country">나라</p>
@@ -32,7 +27,7 @@
                 <p class="extra">대륙: 유럽</p>
             </div>
         </div>
-        <div class="card">
+        <div class="card" data-country="아메리카">
             <div class="card-image"></div>
             <div class="card-content">
                 <p class="country">나라</p>
@@ -45,10 +40,11 @@
 
     <div class="actions">
         <button class="cancel">취소하기</button>
-        <button class="save">저장하기</button>
+        <button class="save" disabled>저장하기</button>
     </div>
 </main>
 
+<!-- 모달 -->
 <div id="feedbackModal" class="modal">
     <div class="modal-content">
         <h3>AI 추천에 만족하시나요?</h3>
@@ -70,8 +66,7 @@
     </div>
 </div>
 
+<!-- 토스트 -->
 <div id="toast" class="toast">제출 완료!</div>
 
-<script src="<c:url value='/js/result.js'/>"></script>
-</body>
-</html>
+<script src="<c:url value='/js/recommend/result.js'/>"></script>
