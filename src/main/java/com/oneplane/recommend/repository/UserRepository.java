@@ -1,6 +1,6 @@
 package com.oneplane.recommend.repository;
 
-import com.oneplane.recommend.domain.User;
+import com.oneplane.user.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

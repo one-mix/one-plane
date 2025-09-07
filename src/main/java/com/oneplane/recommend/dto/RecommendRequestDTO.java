@@ -1,10 +1,10 @@
 package com.oneplane.recommend.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecommendRequestDTO {
     private Long userId;
     private String travelPurpose;

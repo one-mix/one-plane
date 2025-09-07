@@ -3,10 +3,10 @@ package com.oneplane.recommend.service;
 import com.oneplane.recommend.dao.RecommendDAO;
 import com.oneplane.recommend.domain.Country;
 import com.oneplane.recommend.domain.TravelHistory;
-import com.oneplane.recommend.domain.User;
 import com.oneplane.recommend.dto.RecommendFeatureDTO;
 import com.oneplane.recommend.dto.RecommendRequestDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
+import com.oneplane.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

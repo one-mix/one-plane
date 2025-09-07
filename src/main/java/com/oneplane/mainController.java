@@ -10,7 +10,7 @@ public class MainController {
     // 메인 페이지 (지도)
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("contentPage", "map/main.jsp");
+        model.addAttribute("contentPage", "map/content.jsp");
         model.addAttribute("activeMenu", "home");
         return "layout/layout";
     }
@@ -62,7 +62,7 @@ public class MainController {
     // 마이페이지
     @GetMapping("/mypage")
     public String mypage(Model model) {
-        model.addAttribute("contentPage", "mypage/main.jsp");
+        model.addAttribute("contentPage", "mypage/content.jsp");
         return "layout/layout";
     }
 

@@ -1,11 +1,13 @@
 package com.oneplane.recommend.dao;
 
 import com.oneplane.recommend.domain.Country;
+import com.oneplane.recommend.domain.Recommend;
 import com.oneplane.recommend.domain.TravelHistory;
-import com.oneplane.recommend.domain.User;
 import com.oneplane.recommend.repository.CountryRepository;
+import com.oneplane.recommend.repository.RecommendRepository;
 import com.oneplane.recommend.repository.TravelHistoryRepository;
 import com.oneplane.recommend.repository.UserRepository;
+import com.oneplane.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,7 @@ public class RecommendDAOImpl implements RecommendDAO {
     private final UserRepository userRepository;
     private final TravelHistoryRepository travelHistoryRepository;
     private final CountryRepository countryRepository;
+    private final RecommendRepository recommendRepository;
 
     @Override
     public User getUserProfile(Long userId) {
@@ -32,5 +35,15 @@ public class RecommendDAOImpl implements RecommendDAO {
     @Override
     public List<Country> getAllCountries() {
         return countryRepository.findAll();
+    }
+
+    @Override
+    public void saveRecommendation(Recommend recommend) {
+        recommendRepository.save(recommend);
+    }
+
+    @Override
+    public List<Recommend> getUserRecommendations(Long userId) {
+        return recommendRepository.findByUserId(userId);
     }
 }
