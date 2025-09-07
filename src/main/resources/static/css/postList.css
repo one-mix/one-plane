@@ -59,12 +59,15 @@
     gap: var(--spacing-md);
     align-items: center;
     flex-shrink: 0;
+    /*padding: var(--spacing-sm);*/
+    /*padding: 32px;*/
 }
 
 .search-area form {
     display: flex;
     gap: var(--spacing-md);
     align-items: center;
+    padding-top: var(--spacing-md);
 }
 
 .country-dropdown {
