@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
+
+    <%-- 국가 검색 입력창 --%>
+    <div style="position:absolute; top:105px; left:65px; z-index:1000;">
+        <input type="text" id="country-search" placeholder="국가 검색" style="padding:6px; width:200px;" />
+    </div>
+
     <%-- 지도 (객체를 사용하기 위해 id 추가) --%>
     <div id="map" class="map"></div>
 
@@ -38,16 +44,74 @@
         }).addTo(map);
 
         /*
-        * 마커 추가
+        * 변수형 마커 추가 (검색 시 재활용하기 위함)
         * L.marker([위도, 경도]): 지도 위에 마커 생성
         * .addTo(map): 지도에 마커 추가
         * .bindPopup("텍스트"): 마커 클릭 시 뜨는 말풍선 내용
         * .openPopup(): 기본으로 열어둔 상태
         */
-        L.marker([37.5665, 126.9780])
+        let marker = L.marker([37.5665, 126.9780])
             .addTo(map)
-            .bindPopup("여기가 서울입니다!")
+            .bindPopup("여기는 서울입니다.")
             .openPopup();
+
+        // 검색 기능
+        const searchInput = document.getElementById("country-search");
+
+        searchInput.addEventListener("change", async function () {
+
+            // 입력값 가져오기
+            const country = this.value.trim();
+
+            // 국가명이 비어있을 경우
+            if (!country) {
+
+                // 콘솔 경고 메시지 확인
+                console.warn("검색어가 비어있습니다.");
+
+                // 검색 요청 보내지 않음
+                return;
+            }
+
+            try {
+                // Nominatim API로 나라 검색
+                const res = await fetch(
+                    "https://nominatim.openstreetmap.org/search?country="
+                    + encodeURIComponent(country)
+                    + "&format=json"
+                );
+
+                // 응답 받기
+                const data = await res.json();
+
+                // 응답이 있을 경우
+                if (data.length > 0) {
+                    const lat = data[0].lat;
+                    const lon = data[0].lon;
+
+                    // 지도 이동
+                    map.setView([lat, lon], 6);
+
+                    // 기존 마커 제거 후 새 마커 추가
+                    marker.setLatLng([lat, lon])
+
+                    // 기존 팝업 완전히 제거
+                    marker.unbindPopup();
+
+                    /*
+                    * ${} 사용 시 JSP EL 문법과 JS 템플릿 리터럴이 충돌나고 서버에서 가로채서 country 출력 안됨
+                    * + (문자열 연결 방식) 로 변경
+                    */
+                    marker.bindPopup("여기는 " + country + " 입니다.").openPopup();
+                } else {
+                     // 응답이 없을 경우 알림창 뜸
+                     alert("국가를 찾을 수 없습니다.");
+                }
+            } catch (err) {
+                // 콘솔로 에러 메시지 확인
+                console.error("검색 오류", err);
+            }
+        });
     </script>
 
     <%-- 대륙 카테고리 목록 --%>
