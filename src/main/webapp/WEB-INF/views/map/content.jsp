@@ -3,10 +3,52 @@
 <head>
     <%-- CSS 연결 --%>
     <link rel="stylesheet" href="/css/map.css" />
+
+    <%-- Leaflet 라이브러 사용을 위한 CSS 연결 --%>
+    <%-- 예: 지도 기본 스타일, 확대/축소 버튼 모양 등 --%>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
-    <%-- 지도 --%>
-    <div class="map"></div>
+    <%-- 지도 (객체를 사용하기 위해 id 추가) --%>
+    <div id="map" class="map"></div>
+
+    <%-- Leaflet 라이브러 사용을 위한 JS 연결 --%>
+    <%-- 예: 지도 기능 제어 --%>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        /*
+        * 지도 객체 생성
+        * L.map('map'): id="map"인 요소에 지도 객체 연결
+        * .setView([위도, 경도], 줌레벨): 시작 위치와 확대 수준 설정
+        * [37.5665, 126.9780]: 서울 시청 근처 좌표
+        * 13: 줌 레벨 (0=전세계, 18=아주 세밀하게)
+        */
+        const map = L.map('map').setView([37.5665, 126.9780], 13);
+
+        /*
+        * 지도 타일 불러오기
+        * 지도 배경 이미지를 어디서 가져올지 설정
+        * {z}/{x}/{y}: 줌/위도/경도 타일 좌표 자동 변환
+        * attribution: 지도 오른쪽 아래 표시되는 저작권 문구
+        * .addTo(map): 위에서 만든 map 객체에 연결
+        */
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        /*
+        * 마커 추가
+        * L.marker([위도, 경도]): 지도 위에 마커 생성
+        * .addTo(map): 지도에 마커 추가
+        * .bindPopup("텍스트"): 마커 클릭 시 뜨는 말풍선 내용
+        * .openPopup(): 기본으로 열어둔 상태
+        */
+        L.marker([37.5665, 126.9780])
+            .addTo(map)
+            .bindPopup("여기가 서울입니다!")
+            .openPopup();
+    </script>
 
     <%-- 대륙 카테고리 목록 --%>
     <div class="category-list">
