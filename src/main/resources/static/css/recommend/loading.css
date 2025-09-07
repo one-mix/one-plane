@@ -73,3 +73,20 @@ body.loading .content {
     0%, 80%, 100% { transform: scale(0); }
     40% { transform: scale(1); }
 }
+
+/* 비행기 아이콘 애니메이션 */
+.plane-icon {
+    width: 70px;
+    margin-bottom: 1rem;
+    animation: fly-across 4s ease-in-out infinite;
+}
+
+/* 좌→우로 비행하는 느낌 */
+@keyframes fly-across {
+    0%   { transform: translateX(-20px) translateY(0) rotate(-5deg); }
+    25%  { transform: translateX(0) translateY(-5px) rotate(0deg); }
+    50%  { transform: translateX(20px) translateY(0) rotate(5deg); }
+    75%  { transform: translateX(0) translateY(5px) rotate(0deg); }
+    100% { transform: translateX(-20px) translateY(0) rotate(-5deg); }
+}
+
