@@ -9,12 +9,15 @@
     <%-- Leaflet 라이브러 사용을 위한 CSS 연결 --%>
     <%-- 예: 지도 기본 스타일, 확대/축소 버튼 모양 등 --%>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Chart.js CDN 연결 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
     <%-- 국가 검색 입력창 --%>
-    <div style="position:absolute; top:105px; left:65px; z-index:1000;">
-        <input type="text" id="country-search" placeholder="국가 검색" style="padding:6px; width:200px;" />
+    <div class="search-container">
+        <input type="text" id="country-search" class="country-search-input" placeholder="검색할 국가를 입력해주세요" />
     </div>
 
     <%-- 지도 (객체를 사용하기 위해 id 추가) --%>
@@ -116,6 +119,26 @@
             </div>
          </div>
 
+        <!-- 국가 통계 패널 -->
+        <div id="country-info-panel" class="country-info-panel hidden">
+            <div class="panel-header">
+                <img id="country-flag" src="" alt="국기" class="flag">
+                <span id="country-name">국가명</span>
+                <button onclick="closeInfoPanel()" class="close-btn">✕</button>
+            </div>
+
+            <div class="panel-body">
+                <h3>여행경보</h3>
+                <canvas id="travelChart"></canvas>
+
+                <h3>방문객</h3>
+                <canvas id="visitChart"></canvas>
+
+                <h3>환율</h3>
+                <canvas id="currencyChart"></canvas>
+            </div>
+        </div>
+
      </div>
 
     <%-- Leaflet 라이브러 사용을 위한 JS 연결 --%>
@@ -203,6 +226,10 @@
                     * + (문자열 연결 방식) 로 변경
                     */
                     marker.bindPopup("여기는 " + country + " 입니다.").openPopup();
+
+                    // 사이드 패널 열기
+                    openInfoPanel(country);
+
                 } else {
                      // 응답이 없을 경우 알림창 뜸
                      alert("국가를 찾을 수 없습니다.");
@@ -212,6 +239,53 @@
                 console.error("검색 오류", err);
             }
         });
+
+        // 통계 패널 열기 함수
+        function openInfoPanel(country) {
+            document.getElementById("country-name").innerText = country;
+            document.getElementById("country-info-panel").classList.add("show");
+
+            // flag API에서 국기 불러오기
+            document.getElementById("country-flag").src =
+              `https://countryflagsapi.com/png/${country}`;
+
+            // 차트 데이터 바인딩 (Chart.js 사용)
+            renderCharts();
+        }
+
+        // 통계 패널 닫기 함수
+        function closeInfoPanel() {
+            document.getElementById("country-info-panel").classList.remove("show");
+        }
+
+        function renderCharts() {
+            // 여행 경보 통계
+            new Chart(document.getElementById("travelChart"), {
+                type: "doughnut",
+                data: {
+                    labels: ["여행유의", "여행자제"],
+                    datasets: [{ data: [80, 20], backgroundColor: ["#FEE33C", "#FAAD14"] }]
+                }
+            });
+
+            // 방문객 통계
+            new Chart(document.getElementById("visitChart"), {
+                type: "bar",
+                data: {
+                    labels: ["4월","5월","6월","7월","8월","9월"],
+                    datasets: [{ data: [10,20,15,25,18,22], backgroundColor: "#5A90D2" }]
+                }
+            });
+
+            // 환율 통계
+            new Chart(document.getElementById("currencyChart"), {
+                type: "line",
+                data: {
+                    labels: Array.from({length: 30}, (_,i)=>i+1),
+                    datasets: [{ data: Array.from({length:30}, ()=>Math.random()*100), borderColor: "#4caf50" }]
+                }
+            });
+        }
 
         // 모달 열기
         function openGuideline(title, body) {
@@ -267,41 +341,45 @@
 
             <%-- 최신글 목록 (5개만 표시) --%>
             <div class="post-list">
-                <div class="post-item">
+                <a href="http://localhost:8080/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
                     </div>
                     <span>YYYY-MM-DD</span>
-                </div>
-                 <div class="post-item">
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
-                 <div class="post-item">
-                     <div class="country-and-title">
-                         <span>나라</span>
-                         <span>제목</span>
-                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
-                 <div class="post-item">
-                     <div class="country-and-title">
-                         <span>나라</span>
-                         <span>제목</span>
-                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
-                 <div class="post-item">
-                     <div class="country-and-title">
-                         <span>나라</span>
-                         <span>제목</span>
-                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
+                    <div class="country-and-title">
+                        <span>나라</span>
+                        <span>제목</span>
+                    </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
+                    <div class="country-and-title">
+                        <span>나라</span>
+                        <span>제목</span>
+                    </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
+                    <div class="country-and-title">
+                        <span>나라</span>
+                        <span>제목</span>
+                    </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
             </div>
         </div>
 
@@ -315,49 +393,53 @@
            </div>
 
            <%-- 인기글 목록 (5개만 표시) --%>
-           <div class="post-list">
-                <div class="post-item">
+            <div class="post-list">
+                <a href="http://localhost:8080/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
                     </div>
                     <span>YYYY-MM-DD</span>
-                </div>
-                 <div class="post-item">
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
-                 <div class="post-item">
-                     <div class="country-and-title">
-                         <span>나라</span>
-                         <span>제목</span>
-                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
-                 <div class="post-item">
-                     <div class="country-and-title">
-                         <span>나라</span>
-                         <span>제목</span>
-                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
-                 <div class="post-item">
-                     <div class="country-and-title">
-                         <span>나라</span>
-                         <span>제목</span>
-                     </div>
-                     <span>YYYY-MM-DD</span>
-                 </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
+                    <div class="country-and-title">
+                        <span>나라</span>
+                        <span>제목</span>
+                    </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
+                    <div class="country-and-title">
+                        <span>나라</span>
+                        <span>제목</span>
+                    </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
+
+                <a href="http://localhost:8080/post/list" class="post-item">
+                    <div class="country-and-title">
+                        <span>나라</span>
+                        <span>제목</span>
+                    </div>
+                    <span>YYYY-MM-DD</span>
+                </a>
             </div>
         </div>
     </div>
 
     <%-- 인기 후기 --%>
     <div class="popular-reviews">
-        <span class="title">인기 후기</span>
+        <span class="review-title">인기 후기</span>
 
         <div class="carousel">
 
@@ -372,7 +454,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -380,7 +462,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -388,7 +470,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -398,7 +480,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -406,7 +488,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -414,7 +496,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -424,7 +506,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -432,7 +514,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
@@ -440,7 +522,7 @@
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
-                        <span class="title">제목</span>
+                        <span class="review-title">제목</span>
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>

@@ -5,6 +5,91 @@
     background-color: var(--main-100);
 }
 
+.search-container {
+    position:absolute;
+    top: 105px;
+    left: 65px;
+    z-index: 1000;
+}
+
+.country-search-input {
+    width: 280px;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 12px 16px;
+    font-weight: var(--font-medium);
+    border: 1px solid var(--gray-300);
+
+    /* 실제 입력 텍스트 색상 */
+    color: var(--gray-900);
+}
+
+/* placeholder 색상 */
+.country-search-input::placeholder {
+    color: var(--gray-300);
+}
+
+/* ===== 통계 ===== */
+.country-info-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 360px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    transform: translateX(100%);
+    z-index: 999;
+}
+
+.country-info-panel.show {
+    transform: translateX(0);
+}
+
+.country-info-panel .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.country-info-panel .panel-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.country-info-panel .flag {
+    width: 28px;
+    height: 20px;
+    object-fit: cover;
+}
+
+.country-info-panel .continent {
+    font-size: 14px;
+    color: #666;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.country-info-panel .panel-body h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
 /* ===== 행동지침 버튼 ===== */
 .guideline-buttons {
    position: absolute;
@@ -133,7 +218,7 @@
 
 /* ===== 카테고리 ===== */
 .category-list {
-    gap: 48px;
+    gap: 40px;
     display: flex;
     padding: 48px 0px;
     align-items: center;
@@ -143,7 +228,6 @@
 
 /* 각 카테고리 */
 .category-container {
-    gap: 20px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -162,6 +246,13 @@
     background-color: var(--main-500);
 }
 
+.category-title {
+    margin-top: 10px;
+    font-size: 20px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+}
+
 /* ===== 최신글/인기글 (남는 공간 차지) ===== */
 .new-and-popular-posts {
     flex: 1;
@@ -178,6 +269,27 @@
     flex-direction: column;
     gap: 40px;
     width: 45%;
+}
+
+.title {
+    font-size: 20px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+    padding-left: 16px;
+    border-left: 4px solid var(--gray-900);
+    line-height: 1.2;
+}
+
+.review-title {
+    font-size: 20px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+}
+
+.review-card-title {
+    font-size: 16px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
 }
 
 .title-and-more {
@@ -210,6 +322,7 @@
     justify-content: space-between;
     border-bottom: 1px solid var(--gray-100);
     padding-bottom: 10px;
+    text-decoration: none;
 }
 
 /* 나라 + 제목 */
@@ -241,6 +354,8 @@
 .post-item > span {
     font-size: 14px;
     color: var(--gray-400);
+    align-items: center;
+    justify-content: center;
     font-weight: var(--font-medium);
 }
 
