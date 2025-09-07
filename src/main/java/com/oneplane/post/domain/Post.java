@@ -19,7 +19,8 @@ public class Post {
     private String title;
     private String content;              // Summernote HTML 콘텐츠
     private String thumbnailImage;       // 썸네일 이미지 URL
-    private Category category;       // Enum 타입
+    private Category category;
+    private String country;
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;

@@ -28,7 +28,6 @@ public class PostDaoImpl implements PostDao {
 
     @Override
     public List<Post> findPostsWithPaging(PostSearchCondition condition) {
-        log.debug("페이징된 게시글 목록 조회 - 페이지: {}, 크기: {}", condition.getPage(), condition.getSize());
         return sqlSession.selectList(namespace + "findPostsWithPaging", condition);
     }
 
@@ -40,7 +39,6 @@ public class PostDaoImpl implements PostDao {
 
     @Override
     public List<Post> findPostsByCategory(String category, int offset, int size) {
-        log.debug("카테고리별 게시글 조회 - 카테고리: {}, offset: {}, size: {}", category, offset, size);
 
         Map<String, Object> params = new HashMap<>();
         params.put("category", category);
@@ -54,5 +52,16 @@ public class PostDaoImpl implements PostDao {
     public int countPostsByCategory(String category) {
         log.debug("카테고리별 게시글 수 조회 - 카테고리: {}", category);
         return sqlSession.selectOne(namespace + "countPostsByCategory", category);
+    }
+
+    @Override
+    public int insertPost(Post post) {
+        return sqlSession.insert(namespace + "insertPost", post);
+    }
+
+    @Override
+    public Post findPostById(Integer postId) {
+        log.debug("게시글 ID로 조회: {}", postId);
+        return sqlSession.selectOne(namespace + "findPostById", postId);
     }
 }

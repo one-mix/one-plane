@@ -23,4 +23,9 @@ public interface PostDao {
 
     // 카테고리별 게시글 수 조회
     int countPostsByCategory(@Param("category") String category);
+
+    int insertPost(Post post);
+
+    // 게시글 ID로 조회
+    Post findPostById(@Param("postId") Integer postId);
 }

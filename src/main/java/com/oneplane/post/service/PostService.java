@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class PostService {
     private final PostDao postDao;
 
     /**
-     * 게시글 전체 목록 조회 (기존 메서드 유지)
+     * 게시글 전체 목록 조회
      */
     @Transactional(readOnly = true)
     public List<Post> getAllPosts() {
@@ -46,7 +47,6 @@ public class PostService {
 
             // 총 게시글 수 조회
             int totalElements = postDao.countPosts(condition);
-            log.debug("총 게시글 수: {}", totalElements);
 
             // 페이징된 게시글 목록 조회
             List<Post> posts = postDao.findPostsWithPaging(condition);
@@ -69,9 +69,6 @@ public class PostService {
                     .hasPrevious(hasPrevious)
                     .build();
 
-            log.info("페이징된 게시글 조회 완료 - 현재페이지: {}/{}, 게시글수: {}",
-                    condition.getPage(), totalPages, posts.size());
-
             return response;
 
         } catch (Exception e) {
@@ -81,11 +78,10 @@ public class PostService {
     }
 
     /**
-     * 카테고리별 게시글 목록 조회 (페이징)
+     * 카테고리별 게시글 목록 조회
      */
     @Transactional(readOnly = true)
     public PostListResponse getPostsByCategory(String category, int page, int size) {
-        log.info("카테고리별 게시글 조회 - 카테고리: {}, 페이지: {}", category, page);
 
         try {
             // 페이지 유효성 검사
@@ -117,9 +113,6 @@ public class PostService {
                     .hasNext(hasNext)
                     .hasPrevious(hasPrevious)
                     .build();
-
-            log.info("카테고리별 게시글 조회 완료 - 카테고리: {}, 페이지: {}/{}, 게시글수: {}",
-                    category, page, totalPages, posts.size());
 
             return response;
 
@@ -192,7 +185,7 @@ public class PostService {
     }
 
     /**
-     * 게시글 개수 조회 (기존 메서드 유지)
+     * 게시글 개수 조회
      */
     @Transactional(readOnly = true)
     public int getPostCount() {
@@ -209,4 +202,100 @@ public class PostService {
         log.debug("검색 조건에 따른 게시글 개수 조회");
         return postDao.countPosts(condition);
     }
+
+    /**
+     * 게시글 작성
+     */
+    public Post createPost(Post post) {
+        log.info("게시글 작성 처리 시작 - 제목: {}, 작성자: {}", post.getTitle(), post.getUserId());
+
+        try {
+            // 유효성 검사
+            validatePost(post);
+
+            // 썸네일 이미지 추출 (Summernote 내용에서 첫 번째 이미지)
+            if (post.getThumbnailImage() == null || post.getThumbnailImage().isEmpty()) {
+                String firstImage = extractFirstImageFromSummernote(post.getContent());
+                if (firstImage != null) {
+                    post.setThumbnailImage(firstImage);
+                    log.info("썸네일 이미지 자동 추출: {}", firstImage);
+                }
+            }
+
+            // 기본값 설정
+            post.setViewCount(0);
+            post.setLikeCount(0);
+            post.setCommentCount(0);
+            post.setCreatedAt(new Date());
+            post.setUpdatedAt(new Date());
+
+            int result = postDao.insertPost(post);
+            if (result <= 0) {
+                throw new RuntimeException("게시글 작성에 실패했습니다.");
+            }
+
+            log.info("게시글 작성 완료 - postId: {}, 제목: {}, 썸네일: {}",
+                    post.getPostId(), post.getTitle(), post.getThumbnailImage());
+
+            return post;
+
+        } catch (Exception e) {
+            log.error("게시글 작성 중 오류 발생", e);
+            throw new RuntimeException("게시글 작성에 실패했습니다: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 게시글 유효성 검사
+     */
+    private void validatePost(Post post) {
+        if (post.getUserId() == null) {
+            throw new IllegalArgumentException("작성자 정보가 없습니다.");
+        }
+
+        if (post.getTitle() == null || post.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("제목을 입력해주세요.");
+        }
+
+        if (post.getTitle().length() > 200) {
+            throw new IllegalArgumentException("제목은 200자 이하로 입력해주세요.");
+        }
+
+        if (post.getContent() == null || post.getContent().trim().isEmpty()) {
+            throw new IllegalArgumentException("내용을 입력해주세요.");
+        }
+
+        if (post.getCategory() == null) {
+            throw new IllegalArgumentException("카테고리를 선택해주세요.");
+        }
+    }
+
+    //Summernote HTML에서 첫 번째 이미지 URL 추출
+    private String extractFirstImageFromSummernote(String html) {
+        if (html == null || html.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            // JSoup을 사용하여 HTML 파싱
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(html);
+            org.jsoup.select.Elements imgElements = doc.select("img");
+
+            if (!imgElements.isEmpty()) {
+                org.jsoup.nodes.Element firstImg = imgElements.first();
+                String src = firstImg.attr("src");
+
+                if (src != null && !src.trim().isEmpty()) {
+                    // 상대 경로인 경우 절대 경로로 변환할 수 있음
+                    log.debug("첫 번째 이미지 URL 추출: {}", src);
+                    return src;
+                }
+            }
+        } catch (Exception e) {
+            log.warn("이미지 URL 추출 중 오류 발생: {}", e.getMessage());
+        }
+
+        return null;
+    }
+
 }

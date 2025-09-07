@@ -10,13 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PostSearchCondition {
-    private Category category;       // 카테고리 필터
-    private String searchType;           // 검색 타입 (title, content, author)
-    private String searchKeyword;        // 검색 키워드
-    private String sortBy;               // 정렬 기준 (latest, view, like)
-    private Integer page;                // 페이지 번호
-    private Integer size;                // 페이지 크기
-    private Integer userId;              // 특정 사용자 게시글만 조회
+    private Category category;
+    private String country;
+    private String searchType;
+    private String searchKeyword;
+    private String sortBy;
+    private Integer page;
+    private Integer size;
+    private Integer userId;
 
     // 기본값 설정
     public void setDefaults() {
@@ -34,6 +35,7 @@ public class PostSearchCondition {
     public boolean hasSearchCondition() {
         return (searchKeyword != null && !searchKeyword.trim().isEmpty()) ||
                 category != null ||
+                (country != null && !country.trim().isEmpty()) ||
                 userId != null;
     }
 
@@ -56,5 +58,34 @@ public class PostSearchCondition {
     public int getPageGroupEnd(int totalPages) {
         int groupEnd = getPageGroupStart() + 4;
         return Math.min(groupEnd, totalPages);
+    }
+
+    /**
+     * URL 파라미터 생성을 위한 쿼리 스트링 반환
+     */
+    public String toQueryString() {
+        StringBuilder sb = new StringBuilder();
+
+        if (category != null) {
+            sb.append("&category=").append(category.name());
+        }
+
+        if (country != null && !country.trim().isEmpty()) {
+            sb.append("&country=").append(country);
+        }
+
+        if (searchType != null && !searchType.trim().isEmpty()) {
+            sb.append("&searchType=").append(searchType);
+        }
+
+        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+            sb.append("&search=").append(searchKeyword);
+        }
+
+        if (sortBy != null && !sortBy.equals("latest")) {
+            sb.append("&sortBy=").append(sortBy);
+        }
+
+        return sb.toString();
     }
 }
