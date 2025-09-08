@@ -2,9 +2,13 @@ package com.oneplane.recommend.controller;
 
 import com.oneplane.config.SecurityUtil;
 import com.oneplane.recommend.dto.RecommendDTO;
+import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.service.RecommendService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/recommend")
@@ -42,21 +46,31 @@ public class RecommendController {
         return "여행 목적/동행자 저장 완료";
     }
 
-    /** 국가 선택 저장 */
-    @PostMapping("/selection")
+    @GetMapping("/latest-input")
     @ResponseBody
-    public String updateSelection(@RequestBody RecommendDTO dto) {
-        dto.setUserId(SecurityUtil.getCurrentUserId());
-        recommendService.updateSelection(dto);
-        return "선택 완료";
+    public RecommendDTO checkLatestInput() {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        return recommendService.getLatestInput(userId);
     }
 
-    /** 피드백 저장 */
-    @PostMapping("/feedback")
-    @ResponseBody
-    public String updateFeedback(@RequestBody RecommendDTO dto) {
-        dto.setUserId(SecurityUtil.getCurrentUserId());
-        recommendService.updateFeedback(dto);
-        return "피드백 저장 완료";
+    @GetMapping("/loading")
+    public String recommendLoading(RedirectAttributes redirectAttributes) {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        RecommendDTO latest = recommendService.getLatestInput(userId);
+
+        List<RecommendResultDTO> recs = recommendService.callFlaskRecommend(
+                userId,
+                latest.getTravelPurpose(),
+                latest.getCompanion()
+        );
+
+        if (recs.size() > 3) {
+            recs = recs.subList(0, 3); // 상위 3개만
+        }
+
+        redirectAttributes.addFlashAttribute("user", SecurityUtil.getCurrentUserDetails());
+        redirectAttributes.addFlashAttribute("recommendations", recs);
+
+        return "redirect:/recommend/result";
     }
 }

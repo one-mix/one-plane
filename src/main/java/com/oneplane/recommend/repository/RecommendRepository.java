@@ -7,12 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface RecommendRepository {
     void insertAgreement(Integer userId);
     Integer getLatestRecommendId(Integer userId);
-
     String getLatestAgreement(Integer userId);
-
     void updateInput(RecommendDTO dto);
-
-    void updateSelection(RecommendDTO dto);
-
-    void updateFeedback(RecommendDTO dto);
+    RecommendDTO getLatestInput(Integer userId);
 }

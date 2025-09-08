@@ -1,41 +1,26 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <main class="result">
     <link rel="stylesheet" href="<c:url value='/css/recommend/result.css'/>">
     <h2>
-        <span class="username">홍길동</span>님을 위한 3개국,<br>
+        <span class="username">${user.nickname}</span>님을 위한 3개국,<br>
         어떤 곳이 마음에 드시나요?
     </h2>
 
     <div class="cards">
-        <div class="card" data-country="아시아">
-            <div class="card-image"></div>
-            <div class="card-content">
-                <p class="country">나라</p>
-                <h3 class="place">대표 관광지</h3>
-                <p class="extra">유사도: 90%</p>
-                <p class="extra">대륙: 아시아</p>
+        <c:forEach var="rec" items="${recommendations}">
+            <div class="card" data-country="${rec.countryIso3}">
+                <div class="card-image"></div>
+                <div class="card-content">
+                    <p class="country">${rec.countryNameKo}</p>
+                    <h3 class="place">${rec.city}</h3>
+                    <p class="extra">유사도: <fmt:formatNumber value="${rec.score * 100}" pattern="##0"/>%</p>
+                    <p class="extra">코드: ${rec.countryIso3}</p>
+                </div>
             </div>
-        </div>
-        <div class="card" data-country="유럽">
-            <div class="card-image"></div>
-            <div class="card-content">
-                <p class="country">나라</p>
-                <h3 class="place">대표 관광지</h3>
-                <p class="extra">유사도: 85%</p>
-                <p class="extra">대륙: 유럽</p>
-            </div>
-        </div>
-        <div class="card" data-country="아메리카">
-            <div class="card-image"></div>
-            <div class="card-content">
-                <p class="country">나라</p>
-                <h3 class="place">대표 관광지</h3>
-                <p class="extra">유사도: 82%</p>
-                <p class="extra">대륙: 아메리카</p>
-            </div>
-        </div>
+        </c:forEach>
     </div>
 
     <div class="actions">

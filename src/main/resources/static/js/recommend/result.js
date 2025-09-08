@@ -6,23 +6,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const comment = document.getElementById("comment");
     const toast = document.getElementById("toast");
     const saveBtn = document.querySelector(".save");
+    const cancelBtn = document.querySelector(".cancel");
 
     let selectedRating = 0;
+    let selectedCountry = null;
 
     // 카드 선택 시 저장 버튼 활성화
     document.querySelectorAll(".card").forEach(card => {
         card.addEventListener("click", () => {
             document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
             card.classList.add("selected");
+            selectedCountry = card.dataset.country; // countryIso3 값
             saveBtn.disabled = false;
         });
     });
 
-    // 취소/저장 버튼 → 모달 열기
-    document.querySelector(".cancel").addEventListener("click", () => {
-        feedbackModal.style.display = "flex";
+    // 취소 → 메인으로 복귀
+    cancelBtn.addEventListener("click", () => {
+        window.location.href = "/recommend";
     });
+
+    // 저장 버튼 → 모달 열기만
     saveBtn.addEventListener("click", () => {
+        if (!selectedCountry) {
+            alert("저장할 국가를 선택하세요.");
+            return;
+        }
         feedbackModal.style.display = "flex";
     });
 
@@ -42,24 +51,47 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 제출 버튼
+    // 피드백 제출
     submitFeedback.addEventListener("click", () => {
+        if (!selectedCountry) {
+            alert("저장할 국가를 선택하세요!");
+            return;
+        }
+        if (!selectedRating) {
+            alert("별점을 선택해주세요!");
+            return;
+        }
+
         const feedbackText = comment.value;
-        console.log(`⭐ 평점: ${selectedRating}\n📝 코멘트: ${feedbackText}`);
 
-        feedbackModal.style.display = "none";
+        fetch("/api/recommend/feedback", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                countryIso3: selectedCountry,
+                recommendRating: selectedRating,
+                ratingContent: feedbackText
+            })
+        })
+            .then(res => res.text())
+            .then(msg => {
+                console.log("✅ 피드백 저장:", msg);
 
-        // 토스트 메시지 표시
-        toast.textContent = "피드백이 제출되었습니다!";
-        toast.classList.add("show");
+                feedbackModal.style.display = "none";
 
-        setTimeout(() => {
-            toast.classList.remove("show");
-        }, 2000);
+                // 토스트 메시지 표시
+                toast.textContent = "피드백이 제출되었습니다!";
+                toast.classList.add("show");
 
-        // 토스트 닫힌 후 페이지 이동
-        setTimeout(() => {
-            window.location.href = "/recommend";
-        }, 2500);
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 2000);
+
+                // 토스트 닫힌 후 메인으로 이동
+                setTimeout(() => {
+                    window.location.href = "/recommend";
+                }, 2500);
+            })
+            .catch(err => console.error("❌ 피드백 저장 실패:", err));
     });
 });
