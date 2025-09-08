@@ -5,69 +5,97 @@
 
 <mapper namespace="com.oneplane.country.dao.CountryDao">
 
-    <!-- resultMap 정의 -->
+    <!-- Country 매핑 -->
     <resultMap id="CountryMap" type="com.oneplane.country.domain.Country">
-        <id property="countryId" column="country_id"/>
-        <result property="countryName" column="country_name"/>
+        <id     property="countryId"     column="country_id"/>
+        <result property="countryName"   column="country_name"/>
         <result property="countryEnName" column="country_en_name"/>
-        <result property="isoCode" column="iso_code"/> <!-- 중요 -->
-        <result property="continent" column="continent"/>
-        <result property="img" column="img"/>
-        <result property="latitude" column="latitude"/>
-        <result property="longitude" column="longitude"/>
-        <result property="currency" column="currency"/>
-        <result property="distance" column="distance"/>
+        <result property="isoCode"       column="iso_code"/> <!-- ISO-3 코드 -->
+        <result property="continent"     column="continent"/>
+        <result property="img"           column="img"/>
+        <result property="latitude"      column="latitude"/>
+        <result property="longitude"     column="longitude"/>
+        <result property="currency"      column="currency"/>
+        <result property="distance"      column="distance"/>
     </resultMap>
 
+    <!-- 단일 조회 (ID) -->
     <select id="selectCountryById" parameterType="long" resultMap="CountryMap">
-        SELECT * FROM country WHERE country_id = #{id}
+        SELECT *
+        FROM country
+        WHERE country_id = #{id}
     </select>
 
+    <!-- 전체 조회 -->
     <select id="selectAllCountries" resultMap="CountryMap">
-        SELECT * FROM country
+        SELECT *
+        FROM country
     </select>
 
+    <!-- 한글 이름으로 조회 -->
     <select id="findByName" parameterType="string" resultMap="CountryMap">
-        SELECT * FROM country WHERE country_name = #{name}
+        SELECT *
+        FROM country
+        WHERE country_name = #{name}
     </select>
 
+    <!-- ISO 코드로 조회 (ISO-3) -->
+    <select id="findByIsoCode" parameterType="string" resultMap="CountryMap">
+        SELECT *
+        FROM country
+        WHERE iso_code = #{isoCode}
+    </select>
+
+    <!-- Upsert: 존재하면 Update, 없으면 Insert -->
     <insert id="insertCountry" parameterType="com.oneplane.country.domain.Country">
         MERGE INTO country c
         USING (SELECT #{isoCode} AS iso_code FROM dual) s
         ON (c.iso_code = s.iso_code)
         WHEN MATCHED THEN
         UPDATE SET
-        country_name = #{countryName},
-        country_en_name = #{countryEnName},
-        continent = #{continent},
-        img = #{img},
-        latitude = #{latitude},
-        longitude = #{longitude},
-        currency = #{currency},
-        distance = #{distance}
+        country_name     = #{countryName},
+        country_en_name  = #{countryEnName},
+        continent        = #{continent},
+        img              = #{img},
+        latitude         = #{latitude},
+        longitude        = #{longitude},
+        currency         = #{currency},
+        distance         = #{distance}
         WHEN NOT MATCHED THEN
-        INSERT (country_name, country_en_name, iso_code, continent, img, latitude, longitude, currency, distance)
-        VALUES (#{countryName}, #{countryEnName}, #{isoCode}, #{continent}, #{img}, #{latitude}, #{longitude}, #{currency}, #{distance})
+        INSERT (
+        country_name, country_en_name, iso_code,
+        continent, img, latitude, longitude,
+        currency, distance
+        ) VALUES (
+        #{countryName}, #{countryEnName}, #{isoCode},
+        #{continent}, #{img}, #{latitude}, #{longitude},
+        #{currency}, #{distance}
+        )
     </insert>
 
+    <!-- Update -->
     <update id="updateCountry" parameterType="com.oneplane.country.domain.Country">
         UPDATE country
-        SET country_name = #{countryName},
-        country_en_name = #{countryEnName},
-        iso_code = #{isoCode},
-        continent = #{continent},
-        img = #{img},
-        latitude = #{latitude},
-        longitude = #{longitude},
-        currency = #{currency},
-        distance = #{distance}
+        SET
+        country_name     = #{countryName},
+        country_en_name  = #{countryEnName},
+        iso_code         = #{isoCode},
+        continent        = #{continent},
+        img              = #{img},
+        latitude         = #{latitude},
+        longitude        = #{longitude},
+        currency         = #{currency},
+        distance         = #{distance}
         WHERE country_id = #{countryId}
     </update>
 
+    <!-- 단일 삭제 -->
     <delete id="deleteCountry" parameterType="long">
-        DELETE FROM country WHERE country_id = #{id}
+        DELETE FROM country
+        WHERE country_id = #{id}
     </delete>
 
+    <!-- 전체 삭제 -->
     <delete id="deleteAllCountries">
         DELETE FROM country
     </delete>

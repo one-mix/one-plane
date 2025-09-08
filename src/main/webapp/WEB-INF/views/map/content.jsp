@@ -197,7 +197,7 @@
 
                     L.geoJson(geoData, {
                         style: feature => {
-                            const iso = (feature.properties.iso_a2 || "").trim().toUpperCase();
+                            const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
                             const level = alertMap[iso];
                             console.log("Feature ISO:", iso, "Level:", level);
                             return {
@@ -208,7 +208,7 @@
                             };
                         },
                         onEachFeature: (feature, layer) => {
-                            const iso = (feature.properties.iso_a2 || "").trim().toUpperCase();
+                            const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
                             const level = alertMap[iso] || "정보 없음";
                             console.log("Feature ISO:", iso, "Level:", level);
                             layer.bindPopup(`${feature.properties.admin} : ${level}`);

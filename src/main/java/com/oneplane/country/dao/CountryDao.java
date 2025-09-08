@@ -16,4 +16,6 @@ public interface CountryDao {
     int deleteAllCountries();
 
     Country findByName(@Param("name") String name);
+
+    Country findByIsoCode(String isoCode);
 }
