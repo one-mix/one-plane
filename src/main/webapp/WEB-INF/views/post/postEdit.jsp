@@ -60,7 +60,7 @@
         <!-- 버튼 컨테이너 -->
         <div class="button-container">
             <a href="/post/detail/${post.postId}" class="btn-cancel"
-               style="background: var(--gray-200); color: var(--gray-700); border: none; padding: 12px var(--spacing-lg);
+               style="background: white; color: var(--gray-700); border: 1px solid var(--gray-200); padding: 12px var(--spacing-lg);
                       border-radius: 6px; font-size: 16px; font-weight: var(--font-medium); font-family: var(--font-main);
                       cursor: pointer; text-decoration: none; display: inline-block; margin-right: 10px;">
                 취소

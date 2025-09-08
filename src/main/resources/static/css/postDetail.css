@@ -367,8 +367,9 @@
 .comment-write {
     margin-bottom: 30px;
     padding: 20px;
-    background: var(--gray-100);
+    /*background: var(--gray-0);*/
     border-radius: 12px;
+    text-align: right;
 }
 
 .comment-input {
@@ -381,6 +382,7 @@
     font-family: var(--font-main);
     font-size: 14px;
     margin-bottom: 10px;
+    text-align: left;
 }
 
 .comment-input:focus {
