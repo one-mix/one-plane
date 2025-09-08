@@ -143,7 +143,7 @@
         * [37.5665, 126.9780]: 서울 시청 근처 좌표
         * 13: 줌 레벨 (0=전세계, 18=아주 세밀하게)
         */
-        const map = L.map('map').setView([37.5665, 126.9780], 13);
+        const map = L.map('map').setView([37.5665, 126.9780], 10);
 
         /*
         * 지도 타일 불러오기
@@ -155,6 +155,68 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
+
+        // === 여행경보 색칠 ===
+        function getColor(level) {
+            switch(level) {
+                case "여행유의": return "#FEE33C";   // 노랑
+                case "여행자제": return "#FAAD14";   // 주황
+                case "철수권고": return "#FF4D4F";   // 빨강
+                case "여행금지": return "#000000";   // 검정
+                default: return "#D9D9D9";            // 정보 없음
+            }
+        }
+
+        // 여행경보 + GeoJSON 불러오기
+        fetch("/alerts/all")
+          .then(res => res.json())
+          .then(alertData => {
+              console.log("alerts/all 응답:", alertData);
+              const alertMap = {};
+
+              // alertMap 채우기 (isoCode → levelValue)
+                alertData.forEach(d => {
+                    // country 객체 키 전부 출력
+                    console.log("country obj:", d.country);
+
+                    const rawIso = d.country.isoCode || d.country.iso_code || d.country.ISO_CODE;
+                    if (rawIso) {
+                        const iso = rawIso.trim().toUpperCase();
+                        alertMap[iso] = d.levelValue;
+                    }
+                });
+
+
+              console.log("alertMap 최종:", alertMap);
+
+              // GeoJSON 불러오기
+              fetch("/geojson/custom.geo.json")
+                .then(res => res.json())
+                .then(geoData => {
+                    console.log("GeoJSON:", geoData);
+
+                    L.geoJson(geoData, {
+                        style: feature => {
+                            const iso = (feature.properties.iso_a2 || "").trim().toUpperCase();
+                            const level = alertMap[iso];
+                            console.log("Feature ISO:", iso, "Level:", level);
+                            return {
+                                fillColor: getColor(level),
+                                weight: 1,
+                                color: "white",
+                                fillOpacity: 0.7
+                            };
+                        },
+                        onEachFeature: (feature, layer) => {
+                            const iso = (feature.properties.iso_a2 || "").trim().toUpperCase();
+                            const level = alertMap[iso] || "정보 없음";
+                            console.log("Feature ISO:", iso, "Level:", level);
+                            layer.bindPopup(`${feature.properties.admin} : ${level}`);
+                        }
+                    }).addTo(map);
+                });
+          });
+
 
         /*
         * 변수형 마커 추가 (검색 시 재활용하기 위함)

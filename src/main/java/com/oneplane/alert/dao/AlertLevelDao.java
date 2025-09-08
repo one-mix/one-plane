@@ -4,6 +4,8 @@ import com.oneplane.alert.domain.AlertLevel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface AlertLevelDao {
 
@@ -12,4 +14,6 @@ public interface AlertLevelDao {
 
     // 여행경보 추가
     void insertAlert(AlertLevel alertLevel);
+
+    List<AlertLevel> selectAllAlerts();
 }

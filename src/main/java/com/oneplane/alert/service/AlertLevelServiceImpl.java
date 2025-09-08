@@ -4,6 +4,8 @@ import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.alert.domain.AlertLevel;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AlertLevelServiceImpl implements AlertLevelService {
     private final AlertLevelDao alertLevelDao;
@@ -20,5 +22,10 @@ public class AlertLevelServiceImpl implements AlertLevelService {
     @Override
     public void saveAlert(AlertLevel alertLevel) {
         alertLevelDao.insertAlert(alertLevel);
+    }
+
+    @Override
+    public List<AlertLevel> getAllAlerts() {
+        return alertLevelDao.selectAllAlerts();
     }
 }

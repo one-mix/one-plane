@@ -15,6 +15,7 @@
             <id property="countryId" column="country_id"/>
             <result property="countryName" column="country_name"/>
             <result property="countryEnName" column="country_en_name"/>
+            <result property="isoCode" column="iso_code"/> <!-- 추가 -->
             <result property="continent" column="continent"/>
             <result property="img" column="img"/>
         </association>
@@ -28,6 +29,16 @@
         JOIN country c ON a.country_id = c.country_id
         WHERE a.country_id = #{countryId}
     </select>
+
+    <!-- 여행경보 전체 조회 -->
+    <select id="selectAllAlerts" resultMap="AlertLevelMap">
+        SELECT a.alert_id, a.country_id, a.level_value,
+        c.country_name, c.country_en_name, c.iso_code,
+        c.continent, c.img, c.latitude, c.longitude
+        FROM alert_level a
+        JOIN country c ON a.country_id = c.country_id
+    </select>
+
 
     <!-- 여행경보 입력 -->
     <insert id="insertAlert" parameterType="com.oneplane.alert.domain.AlertLevel">

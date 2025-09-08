@@ -6,4 +6,6 @@ import java.util.List;
 public interface AlertLevelService {
     AlertLevel getAlertByCountryId(Long countryId);
     void saveAlert(AlertLevel alertLevel);
+
+    List<AlertLevel> getAllAlerts();
 }

@@ -5,15 +5,29 @@
 
 <mapper namespace="com.oneplane.country.dao.CountryDao">
 
-    <select id="selectCountryById" resultType="com.oneplane.country.domain.Country">
+    <!-- resultMap 정의 -->
+    <resultMap id="CountryMap" type="com.oneplane.country.domain.Country">
+        <id property="countryId" column="country_id"/>
+        <result property="countryName" column="country_name"/>
+        <result property="countryEnName" column="country_en_name"/>
+        <result property="isoCode" column="iso_code"/> <!-- 중요 -->
+        <result property="continent" column="continent"/>
+        <result property="img" column="img"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="currency" column="currency"/>
+        <result property="distance" column="distance"/>
+    </resultMap>
+
+    <select id="selectCountryById" parameterType="long" resultMap="CountryMap">
         SELECT * FROM country WHERE country_id = #{id}
     </select>
 
-    <select id="selectAllCountries" resultType="com.oneplane.country.domain.Country">
+    <select id="selectAllCountries" resultMap="CountryMap">
         SELECT * FROM country
     </select>
 
-    <select id="findByName" parameterType="string" resultType="com.oneplane.country.domain.Country">
+    <select id="findByName" parameterType="string" resultMap="CountryMap">
         SELECT * FROM country WHERE country_name = #{name}
     </select>
 
@@ -23,17 +37,17 @@
         ON (c.iso_code = s.iso_code)
         WHEN MATCHED THEN
         UPDATE SET
-            country_name = #{countryName},
-            country_en_name = #{countryEnName},
-            continent = #{continent},
-            img = #{img},
-            latitude = #{latitude},
-            longitude = #{longitude},
-            currency = #{currency},
-            distance = #{distance}
+        country_name = #{countryName},
+        country_en_name = #{countryEnName},
+        continent = #{continent},
+        img = #{img},
+        latitude = #{latitude},
+        longitude = #{longitude},
+        currency = #{currency},
+        distance = #{distance}
         WHEN NOT MATCHED THEN
-            INSERT (country_name, country_en_name, iso_code, continent, img, latitude, longitude, currency, distance)
-            VALUES (#{countryName}, #{countryEnName}, #{isoCode}, #{continent}, #{img}, #{latitude}, #{longitude}, #{currency}, #{distance})
+        INSERT (country_name, country_en_name, iso_code, continent, img, latitude, longitude, currency, distance)
+        VALUES (#{countryName}, #{countryEnName}, #{isoCode}, #{continent}, #{img}, #{latitude}, #{longitude}, #{currency}, #{distance})
     </insert>
 
     <update id="updateCountry" parameterType="com.oneplane.country.domain.Country">
@@ -57,4 +71,5 @@
     <delete id="deleteAllCountries">
         DELETE FROM country
     </delete>
+
 </mapper>
