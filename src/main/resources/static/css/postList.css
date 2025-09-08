@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin: 20px;
     flex-wrap: wrap;
     gap: 20px;
 }
@@ -18,20 +18,20 @@
     display: flex;
     gap: var(--spacing-sm);
     align-items: center;
-    background: var(--main-0);
+    /*background: var(--main-0);*/
     padding: var(--spacing-sm);
     border-radius: 50px;
     flex-shrink: 0;
 }
 
 .top-tab {
-    padding: 12px var(--spacing-lg);
+    padding: 12px var(--spacing-md);
     border: none;
     border-radius: 25px;
     background: transparent;
     color: var(--gray-400);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: var(--font-medium);
     font-family: var(--font-main);
     cursor: pointer;
@@ -48,10 +48,11 @@
 }
 
 .top-tab.active {
-    background: var(--main-100);
-    color: var(--gray-800);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+    color: var(--main-700);
+    /*box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);*/
     border: 1px solid var(--gray-100);
+    /*font-weight: var(--font-semibold);*/
 }
 
 .search-area {
@@ -59,12 +60,15 @@
     gap: var(--spacing-md);
     align-items: center;
     flex-shrink: 0;
+    /*padding: var(--spacing-sm);*/
+    /*padding: 32px;*/
 }
 
 .search-area form {
     display: flex;
     gap: var(--spacing-md);
     align-items: center;
+    padding-top: var(--spacing-md);
 }
 
 .country-dropdown {
@@ -138,18 +142,18 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    /*transition: all 0.2s ease;*/
 }
 
 .result-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-color: var(--gray-200);
-    transform: translateY(-2px);
+    /*box-shadow: 0 4px 12px rgba(0,0,0,0.1);*/
+    /*border-color: var(--gray-100);*/
+    /*transform: translateY(-2px);*/
 }
 
 .result-info {
     flex: 1;
-    margin-right: var(--spacing-md);
+    margin-right: 60px;
 }
 
 .result-info h3 {
@@ -193,7 +197,16 @@
     border-radius: 8px;
 }
 
-.category-badge {
+/*.category-badge {*/
+/*    display: inline-block;*/
+/*    padding: 4px var(--spacing-sm);*/
+/*    border-radius: 12px;*/
+/*    font-size: 12px;*/
+/*    font-weight: var(--font-medium);*/
+/*    font-family: var(--font-main);*/
+/*    margin-right: var(--spacing-sm);*/
+/*}*/
+.country-badge {
     display: inline-block;
     padding: 4px var(--spacing-sm);
     border-radius: 12px;
@@ -201,7 +214,10 @@
     font-weight: var(--font-medium);
     font-family: var(--font-main);
     margin-right: var(--spacing-sm);
+    background: var(--main-100);
+    color: var(--main-700);
 }
+
 
 .category-READY {
     background: var(--main-200);

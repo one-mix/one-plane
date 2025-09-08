@@ -37,13 +37,28 @@
                     <div class="result-card" onclick="location.href='/post/detail/${post.postId}'">
                         <div class="result-info">
                             <div style="margin-bottom: 8px;">
-                                <span class="category-badge category-${post.category}">
+                                <span class="country-badge">
                                     <c:choose>
-                                        <c:when test="${post.category eq 'READY'}">준비</c:when>
-                                        <c:when test="${post.category eq 'REVIEW'}">후기</c:when>
-                                        <c:when test="${post.category eq 'ACCOMPANY'}">동행</c:when>
-                                        <c:when test="${post.category eq 'FREE'}">자유</c:when>
-                                        <c:otherwise>${post.category}</c:otherwise>
+                                        <c:when test="${not empty post.country}">
+                                            <c:choose>
+                                                <c:when test="${post.country eq 'japan'}">일본</c:when>
+                                                <c:when test="${post.country eq 'korea'}">한국</c:when>
+                                                <c:when test="${post.country eq 'china'}">중국</c:when>
+                                                <c:when test="${post.country eq 'usa'}">미국</c:when>
+                                                <c:when test="${post.country eq 'thailand'}">태국</c:when>
+                                                <c:when test="${post.country eq 'vietnam'}">베트남</c:when>
+                                                <c:when test="${post.country eq 'singapore'}">싱가포르</c:when>
+                                                <c:when test="${post.country eq 'malaysia'}">말레이시아</c:when>
+                                                <c:when test="${post.country eq 'philippines'}">필리핀</c:when>
+                                                <c:when test="${post.country eq 'france'}">프랑스</c:when>
+                                                <c:when test="${post.country eq 'italy'}">이탈리아</c:when>
+                                                <c:when test="${post.country eq 'spain'}">스페인</c:when>
+                                                <c:when test="${post.country eq 'germany'}">독일</c:when>
+                                                <c:when test="${post.country eq 'uk'}">영국</c:when>
+                                                <c:otherwise>${post.country}</c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>미분류</c:otherwise>
                                     </c:choose>
                                 </span>
                             </div>
@@ -95,7 +110,8 @@
                                 선택한 카테고리에 게시글이 없습니다.
                             </c:when>
                             <c:otherwise>
-                                아직 작성된 게시글이 없습니다. 첫 번째 게시글을 작성해보세요!
+                                아직 작성된 게시글이 없습니다. <br>
+                                첫 번째 게시글을 작성해보세요!
                             </c:otherwise>
                         </c:choose>
                     </p>
@@ -163,15 +179,6 @@
 </main>
 
 <script>
-    document.querySelectorAll('.result-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
-        });
-
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
 
     document.querySelector('form').addEventListener('submit', function(e) {
         const searchInput = document.querySelector('input[name="search"]');
