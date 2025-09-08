@@ -1,6 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%-- EL 해석 무시 --%>
-<%@ page isELIgnored="true" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" isELIgnored="true" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <%-- CSS 연결 --%>
@@ -336,12 +335,21 @@
            <%-- 최신글 + 더보기--%>
            <div class="title-and-more">
                <span class="title">최신글</span>
-               <a href="http://localhost:8080/post/list" class="more">더보기 →</a>
+               <a href="/post/list" class="more">더보기 →</a>
            </div>
+
+           <!-- 국가 리스트 -->
+            <ul>
+                <c:forEach var="c" items="${countries}">
+                    <li class="tooltip-country">${c.countryName}</li>
+                </c:forEach>
+            </ul>
+
+
 
             <%-- 최신글 목록 (5개만 표시) --%>
             <div class="post-list">
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -349,7 +357,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -357,7 +365,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -365,7 +373,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -373,7 +381,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -389,12 +397,12 @@
            <%-- 인기글 + 더보기--%>
            <div class="title-and-more">
                <span class="title">인기글</span>
-               <a href="http://localhost:8080/post/list" class="more">더보기 →</a>
+                <a href="/post/list" class="more">더보기 →</a>
            </div>
 
            <%-- 인기글 목록 (5개만 표시) --%>
             <div class="post-list">
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -402,7 +410,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -410,7 +418,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -418,7 +426,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -426,7 +434,7 @@
                     <span>YYYY-MM-DD</span>
                 </a>
 
-                <a href="http://localhost:8080/post/list" class="post-item">
+                <a href="/post/list" class="post-item">
                     <div class="country-and-title">
                         <span>나라</span>
                         <span>제목</span>
@@ -450,7 +458,7 @@
                 <div class="carousel-track">
 
                 <%-- 슬라이드 1p (3개의 카드 표시) --%>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -458,7 +466,7 @@
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -466,7 +474,7 @@
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -476,7 +484,7 @@
                 </a>
 
                 <%-- 슬라이드 2p (3개의 카드 표시) --%>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -484,7 +492,7 @@
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -492,7 +500,7 @@
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -502,7 +510,7 @@
                 </a>
 
                 <%-- 슬라이드 3p (3개의 카드 표시) --%>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -510,7 +518,7 @@
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>
@@ -518,7 +526,7 @@
                         <span class="date">YYYY-MM-DD</span>
                     </div>
                 </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
+                <a href="/post/list?category=REVIEW" class="review-card">
                     <img class="thumbnail" src="/images/sample.png" alt="썸네일">
                     <div class="info">
                         <span class="country">나라</span>

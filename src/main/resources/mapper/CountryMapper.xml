@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.country.dao.CountryDao">
+
+    <select id="selectCountryById" resultType="com.oneplane.country.domain.Country">
+        SELECT * FROM country WHERE country_id = #{id}
+    </select>
+
+    <select id="selectAllCountries" resultType="com.oneplane.country.domain.Country">
+        SELECT * FROM country
+    </select>
+
+    <insert id="insertCountry" parameterType="com.oneplane.country.domain.Country">
+        MERGE INTO country c
+        USING (SELECT #{isoCode} AS iso_code FROM dual) s
+        ON (c.iso_code = s.iso_code)
+        WHEN MATCHED THEN
+        UPDATE SET
+            country_name = #{countryName},
+            country_en_name = #{countryEnName},
+            continent = #{continent},
+            img = #{img},
+            latitude = #{latitude},
+            longitude = #{longitude},
+            currency = #{currency},
+            distance = #{distance}
+        WHEN NOT MATCHED THEN
+            INSERT (country_name, country_en_name, iso_code, continent, img, latitude, longitude, currency, distance)
+            VALUES (#{countryName}, #{countryEnName}, #{isoCode}, #{continent}, #{img}, #{latitude}, #{longitude}, #{currency}, #{distance})
+    </insert>
+
+
+    <update id="updateCountry" parameterType="com.oneplane.country.domain.Country">
+        UPDATE country
+        SET country_name = #{countryName},
+        country_en_name = #{countryEnName},
+        iso_code = #{isoCode},
+        continent = #{continent},
+        img = #{img},
+        latitude = #{latitude},
+        longitude = #{longitude},
+        currency = #{currency},
+        distance = #{distance}
+        WHERE country_id = #{countryId}
+    </update>
+
+    <delete id="deleteCountry" parameterType="long">
+        DELETE FROM country WHERE country_id = #{id}
+    </delete>
+
+    <delete id="deleteAllCountries">
+        DELETE FROM country
+    </delete>
+</mapper>
