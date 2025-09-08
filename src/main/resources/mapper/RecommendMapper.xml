@@ -1,25 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oneplane.recommend.repository.RecommendRepository">
 
-    <insert id="save" parameterType="com.oneplane.recommend.domain.Recommend">
+    <!-- 동의 저장 -->
+    <insert id="insertAgreement" parameterType="int">
+        INSERT INTO recommend (user_id, agreement, created_at)
+        VALUES (#{userId}, 'Y', SYSDATE)
+    </insert>
+
+    <!-- 최근 동의 여부 확인 -->
+    <select id="findLatestAgreement" parameterType="int" resultType="string">
+        SELECT agreement
+        FROM recommend
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- 국가 선택 INSERT -->
+    <insert id="insertSelection" parameterType="com.oneplane.recommend.dto.RecommendDTO">
         INSERT INTO recommend (
-            user_id, travel_history_id, country_id,
-            travel_purpose, companion, recommend_rating, rating_content, agreement
+            user_id, country_id, travel_purpose, companion, created_at
         ) VALUES (
-                     #{userId}, #{travelHistoryId}, #{countryId},
-                     #{travelPurpose}, #{companion}, #{recommendRating}, #{ratingContent}, #{agreement}
+                     #{userId}, #{countryId}, #{travelPurpose}, #{companion}, SYSDATE
                  )
     </insert>
 
-    <select id="findByUserId" parameterType="long" resultType="com.oneplane.recommend.domain.Recommend">
-        SELECT *
-        FROM recommend
-        WHERE user_id = #{userId}
-          AND deleted_at IS NULL
-        ORDER BY created_at DESC
-    </select>
+    <!-- 피드백 INSERT -->
+    <insert id="insertFeedback" parameterType="com.oneplane.recommend.dto.RecommendDTO">
+        INSERT INTO recommend (
+            user_id, recommend_rating, rating_content, created_at
+        ) VALUES (
+                     #{userId}, #{recommendRating}, #{ratingContent}, SYSDATE
+                 )
+    </insert>
 
 </mapper>

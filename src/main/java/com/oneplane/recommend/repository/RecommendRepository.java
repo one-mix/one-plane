@@ -1,12 +1,15 @@
 package com.oneplane.recommend.repository;
 
-import com.oneplane.recommend.domain.Recommend;
+import com.oneplane.recommend.dto.RecommendDTO;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
 
 @Mapper
 public interface RecommendRepository {
-    void save(Recommend recommend);
-    List<Recommend> findByUserId(Long userId);
+    void insertAgreement(Integer userId);
+
+    String findLatestAgreement(Integer userId);
+
+    void insertSelection(RecommendDTO dto);
+
+    void insertFeedback(RecommendDTO dto);
 }

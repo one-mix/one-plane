@@ -4,7 +4,7 @@
 <main class="hero">
     <section class="intro">
         <h1><span class="highlight">AI</span>와 함께<br>여행지 알아보기</h1>
-        <p>회원님의 여행 이력과 정보를 바탕으로<br>
+        <p>${user.nickname}님의 여행 이력과 정보를 바탕으로<br>
             취향과 목적에 맞는 여행 국가를 추천해드려요!</p>
 
         <label class="consent">
