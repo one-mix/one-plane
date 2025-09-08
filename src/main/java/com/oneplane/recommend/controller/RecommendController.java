@@ -4,7 +4,6 @@ import com.oneplane.config.SecurityUtil;
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.service.RecommendService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -34,12 +33,21 @@ public class RecommendController {
         return "동의 완료";
     }
 
+    /** 여행 목적 + 동행자 저장 */
+    @PostMapping("/input")
+    @ResponseBody
+    public String saveInput(@RequestBody RecommendDTO dto) {
+        dto.setUserId(SecurityUtil.getCurrentUserId());
+        recommendService.updateInput(dto);
+        return "여행 목적/동행자 저장 완료";
+    }
+
     /** 국가 선택 저장 */
     @PostMapping("/selection")
     @ResponseBody
     public String updateSelection(@RequestBody RecommendDTO dto) {
         dto.setUserId(SecurityUtil.getCurrentUserId());
-        recommendService.insertSelection(dto);
+        recommendService.updateSelection(dto);
         return "선택 완료";
     }
 
@@ -48,7 +56,7 @@ public class RecommendController {
     @ResponseBody
     public String updateFeedback(@RequestBody RecommendDTO dto) {
         dto.setUserId(SecurityUtil.getCurrentUserId());
-        recommendService.insertFeedback(dto);
+        recommendService.updateFeedback(dto);
         return "피드백 저장 완료";
     }
 }

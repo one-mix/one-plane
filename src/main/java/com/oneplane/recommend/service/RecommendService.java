@@ -3,9 +3,11 @@ package com.oneplane.recommend.service;
 import com.oneplane.recommend.dto.RecommendDTO;
 
 public interface RecommendService {
-    void saveAgreement(Integer userId);
+    Integer saveAgreement(Integer userId);
     String getLatestAgreement(Integer userId);
 
-    void insertSelection(RecommendDTO dto);
-    void insertFeedback(RecommendDTO dto);
+    void updateInput(RecommendDTO dto);
+
+    void updateSelection(RecommendDTO dto);
+    void updateFeedback(RecommendDTO dto);
 }

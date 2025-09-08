@@ -6,10 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface RecommendRepository {
     void insertAgreement(Integer userId);
+    Integer getLatestRecommendId(Integer userId);
 
-    String findLatestAgreement(Integer userId);
+    String getLatestAgreement(Integer userId);
 
-    void insertSelection(RecommendDTO dto);
+    void updateInput(RecommendDTO dto);
 
-    void insertFeedback(RecommendDTO dto);
+    void updateSelection(RecommendDTO dto);
+
+    void updateFeedback(RecommendDTO dto);
 }

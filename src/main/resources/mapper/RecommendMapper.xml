@@ -11,8 +11,17 @@
         VALUES (#{userId}, 'Y', SYSDATE)
     </insert>
 
-    <!-- 최근 동의 여부 확인 -->
-    <select id="findLatestAgreement" parameterType="int" resultType="string">
+    <!-- 최신 recommend_id 가져오기 -->
+    <select id="getLatestRecommendId" parameterType="int" resultType="int">
+        SELECT recommend_id
+        FROM recommend
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+            FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <!-- 최근 agreement 여부 확인 -->
+    <select id="getLatestAgreement" parameterType="int" resultType="string">
         SELECT agreement
         FROM recommend
         WHERE user_id = #{userId}
@@ -20,8 +29,16 @@
             FETCH FIRST 1 ROWS ONLY
     </select>
 
+    <!-- 여행 목적 + 동행자 업데이트 -->
+    <update id="updateInput" parameterType="com.oneplane.recommend.dto.RecommendDTO">
+        UPDATE recommend
+        SET travel_purpose = #{travelPurpose},
+            companion = #{companion}
+        WHERE recommend_id = #{recommendId}
+    </update>
+
     <!-- 국가 선택 INSERT -->
-    <insert id="insertSelection" parameterType="com.oneplane.recommend.dto.RecommendDTO">
+    <insert id="updateSelection" parameterType="com.oneplane.recommend.dto.RecommendDTO">
         INSERT INTO recommend (
             user_id, country_id, travel_purpose, companion, created_at
         ) VALUES (
@@ -30,7 +47,7 @@
     </insert>
 
     <!-- 피드백 INSERT -->
-    <insert id="insertFeedback" parameterType="com.oneplane.recommend.dto.RecommendDTO">
+    <insert id="updateFeedback" parameterType="com.oneplane.recommend.dto.RecommendDTO">
         INSERT INTO recommend (
             user_id, recommend_rating, rating_content, created_at
         ) VALUES (

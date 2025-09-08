@@ -14,22 +14,33 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     @Override
-    public void saveAgreement(Integer userId) {
+    public Integer saveAgreement(Integer userId) {
         recommendRepository.insertAgreement(userId);
+        return recommendRepository.getLatestRecommendId(userId);
     }
 
     @Override
     public String getLatestAgreement(Integer userId) {
-        return recommendRepository.findLatestAgreement(userId);
+        return recommendRepository.getLatestAgreement(userId);
     }
 
     @Override
-    public void insertSelection(RecommendDTO dto) {
-        recommendRepository.insertSelection(dto);
+    public void updateInput(RecommendDTO dto) {
+        Integer latestId = recommendRepository.getLatestRecommendId(dto.getUserId());
+        if (latestId == null) {
+            throw new IllegalStateException("해당 유저의 동의 내역이 없습니다.");
+        }
+        dto.setRecommendId(latestId);
+        recommendRepository.updateInput(dto);
     }
 
     @Override
-    public void insertFeedback(RecommendDTO dto) {
-        recommendRepository.insertFeedback(dto);
+    public void updateSelection(RecommendDTO dto) {
+        recommendRepository.updateSelection(dto);
+    }
+
+    @Override
+    public void updateFeedback(RecommendDTO dto) {
+        recommendRepository.updateFeedback(dto);
     }
 }
