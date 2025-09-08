@@ -8,4 +8,7 @@ public class RecommendResultDTO {
     private String countryIso3;
     private String city;
     private double score;
+
+    private String continent;
+    private String countryImg;
 }

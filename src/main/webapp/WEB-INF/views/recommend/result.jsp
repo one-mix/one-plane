@@ -12,12 +12,14 @@
     <div class="cards">
         <c:forEach var="rec" items="${recommendations}">
             <div class="card" data-country="${rec.countryIso3}">
-                <div class="card-image"></div>
+                <div class="card-image">
+                    <img src="${rec.countryImg}" alt="${rec.countryNameKo} 국기">
+                </div>
                 <div class="card-content">
                     <p class="country">${rec.countryNameKo}</p>
                     <h3 class="place">${rec.city}</h3>
                     <p class="extra">유사도: <fmt:formatNumber value="${rec.score * 100}" pattern="##0"/>%</p>
-                    <p class="extra">코드: ${rec.countryIso3}</p>
+                    <p class="extra">대륙: ${rec.continent}</p>
                 </div>
             </div>
         </c:forEach>
