@@ -27,6 +27,14 @@ public class CountryController {
         return "layout/layout";
     }
 
+    // CountryController.java
+    @GetMapping("/search")
+    @ResponseBody
+    public Country searchByName(@RequestParam String name) {
+        return countryService.getCountryByName(name);
+    }
+
+
     // 수동 동기화 실행용 (API → DB 저장)
     @GetMapping("/sync")
     @ResponseBody
@@ -34,7 +42,6 @@ public class CountryController {
         countryService.updateCountriesFromApi();
         return Map.of("message", "국가 데이터 동기화 완료");
     }
-
 
     @GetMapping("/{id}")
     @ResponseBody

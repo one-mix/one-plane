@@ -13,6 +13,10 @@
         SELECT * FROM country
     </select>
 
+    <select id="findByName" parameterType="string" resultType="com.oneplane.country.domain.Country">
+        SELECT * FROM country WHERE country_name = #{name}
+    </select>
+
     <insert id="insertCountry" parameterType="com.oneplane.country.domain.Country">
         MERGE INTO country c
         USING (SELECT #{isoCode} AS iso_code FROM dual) s

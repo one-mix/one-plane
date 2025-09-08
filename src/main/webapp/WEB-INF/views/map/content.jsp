@@ -35,6 +35,7 @@
                     </ul>
                 </div>
             </div>
+
             <div class="tooltip-container">
                 <button class="yellow">
                     <span class="level">1단계</span>
@@ -114,21 +115,18 @@
             <div class="panel-header">
                 <img id="country-flag" src="" alt="국기" class="flag">
                 <span id="country-name">국가명</span>
+                <span id="country-continent">대륙명</span>
                 <button onclick="closeInfoPanel()" class="close-btn">✕</button>
             </div>
-
             <div class="panel-body">
                 <h3>여행경보</h3>
                 <canvas id="travelChart"></canvas>
-
                 <h3>방문객</h3>
                 <canvas id="visitChart"></canvas>
-
                 <h3>환율</h3>
                 <canvas id="currencyChart"></canvas>
             </div>
         </div>
-
      </div>
 
     <%-- Leaflet 라이브러 사용을 위한 JS 연결 --%>
@@ -231,16 +229,24 @@
         });
 
         // 통계 패널 열기 함수
-        function openInfoPanel(country) {
-            document.getElementById("country-name").innerText = country;
+        async function openInfoPanel(countryName) {
             document.getElementById("country-info-panel").classList.add("show");
 
-            // flag API에서 국기 불러오기
-            document.getElementById("country-flag").src =
-              `https://countryflagsapi.com/png/${country}`;
+            try {
+                const res = await fetch(`/countries/search?name=${encodeURIComponent(countryName)}`);
+                const country = await res.json();
 
-            // 차트 데이터 바인딩 (Chart.js 사용)
-            renderCharts();
+                // 패널 정보 채우기
+                document.getElementById("country-flag").src = country.img || `/images/default.png`;
+                document.getElementById("country-name").innerText = country.countryName;
+                document.getElementById("country-continent").innerText = country.continent;
+
+                // 차트 렌더링
+                renderCharts();
+
+            } catch (err) {
+                console.error("국가 데이터 불러오기 오류:", err);
+            }
         }
 
         // 통계 패널 닫기 함수
@@ -248,9 +254,20 @@
             document.getElementById("country-info-panel").classList.remove("show");
         }
 
+        // 차트 인스턴스 전역 변수
+         let travelChartInstance, visitChartInstance, currencyChartInstance;
+
         function renderCharts() {
+            const travelCtx = document.getElementById("travelChart").getContext("2d");
+            const visitCtx = document.getElementById("visitChart").getContext("2d");
+            const currencyCtx = document.getElementById("currencyChart").getContext("2d");
+
+            if (travelChartInstance) travelChartInstance.destroy();
+            if (visitChartInstance) visitChartInstance.destroy();
+            if (currencyChartInstance) currencyChartInstance.destroy();
+
             // 여행 경보 통계
-            new Chart(document.getElementById("travelChart"), {
+            travelChartInstance = new Chart(travelCtx, {
                 type: "doughnut",
                 data: {
                     labels: ["여행유의", "여행자제"],
@@ -259,7 +276,7 @@
             });
 
             // 방문객 통계
-            new Chart(document.getElementById("visitChart"), {
+            visitChartInstance = new Chart(visitCtx, {
                 type: "bar",
                 data: {
                     labels: ["4월","5월","6월","7월","8월","9월"],
@@ -268,7 +285,7 @@
             });
 
             // 환율 통계
-            new Chart(document.getElementById("currencyChart"), {
+            currencyChartInstance = new Chart(currencyCtx, {
                 type: "line",
                 data: {
                     labels: Array.from({length: 30}, (_,i)=>i+1),
@@ -328,15 +345,6 @@
                <span class="title">최신글</span>
                <a href="/post/list" class="more">더보기 →</a>
            </div>
-
-           <!-- 국가 리스트 -->
-            <ul>
-                <c:forEach var="c" items="${countries}">
-                    <li class="tooltip-country">${c.countryName}</li>
-                </c:forEach>
-            </ul>
-
-
 
             <%-- 최신글 목록 (5개만 표시) --%>
             <div class="post-list">

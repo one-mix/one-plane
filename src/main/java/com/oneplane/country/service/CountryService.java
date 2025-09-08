@@ -10,6 +10,9 @@ public interface CountryService {
     int updateCountry(Country country);
     int deleteCountry(Long id);
 
+    // 나라 이름 반환
+    Country getCountryByName(String name);
+
     // 외교부 국가별 기본정보 API -> DB 업데이트
     void updateCountriesFromApi();
 }

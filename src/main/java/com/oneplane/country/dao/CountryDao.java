@@ -2,6 +2,7 @@ package com.oneplane.country.dao;
 
 import com.oneplane.country.domain.Country;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface CountryDao {
     int updateCountry(Country country);
     int deleteCountry(Long id);
     int deleteAllCountries();
+
+    Country findByName(@Param("name") String name);
 }

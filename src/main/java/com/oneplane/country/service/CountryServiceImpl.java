@@ -56,6 +56,11 @@ public class CountryServiceImpl implements CountryService {
         return countryDao.deleteCountry(id);
     }
 
+    @Override
+    public Country getCountryByName(String name) {
+        return countryDao.findByName(name);
+    }
+
     /**
      * 외교부 API에서 국가 데이터 조회 → DB 동기화
      */
