@@ -30,18 +30,9 @@
                     <span>즐겨찾기</span>
                 </button>
                 <div class="tooltip-content scrollable">
-                    <ui>
-                        <li class="tooltip-country">가나</li>
-                        <li class="tooltip-country">대한민국</li>
-                        <li class="tooltip-country">미국</li>
-                        <li class="tooltip-country">일본</li>
-                        <li class="tooltip-country">중국</li>
-                        <li class="tooltip-country">프랑스</li>
-                        <li class="tooltip-country">영국</li>
-                        <li class="tooltip-country">호주</li>
-                        <li class="tooltip-country">브라질</li>
-                        <li class="tooltip-country">캐나다</li>
-                    </ui>
+                    <ul id="favorites-list">
+                        <!-- JS로 <li> 자동 생성 -->
+                    </ul>
                 </div>
             </div>
             <div class="tooltip-container">
@@ -550,6 +541,9 @@
 
     <%-- 커설 js 연결 --%>
     <script src="/js/carousel.js"></script>
+
+    <%-- 즐겨찾기 국가 js 연결 --%>
+    <script src="/js/favorites.js"></script>
 
 </body>
 </html>
