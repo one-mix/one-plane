@@ -15,7 +15,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -115,8 +117,7 @@ public class CountryServiceImpl implements CountryService {
                 Country country = new Country();
                 country.setCountryName(item.path("countryName").asText());
                 country.setCountryEnName(item.path("countryEnName").asText());
-                // API에 isoCode가 없으므로 id를 대체 키로 사용
-                country.setIsoCode(item.path("id").asText());
+                country.setIsoCode(item.path("isoCode").asText());
                 country.setContinent(item.path("continent").asText());
                 country.setImg(item.path("imgUrl").asText());
 
