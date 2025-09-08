@@ -36,7 +36,6 @@
             VALUES (#{countryName}, #{countryEnName}, #{isoCode}, #{continent}, #{img}, #{latitude}, #{longitude}, #{currency}, #{distance})
     </insert>
 
-
     <update id="updateCountry" parameterType="com.oneplane.country.domain.Country">
         UPDATE country
         SET country_name = #{countryName},

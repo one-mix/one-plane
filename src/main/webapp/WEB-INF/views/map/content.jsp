@@ -113,9 +113,11 @@
         <!-- 국가 통계 패널 -->
         <div id="country-info-panel" class="country-info-panel hidden">
             <div class="panel-header">
-                <img id="country-flag" src="" alt="국기" class="flag">
-                <span id="country-name">국가명</span>
-                <span id="country-continent">대륙명</span>
+                <div class="panel-country">
+                    <img id="country-flag" src="" alt="국기" class="flag">
+                    <span id="country-name">국가명</span>
+                    <span id="country-continent">(대륙명)</span>
+                </div>
                 <button onclick="closeInfoPanel()" class="close-btn">✕</button>
             </div>
             <div class="panel-body">
