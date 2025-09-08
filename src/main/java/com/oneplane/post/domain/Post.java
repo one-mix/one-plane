@@ -19,7 +19,8 @@ public class Post {
     private String title;
     private String content;              // Summernote HTML 콘텐츠
     private String thumbnailImage;       // 썸네일 이미지 URL
-    private Category category;       // Enum 타입
+    private Category category;
+    private String country;
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;
@@ -44,7 +45,8 @@ public class Post {
 
     public String getAuthorName() {
         if (user != null) {
-            return user.getName() != null ? user.getName() : user.getNickname();
+            // 닉네임이 있으면 닉네임, 없으면 이름 반환
+            return user.getNickname() != null ? user.getNickname() : user.getName();
         }
         return "알 수 없음";
     }

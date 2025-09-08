@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class PostService {
     private final PostDao postDao;
 
     /**
-     * 게시글 전체 목록 조회 (기존 메서드 유지)
+     * 게시글 전체 목록 조회
      */
     @Transactional(readOnly = true)
     public List<Post> getAllPosts() {
@@ -46,7 +47,6 @@ public class PostService {
 
             // 총 게시글 수 조회
             int totalElements = postDao.countPosts(condition);
-            log.debug("총 게시글 수: {}", totalElements);
 
             // 페이징된 게시글 목록 조회
             List<Post> posts = postDao.findPostsWithPaging(condition);
@@ -69,9 +69,6 @@ public class PostService {
                     .hasPrevious(hasPrevious)
                     .build();
 
-            log.info("페이징된 게시글 조회 완료 - 현재페이지: {}/{}, 게시글수: {}",
-                    condition.getPage(), totalPages, posts.size());
-
             return response;
 
         } catch (Exception e) {
@@ -81,11 +78,10 @@ public class PostService {
     }
 
     /**
-     * 카테고리별 게시글 목록 조회 (페이징)
+     * 카테고리별 게시글 목록 조회
      */
     @Transactional(readOnly = true)
     public PostListResponse getPostsByCategory(String category, int page, int size) {
-        log.info("카테고리별 게시글 조회 - 카테고리: {}, 페이지: {}", category, page);
 
         try {
             // 페이지 유효성 검사
@@ -117,9 +113,6 @@ public class PostService {
                     .hasNext(hasNext)
                     .hasPrevious(hasPrevious)
                     .build();
-
-            log.info("카테고리별 게시글 조회 완료 - 카테고리: {}, 페이지: {}/{}, 게시글수: {}",
-                    category, page, totalPages, posts.size());
 
             return response;
 
@@ -192,7 +185,7 @@ public class PostService {
     }
 
     /**
-     * 게시글 개수 조회 (기존 메서드 유지)
+     * 게시글 개수 조회
      */
     @Transactional(readOnly = true)
     public int getPostCount() {
@@ -208,5 +201,253 @@ public class PostService {
     public int getPostCount(PostSearchCondition condition) {
         log.debug("검색 조건에 따른 게시글 개수 조회");
         return postDao.countPosts(condition);
+    }
+
+    /**
+     * 게시글 작성
+     */
+    public Post createPost(Post post) {
+        log.info("게시글 작성 처리 시작 - 제목: {}, 작성자: {}", post.getTitle(), post.getUserId());
+
+        try {
+            // 유효성 검사
+            validatePost(post);
+
+            // 썸네일 이미지 추출 (Summernote 내용에서 첫 번째 이미지)
+            if (post.getThumbnailImage() == null || post.getThumbnailImage().isEmpty()) {
+                String firstImage = extractFirstImageFromSummernote(post.getContent());
+                if (firstImage != null) {
+                    post.setThumbnailImage(firstImage);
+                    log.info("썸네일 이미지 자동 추출: {}", firstImage);
+                }
+            }
+
+            // 기본값 설정
+            post.setViewCount(0);
+            post.setLikeCount(0);
+            post.setCommentCount(0);
+            post.setCreatedAt(new Date());
+            post.setUpdatedAt(new Date());
+
+            int result = postDao.insertPost(post);
+            if (result <= 0) {
+                throw new RuntimeException("게시글 작성에 실패했습니다.");
+            }
+
+            log.info("게시글 작성 완료 - postId: {}, 제목: {}, 썸네일: {}",
+                    post.getPostId(), post.getTitle(), post.getThumbnailImage());
+
+            return post;
+
+        } catch (Exception e) {
+            log.error("게시글 작성 중 오류 발생", e);
+            throw new RuntimeException("게시글 작성에 실패했습니다: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 게시글 유효성 검사
+     */
+    private void validatePost(Post post) {
+        if (post.getUserId() == null) {
+            throw new IllegalArgumentException("작성자 정보가 없습니다.");
+        }
+
+        if (post.getTitle() == null || post.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("제목을 입력해주세요.");
+        }
+
+        if (post.getTitle().length() > 200) {
+            throw new IllegalArgumentException("제목은 200자 이하로 입력해주세요.");
+        }
+
+        if (post.getContent() == null || post.getContent().trim().isEmpty()) {
+            throw new IllegalArgumentException("내용을 입력해주세요.");
+        }
+
+        if (post.getCategory() == null) {
+            throw new IllegalArgumentException("카테고리를 선택해주세요.");
+        }
+    }
+
+    //Summernote HTML에서 첫 번째 이미지 URL 추출
+    private String extractFirstImageFromSummernote(String html) {
+        if (html == null || html.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            // JSoup을 사용하여 HTML 파싱
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(html);
+            org.jsoup.select.Elements imgElements = doc.select("img");
+
+            if (!imgElements.isEmpty()) {
+                org.jsoup.nodes.Element firstImg = imgElements.first();
+                String src = firstImg.attr("src");
+
+                if (src != null && !src.trim().isEmpty()) {
+                    // 상대 경로인 경우 절대 경로로 변환할 수 있음
+                    log.debug("첫 번째 이미지 URL 추출: {}", src);
+                    return src;
+                }
+            }
+        } catch (Exception e) {
+            log.warn("이미지 URL 추출 중 오류 발생: {}", e.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * 게시글 상세 조회
+     */
+    @Transactional
+    public Post getPostDetail(Integer postId) {
+        log.info("게시글 상세 조회 및 조회수 증가 - postId: {}", postId);
+
+        try {
+            // 게시글 조회
+            Post post = postDao.findPostById(postId);
+
+            if (post == null) {
+                throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+            }
+
+            if (post.isDeleted()) {
+                throw new IllegalArgumentException("삭제된 게시글입니다.");
+            }
+
+            // 조회수 증가
+            postDao.increaseViewCount(postId);
+
+            // 증가된 조회수 반영
+            post.increaseViewCount();
+
+            // 게시글 데이터 후처리
+            processPostData(post);
+
+            log.info("게시글 상세 조회 완료 - postId: {}, 제목: {}, 조회수: {}",
+                    postId, post.getTitle(), post.getViewCount());
+
+            return post;
+
+        } catch (Exception e) {
+            log.error("게시글 상세 조회 중 오류 발생 - postId: {}", postId, e);
+            throw new RuntimeException("게시글을 불러오는데 실패했습니다: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 게시글 조회
+     */
+    @Transactional(readOnly = true)
+    public Post getPostById(Integer postId) {
+        log.debug("게시글 조회 - postId: {}", postId);
+
+        Post post = postDao.findPostById(postId);
+        if (post != null) {
+            processPostData(post);
+        }
+
+        return post;
+    }
+
+    /**
+     * 조회수 증가
+     */
+    @Transactional
+    public boolean increaseViewCount(Integer postId) {
+        log.debug("조회수 증가 - postId: {}", postId);
+
+        try {
+            int result = postDao.increaseViewCount(postId);
+            return result > 0;
+        } catch (Exception e) {
+            log.error("조회수 증가 중 오류 발생 - postId: {}", postId, e);
+            return false;
+        }
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    @Transactional
+    public boolean deletePost(Integer postId, Integer userId) {
+        log.info("게시글 삭제 처리 - postId: {}, 삭제자: {}", postId, userId);
+
+        try {
+            // 게시글 존재 확인
+            Post post = postDao.findPostById(postId);
+            if (post == null) {
+                throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+            }
+
+            if (post.isDeleted()) {
+                throw new IllegalArgumentException("이미 삭제된 게시글입니다.");
+            }
+
+            // 삭제 처리
+            int result = postDao.deletePost(postId);
+
+            if (result > 0) {
+                log.info("게시글 삭제 완료 - postId: {}, 제목: {}", postId, post.getTitle());
+                return true;
+            } else {
+                log.warn("게시글 삭제 실패 - postId: {}", postId);
+                return false;
+            }
+
+        } catch (Exception e) {
+            log.error("게시글 삭제 중 오류 발생 - postId: {}", postId, e);
+            throw new RuntimeException("게시글 삭제에 실패했습니다: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 게시글 수정
+     */
+    @Transactional
+    public Post updatePost(Integer postId, Post updatePost) {
+        log.info("게시글 수정 처리 - postId: {}", postId);
+
+        try {
+            // 기존 게시글 조회
+            Post existingPost = postDao.findPostById(postId);
+            if (existingPost == null) {
+                throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+            }
+
+            if (existingPost.isDeleted()) {
+                throw new IllegalArgumentException("삭제된 게시글은 수정할 수 없습니다.");
+            }
+
+            // 수정할 데이터 설정
+            existingPost.setTitle(updatePost.getTitle());
+            existingPost.setContent(updatePost.getContent());
+            existingPost.setCategory(updatePost.getCategory());
+            existingPost.setCountry(updatePost.getCountry());
+            existingPost.setUpdatedAt(new Date());
+
+            // 썸네일 이미지 재추출
+            if (updatePost.getThumbnailImage() == null || updatePost.getThumbnailImage().isEmpty()) {
+                String firstImage = extractFirstImageFromSummernote(updatePost.getContent());
+                existingPost.setThumbnailImage(firstImage);
+            } else {
+                existingPost.setThumbnailImage(updatePost.getThumbnailImage());
+            }
+
+            // 데이터베이스 업데이트
+            int result = postDao.updatePost(existingPost);
+            if (result <= 0) {
+                throw new RuntimeException("게시글 수정에 실패했습니다.");
+            }
+
+            log.info("게시글 수정 완료 - postId: {}, 제목: {}", postId, existingPost.getTitle());
+            return existingPost;
+
+        } catch (Exception e) {
+            log.error("게시글 수정 중 오류 발생 - postId: {}", postId, e);
+            throw new RuntimeException("게시글 수정에 실패했습니다: " + e.getMessage());
+        }
     }
 }
