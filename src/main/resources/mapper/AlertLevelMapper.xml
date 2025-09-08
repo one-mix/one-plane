@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.alert.dao.AlertLevelDao">
+
+    <resultMap id="AlertLevelMap" type="com.oneplane.alert.domain.AlertLevel">
+        <id property="alertId" column="alert_id"/>
+        <result property="countryId" column="country_id"/>
+        <result property="levelValue" column="level_value"/>
+
+        <!-- Country 객체까지 조인 -->
+        <association property="country" javaType="com.oneplane.country.domain.Country">
+            <id property="countryId" column="country_id"/>
+            <result property="countryName" column="country_name"/>
+            <result property="countryEnName" column="country_en_name"/>
+            <result property="continent" column="continent"/>
+            <result property="img" column="img"/>
+        </association>
+    </resultMap>
+
+    <!-- 국가별 여행경보 조회 -->
+    <select id="selectAlertByCountryId" parameterType="long" resultMap="AlertLevelMap">
+        SELECT a.alert_id, a.country_id, a.level_value,
+        c.country_name, c.country_en_name, c.continent, c.img
+        FROM alert_level a
+        JOIN country c ON a.country_id = c.country_id
+        WHERE a.country_id = #{countryId}
+    </select>
+
+    <!-- 여행경보 입력 -->
+    <insert id="insertAlert" parameterType="com.oneplane.alert.domain.AlertLevel">
+        INSERT INTO alert_level (alert_id, country_id, level_value)
+        VALUES (seq_alert_level.NEXTVAL, #{countryId}, #{levelValue})
+    </insert>
+
+</mapper>
