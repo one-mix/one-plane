@@ -61,14 +61,43 @@ html, body {
     margin: 0 10px;
 }
 
+.user form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+/* 로그아웃 버튼 */
+.logout-btn {
+    font-size: 16px;
+    font-weight: var(--font-medium);
+    color: var(--gray-500);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-family: var(--font-main);
+    margin: 0 10px;
+}
+
+.logout-btn:hover {
+    color: var(--gray-700);
+}
+
 /* 헤더 프로필 이미지 */
 .profile-img {
     width: 48px;
     height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+    border: 2px solid var(--gray-100);
 }
 
 .container {
-    flex: 1; /* 헤더+푸터 빼고 남는 공간 전부 차지 */
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
