@@ -64,4 +64,22 @@ public class PostDaoImpl implements PostDao {
         log.debug("게시글 ID로 조회: {}", postId);
         return sqlSession.selectOne(namespace + "findPostById", postId);
     }
+
+    @Override
+    public int increaseViewCount(Integer postId) {
+        log.debug("조회수 증가 - postId: {}", postId);
+        return sqlSession.update(namespace + "increaseViewCount", postId);
+    }
+
+    @Override
+    public int deletePost(Integer postId) {
+        log.debug("게시글 삭제 (소프트 딜리트) - postId: {}", postId);
+        return sqlSession.update(namespace + "deletePost", postId);
+    }
+
+    @Override
+    public int updatePost(Post post) {
+        log.debug("게시글 수정 - postId: {}", post.getPostId());
+        return sqlSession.update(namespace + "updatePost", post);
+    }
 }

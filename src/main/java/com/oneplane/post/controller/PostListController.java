@@ -6,6 +6,8 @@ import com.oneplane.post.domain.Post;
 import com.oneplane.post.domain.PostListResponse;
 import com.oneplane.post.domain.PostSearchCondition;
 import com.oneplane.post.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -258,4 +259,297 @@ public class PostListController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
+    /**
+     * 게시글 상세보기 페이지
+     */
+    @GetMapping("/detail/{postId}")
+    public String postDetail(@PathVariable Integer postId, Model model, HttpServletRequest request) {
+        log.info("게시글 상세보기 요청 - postId: {}", postId);
+
+        try {
+            // 게시글 조회
+            Post post = postService.getPostById(postId);
+
+            if (post == null) {
+                log.warn("존재하지 않는 게시글 - postId: {}", postId);
+                model.addAttribute("errorMessage", "존재하지 않는 게시글입니다.");
+                return "error/404";
+            }
+
+            if (post.isDeleted()) {
+                log.warn("삭제된 게시글 접근 시도 - postId: {}", postId);
+                model.addAttribute("errorMessage", "삭제된 게시글입니다.");
+                return "error/404";
+            }
+
+            // 1시간 간격 조회수 증가
+            HttpSession session = request.getSession();
+            String sessionKey = "viewed_post_" + postId;
+            Long lastViewTime = (Long) session.getAttribute(sessionKey);
+
+            boolean shouldIncreaseView = false;
+            long currentTime = System.currentTimeMillis();
+
+            if (lastViewTime == null) {
+                // 처음 조회하는 경우
+                shouldIncreaseView = true;
+                log.debug("첫 조회 - postId: {}", postId);
+            } else {
+                // 마지막 조회로부터 1시간 이후에만 다시 카운트
+                long timeDiff = currentTime - lastViewTime;
+                long cooldownTime = 60 * 60 * 1000;
+
+                if (timeDiff > cooldownTime) {
+                    shouldIncreaseView = true;
+                    log.debug("1시간 경과로 조회수 증가 허용 - postId: {}, 경과시간: {}분",
+                            postId, timeDiff / (60 * 1000));
+                } else {
+                    long remainingTime = cooldownTime - timeDiff;
+                    long remainingMinutes = remainingTime / (60 * 1000);
+                    log.debug("조회수 증가 대기 중 - postId: {}, 남은시간: {}분", postId, remainingMinutes);
+                }
+            }
+
+            // 조회수 증가 처리
+            if (shouldIncreaseView) {
+                boolean viewIncreased = postService.increaseViewCount(postId);
+                if (viewIncreased) {
+                    post.increaseViewCount();
+                    // 세션에 현재 조회 시간 기록
+                    session.setAttribute(sessionKey, currentTime);
+                    log.info("조회수 증가 완료 - postId: {}, 새로운 조회수: {}", postId, post.getViewCount());
+                }
+            }
+
+            // 수정/삭제 권한 확인
+            boolean canEdit = false;
+            boolean canDelete = false;
+
+            if (SecurityUtil.isAuthenticated()) {
+                Integer currentUserId = SecurityUtil.getCurrentUserId();
+                boolean isOwner = post.isOwner(currentUserId);
+                boolean isAdmin = SecurityUtil.isCurrentUserAdmin();
+
+                canEdit = isOwner || isAdmin;
+                canDelete = isOwner || isAdmin;
+            }
+
+            model.addAttribute("post", post);
+            model.addAttribute("canEdit", canEdit);
+            model.addAttribute("canDelete", canDelete);
+            model.addAttribute("contentPage", "post/postDetail.jsp");
+            model.addAttribute("activeMenu", "post");
+
+            log.info("게시글 상세보기 완료 - postId: {}, 제목: {}, 조회수: {}",
+                    postId, post.getTitle(), post.getViewCount());
+
+            return "layout/layout";
+
+        } catch (Exception e) {
+            log.error("게시글 상세보기 중 오류 발생 - postId: {}", postId, e);
+            model.addAttribute("errorMessage", "게시글을 불러오는데 실패했습니다.");
+            return "error/500";
+        }
+    }
+    /**
+     * 게시글 수정 페이지
+     */
+    @GetMapping("/edit/{postId}")
+    public String postEdit(@PathVariable Integer postId, Model model) {
+        log.info("게시글 수정 페이지 요청 - postId: {}", postId);
+
+        try {
+            // 인증된 사용자인지 확인
+            if (!SecurityUtil.isAuthenticated()) {
+                return "redirect:/oauth2/authorization/kakao";
+            }
+
+            Post post = postService.getPostById(postId);
+
+            if (post == null || post.isDeleted()) {
+                model.addAttribute("errorMessage", "존재하지 않는 게시글입니다.");
+                return "error/404";
+            }
+
+            // 수정 권한 확인
+            Integer currentUserId = SecurityUtil.getCurrentUserId();
+            if (!post.isOwner(currentUserId) && !SecurityUtil.isCurrentUserAdmin()) {
+                model.addAttribute("errorMessage", "게시글 수정 권한이 없습니다.");
+                return "error/403";
+            }
+
+            // 카테고리 목록도 함께 전달
+            model.addAttribute("post", post);
+            model.addAttribute("categories", Category.values());
+            model.addAttribute("contentPage", "post/postEdit.jsp");
+            model.addAttribute("activeMenu", "post");
+
+            log.info("게시글 수정 페이지 로드 완료 - postId: {}, 제목: {}", postId, post.getTitle());
+
+            return "layout/layout";
+
+        } catch (Exception e) {
+            log.error("게시글 수정 페이지 로드 중 오류 발생 - postId: {}", postId, e);
+            model.addAttribute("errorMessage", "게시글을 불러오는데 실패했습니다.");
+            return "error/500";
+        }
+    }
+
+    /**
+     * 게시글 수정 처리 (POST)
+     */
+    @PostMapping("/edit/{postId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updatePost(
+            @PathVariable Integer postId,
+            @RequestParam String category,
+            @RequestParam String country,
+            @RequestParam String title,
+            @RequestParam String content) {
+
+        log.info("게시글 수정 처리 요청 - postId: {}, 제목: {}", postId, title);
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // 인증된 사용자인지 확인
+            if (!SecurityUtil.isAuthenticated()) {
+                response.put("success", false);
+                response.put("message", "로그인이 필요합니다.");
+                return ResponseEntity.status(401).body(response);
+            }
+
+            // 기존 게시글 조회
+            Post existingPost = postService.getPostById(postId);
+            if (existingPost == null || existingPost.isDeleted()) {
+                response.put("success", false);
+                response.put("message", "존재하지 않는 게시글입니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // 수정 권한 확인
+            Integer currentUserId = SecurityUtil.getCurrentUserId();
+            if (!existingPost.isOwner(currentUserId) && !SecurityUtil.isCurrentUserAdmin()) {
+                response.put("success", false);
+                response.put("message", "게시글 수정 권한이 없습니다.");
+                return ResponseEntity.status(403).body(response);
+            }
+
+            // 유효성 검사
+            if (category == null || category.trim().isEmpty()) {
+                response.put("success", false);
+                response.put("message", "카테고리를 선택해주세요.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            if (title == null || title.trim().isEmpty()) {
+                response.put("success", false);
+                response.put("message", "제목을 입력해주세요.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            if (title.length() > 200) {
+                response.put("success", false);
+                response.put("message", "제목은 200자 이하로 입력해주세요.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            if (content == null || content.trim().isEmpty()) {
+                response.put("success", false);
+                response.put("message", "내용을 입력해주세요.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // 수정할 게시글 객체 생성
+            Post updatePost = Post.builder()
+                    .postId(postId)
+                    .title(title.trim())
+                    .content(content)
+                    .category(Category.valueOf(category))
+                    .country(country)
+                    .build();
+
+            // 게시글 수정
+            Post updatedPost = postService.updatePost(postId, updatePost);
+
+            response.put("success", true);
+            response.put("message", "게시글이 성공적으로 수정되었습니다.");
+            response.put("postId", updatedPost.getPostId());
+
+            log.info("게시글 수정 완료 - postId: {}, 제목: {}, 수정자: {}",
+                    updatedPost.getPostId(), updatedPost.getTitle(), currentUserId);
+
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            log.warn("게시글 수정 실패 - 잘못된 요청: {}", e.getMessage());
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+
+        } catch (Exception e) {
+            log.error("게시글 수정 처리 중 오류 발생 - postId: {}", postId, e);
+            response.put("success", false);
+            response.put("message", "게시글 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    /**
+     * 게시글 삭제 처리
+     */
+    @PostMapping("/delete/{postId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> deletePost(@PathVariable Integer postId) {
+        log.info("게시글 삭제 요청 - postId: {}", postId);
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // 인증된 사용자인지 확인
+            if (!SecurityUtil.isAuthenticated()) {
+                response.put("success", false);
+                response.put("message", "로그인이 필요합니다.");
+                return ResponseEntity.status(401).body(response);
+            }
+
+            Post post = postService.getPostById(postId);
+
+            if (post == null || post.isDeleted()) {
+                response.put("success", false);
+                response.put("message", "존재하지 않는 게시글입니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // 삭제 권한 확인
+            Integer currentUserId = SecurityUtil.getCurrentUserId();
+            if (!post.isOwner(currentUserId) && !SecurityUtil.isCurrentUserAdmin()) {
+                response.put("success", false);
+                response.put("message", "게시글 삭제 권한이 없습니다.");
+                return ResponseEntity.status(403).body(response);
+            }
+
+            // 게시글 삭제
+            boolean deleted = postService.deletePost(postId, currentUserId);
+
+            if (deleted) {
+                response.put("success", true);
+                response.put("message", "게시글이 삭제되었습니다.");
+                log.info("게시글 삭제 완료 - postId: {}, 삭제자: {}", postId, currentUserId);
+            } else {
+                response.put("success", false);
+                response.put("message", "게시글 삭제에 실패했습니다.");
+            }
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("게시글 삭제 중 오류 발생 - postId: {}", postId, e);
+            response.put("success", false);
+            response.put("message", "게시글 삭제 중 오류가 발생했습니다.");
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
 }

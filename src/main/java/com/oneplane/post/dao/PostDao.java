@@ -28,4 +28,13 @@ public interface PostDao {
 
     // 게시글 ID로 조회
     Post findPostById(@Param("postId") Integer postId);
+
+    // 조회수 증가
+    int increaseViewCount(@Param("postId") Integer postId);
+
+    // 게시글 삭제
+    int deletePost(@Param("postId") Integer postId);
+
+    // 게시글 수정
+    int updatePost(Post post);
 }

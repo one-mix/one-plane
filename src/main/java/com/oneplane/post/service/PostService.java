@@ -298,4 +298,156 @@ public class PostService {
         return null;
     }
 
+    /**
+     * 게시글 상세 조회
+     */
+    @Transactional
+    public Post getPostDetail(Integer postId) {
+        log.info("게시글 상세 조회 및 조회수 증가 - postId: {}", postId);
+
+        try {
+            // 게시글 조회
+            Post post = postDao.findPostById(postId);
+
+            if (post == null) {
+                throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+            }
+
+            if (post.isDeleted()) {
+                throw new IllegalArgumentException("삭제된 게시글입니다.");
+            }
+
+            // 조회수 증가
+            postDao.increaseViewCount(postId);
+
+            // 증가된 조회수 반영
+            post.increaseViewCount();
+
+            // 게시글 데이터 후처리
+            processPostData(post);
+
+            log.info("게시글 상세 조회 완료 - postId: {}, 제목: {}, 조회수: {}",
+                    postId, post.getTitle(), post.getViewCount());
+
+            return post;
+
+        } catch (Exception e) {
+            log.error("게시글 상세 조회 중 오류 발생 - postId: {}", postId, e);
+            throw new RuntimeException("게시글을 불러오는데 실패했습니다: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 게시글 조회
+     */
+    @Transactional(readOnly = true)
+    public Post getPostById(Integer postId) {
+        log.debug("게시글 조회 - postId: {}", postId);
+
+        Post post = postDao.findPostById(postId);
+        if (post != null) {
+            processPostData(post);
+        }
+
+        return post;
+    }
+
+    /**
+     * 조회수 증가
+     */
+    @Transactional
+    public boolean increaseViewCount(Integer postId) {
+        log.debug("조회수 증가 - postId: {}", postId);
+
+        try {
+            int result = postDao.increaseViewCount(postId);
+            return result > 0;
+        } catch (Exception e) {
+            log.error("조회수 증가 중 오류 발생 - postId: {}", postId, e);
+            return false;
+        }
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    @Transactional
+    public boolean deletePost(Integer postId, Integer userId) {
+        log.info("게시글 삭제 처리 - postId: {}, 삭제자: {}", postId, userId);
+
+        try {
+            // 게시글 존재 확인
+            Post post = postDao.findPostById(postId);
+            if (post == null) {
+                throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+            }
+
+            if (post.isDeleted()) {
+                throw new IllegalArgumentException("이미 삭제된 게시글입니다.");
+            }
+
+            // 삭제 처리
+            int result = postDao.deletePost(postId);
+
+            if (result > 0) {
+                log.info("게시글 삭제 완료 - postId: {}, 제목: {}", postId, post.getTitle());
+                return true;
+            } else {
+                log.warn("게시글 삭제 실패 - postId: {}", postId);
+                return false;
+            }
+
+        } catch (Exception e) {
+            log.error("게시글 삭제 중 오류 발생 - postId: {}", postId, e);
+            throw new RuntimeException("게시글 삭제에 실패했습니다: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 게시글 수정
+     */
+    @Transactional
+    public Post updatePost(Integer postId, Post updatePost) {
+        log.info("게시글 수정 처리 - postId: {}", postId);
+
+        try {
+            // 기존 게시글 조회
+            Post existingPost = postDao.findPostById(postId);
+            if (existingPost == null) {
+                throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+            }
+
+            if (existingPost.isDeleted()) {
+                throw new IllegalArgumentException("삭제된 게시글은 수정할 수 없습니다.");
+            }
+
+            // 수정할 데이터 설정
+            existingPost.setTitle(updatePost.getTitle());
+            existingPost.setContent(updatePost.getContent());
+            existingPost.setCategory(updatePost.getCategory());
+            existingPost.setCountry(updatePost.getCountry());
+            existingPost.setUpdatedAt(new Date());
+
+            // 썸네일 이미지 재추출
+            if (updatePost.getThumbnailImage() == null || updatePost.getThumbnailImage().isEmpty()) {
+                String firstImage = extractFirstImageFromSummernote(updatePost.getContent());
+                existingPost.setThumbnailImage(firstImage);
+            } else {
+                existingPost.setThumbnailImage(updatePost.getThumbnailImage());
+            }
+
+            // 데이터베이스 업데이트
+            int result = postDao.updatePost(existingPost);
+            if (result <= 0) {
+                throw new RuntimeException("게시글 수정에 실패했습니다.");
+            }
+
+            log.info("게시글 수정 완료 - postId: {}, 제목: {}", postId, existingPost.getTitle());
+            return existingPost;
+
+        } catch (Exception e) {
+            log.error("게시글 수정 중 오류 발생 - postId: {}", postId, e);
+            throw new RuntimeException("게시글 수정에 실패했습니다: " + e.getMessage());
+        }
+    }
 }

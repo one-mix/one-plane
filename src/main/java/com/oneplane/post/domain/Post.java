@@ -45,7 +45,8 @@ public class Post {
 
     public String getAuthorName() {
         if (user != null) {
-            return user.getName() != null ? user.getName() : user.getNickname();
+            // 닉네임이 있으면 닉네임, 없으면 이름 반환
+            return user.getNickname() != null ? user.getNickname() : user.getName();
         }
         return "알 수 없음";
     }
