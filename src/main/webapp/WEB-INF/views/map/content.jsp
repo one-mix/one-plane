@@ -134,6 +134,8 @@
                         const response = await fetch(`/fx/${countryId}`);
                         const data = await response.json();
 
+                        console.log("환율 api 응답:", data)
+
                         if (!Array.isArray(data) || data.length === 0) {
                             console.warn("환율 데이터 없음");
                             return;
@@ -142,7 +144,13 @@
                         const labels = data.map(r => r.baseDate);
                         const values = data.map(r => r.dealBasR);
 
-                        new Chart(document.getElementById("currencyChart"), {
+                        // 이미 차트가 있으면 제거
+                        if (currencyChartInstance) {
+                            currencyChartInstance.destroy();
+                        }
+
+                        const ctx = document.getElementById("currencyChart").getContext("2d");
+                        currencyChartInstance = new Chart(ctx, {
                             type: "line",
                             data: {
                                 labels: labels,
@@ -150,18 +158,12 @@
                                     label: "환율",
                                     data: values,
                                     borderColor: "#30609D",
-                                    fill: false
+                                    fill: false,
+                                    tension: 0.1
                                 }]
-                            },
-                            options: {
-                                scales: {
-                                    x: { title: { display: true, text: "날짜" } },
-                                    y: { title: { display: true, text: "환율" } }
-                                }
                             }
                         });
                     }
-                    // loadCurrencyChart(134);
                 </script>
 
             </div>
@@ -282,10 +284,8 @@
 
             // 국가명이 비어있을 경우
             if (!country) {
-
                 // 콘솔 경고 메시지 확인
                 console.warn("검색어가 비어있습니다.");
-
                 // 검색 요청 보내지 않음
                 return;
             }
@@ -306,30 +306,30 @@
                     const lat = data[0].lat;
                     const lon = data[0].lon;
 
-                    // 지도 이동
+                    // 지도 이동 & 마커 갱신
                     map.setView([lat, lon], 2);
-
-                    // 기존 마커 제거 후 새 마커 추가
                     marker.setLatLng([lat, lon])
+                          .unbindPopup()
+                          .bindPopup("여기는 " + country + " 입니다.")
+                          .openPopup();
 
-                    // 기존 팝업 완전히 제거
-                    marker.unbindPopup();
-
-                    /*
-                    * ${} 사용 시 JSP EL 문법과 JS 템플릿 리터럴이 충돌나고 서버에서 가로채서 country 출력 안됨
-                    * + (문자열 연결 방식) 로 변경
-                    */
-                    marker.bindPopup("여기는 " + country + " 입니다.").openPopup();
+                    // 국가 상세 조회
+                     const countryRes = await fetch(`/countries/search?name=${encodeURIComponent(country)}`);
+                     const countryData = await countryRes.json();
 
                     // 사이드 패널 열기
-                    openInfoPanel(country);
+                    openInfoPanel(countryData);
 
+                    // 환율 차트 렌더링
+                    if (countryData && countryData.countryId) {
+                        loadCurrencyChart(countryData.countryId);
+                    } else {
+                        console.warn("countryId 없음:", countryData);
+                    }
                 } else {
-                     // 응답이 없을 경우 알림창 뜸
                      alert("국가를 찾을 수 없습니다.");
                 }
             } catch (err) {
-                // 콘솔로 에러 메시지 확인
                 console.error("검색 오류", err);
             }
         });
@@ -351,23 +351,20 @@
         }
 
         // 통계 패널 열기 함수
-        async function openInfoPanel(countryName) {
+        async function openInfoPanel(countryData) {
             document.getElementById("country-info-panel").classList.add("show");
 
-            try {
-                const res = await fetch(`/countries/search?name=${encodeURIComponent(countryName)}`);
-                const country = await res.json();
+            // 패널 정보 채우기
+            document.getElementById("country-flag").src = countryData.img || `/images/aimg.png`;
+            document.getElementById("country-name").innerText = countryData.countryName;
+            document.getElementById("country-continent").innerText = countryData.continent;
 
-                // 패널 정보 채우기
-                document.getElementById("country-flag").src = country.img || `/images/aimg.png`;
-                document.getElementById("country-name").innerText = country.countryName;
-                document.getElementById("country-continent").innerText = country.continent;
+            // 차트 렌더링
+            renderCharts();
 
-                // 차트 렌더링
-                renderCharts();
-
-            } catch (err) {
-                console.error("국가 데이터 불러오기 오류:", err);
+            // 환율 차트는 따로 실행
+            if (countryData && countryData.countryId) {
+                loadCurrencyChart(countryData.countryId);
             }
         }
 
@@ -403,15 +400,6 @@
                 data: {
                     labels: ["4월","5월","6월","7월","8월","9월"],
                     datasets: [{ data: [10,20,15,25,18,22], backgroundColor: "#5A90D2" }]
-                }
-            });
-
-            // 환율 통계
-            currencyChartInstance = new Chart(currencyCtx, {
-                type: "line",
-                data: {
-                    labels: Array.from({length: 30}, (_,i)=>i+1),
-                    datasets: [{ data: Array.from({length:30}, ()=>Math.random()*100), borderColor: "#4caf50" }]
                 }
             });
         }

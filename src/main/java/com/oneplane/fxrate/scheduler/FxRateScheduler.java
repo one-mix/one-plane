@@ -15,13 +15,11 @@ public class FxRateScheduler {
 
     private final FxRateService fxRateService;
 
-    @Scheduled(fixedRate = 10000)  // 10초마다 실행
-    // @Scheduled(cron = "0 0 9 * * *", zone = "Asia/Seoul")
+    // 오전 11시 30분마다 실행
+    @Scheduled(cron = "0 30 11 * * *", zone = "Asia/Seoul")
     public void updateDailyFxRates() throws ParseException {
         log.info("매일 환율 자동 업데이트 시작");
-
         fxRateService.fetchAndSaveFxRates();
-
         log.info("매일 환율 자동 업데이트 완료");
     }
 }

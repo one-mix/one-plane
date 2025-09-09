@@ -50,9 +50,10 @@
         c.currency,
         c.distance
         FROM favorites_country f
-        JOIN country c ON f.country_id = c.country_id
+        LEFT JOIN country c ON f.country_id = c.country_id
         WHERE f.user_id = #{userId}
         ORDER BY f.favorites_country_id
     </select>
+
 
 </mapper>

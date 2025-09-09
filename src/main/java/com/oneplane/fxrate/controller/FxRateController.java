@@ -18,9 +18,9 @@ public class FxRateController {
 
     private final FxRateService fxRateService;
 
-    // 환율 API 호출 + DB 저장
-    @PostMapping("/update/{countryId}")
-    public String updateFxRates(@PathVariable Long countryId) throws ParseException {
+    // 강제 업데이트 (수동 실행용)
+    @PostMapping("/update")
+    public String updateFxRates() throws ParseException {
         fxRateService.fetchAndSaveFxRates();
         return "환율 업데이트 완료";
     }
@@ -31,3 +31,4 @@ public class FxRateController {
         return fxRateService.getRecentRates(countryId);
     }
 }
+
