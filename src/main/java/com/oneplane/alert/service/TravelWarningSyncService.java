@@ -36,6 +36,9 @@ public class TravelWarningSyncService {
         JsonNode response = restTemplate.getForObject(url, JsonNode.class);
         JsonNode items = response.path("response").path("body").path("items").path("item");
 
+        // 여기서 개수 확인
+        System.out.println("API items count: " + items.size());
+
         items.forEach(item -> {
             String isoCode = item.path("iso_code").asText().trim().toUpperCase(); // AFG, JPN, KOR...
             String level = null;

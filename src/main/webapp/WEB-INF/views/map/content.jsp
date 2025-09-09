@@ -181,8 +181,9 @@
               console.log("alerts/all 응답:", alertData);
               const alertMap = {};
 
-              // alertMap 채우기 (isoCode → levelValue)
+              // alertMap 채우기
                 alertData.forEach(d => {
+
                     // country 객체 키 전부 출력
                     console.log("country obj:", d.country);
 
@@ -192,7 +193,6 @@
                         alertMap[iso] = d.levelValue;
                     }
                 });
-
 
               console.log("alertMap 최종:", alertMap);
 
