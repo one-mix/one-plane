@@ -90,7 +90,7 @@ public class RecommendServiceImpl implements RecommendService {
         }
 
         // 2. ISO 코드로 countryId 조회
-        Integer countryId = countryRepository.findCountryIdByIsoCode(country);
+        Integer countryId = countryDao.findCountryIdByIsoCode(country);
         if (countryId == null) {
             throw new IllegalArgumentException("유효하지 않은 국가 코드입니다: " + country);
         }
