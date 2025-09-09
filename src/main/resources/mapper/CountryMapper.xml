@@ -5,6 +5,13 @@
 
 <mapper namespace="com.oneplane.country.repository.CountryRepository">
 
+    <select id="findCountryInfo" parameterType="string" resultType="com.oneplane.recommend.dto.RecommendResultDTO">
+        SELECT continent,
+               img AS countryImg
+        FROM country
+        WHERE iso_code = #{isoCode}
+    </select>
+
     <!-- iso_code를 기준으로 countryId 조회 -->
     <select id="findCountryIdByIsoCode" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT country_id
