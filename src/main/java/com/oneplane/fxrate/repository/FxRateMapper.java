@@ -9,6 +9,4 @@ import java.util.List;
 public interface FxRateMapper {
     void upsertFxRate(FxRate fxRate);
     List<FxRate> findRecentByCountry(Long countryId);
-
-    void insertFxRate(FxRate fxRate);
 }

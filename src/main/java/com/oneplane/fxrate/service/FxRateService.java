@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -25,7 +27,7 @@ public class FxRateService {
     private static final String API_KEY = "FM8C7ym8k05QP6k7jbysogAPUygHEuvq";
 
     @Transactional
-    public void fetchAndSaveFxRates() {
+    public void fetchAndSaveFxRates() throws ParseException {
         String today = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
 
         String url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
@@ -60,7 +62,11 @@ public class FxRateService {
                     fxRate.setCountryId(countryId);
                     fxRate.setCurrency(curUnit);
                     fxRate.setDealBasR(Double.valueOf(dealBasRStr.replace(",", "")));
-                    fxRate.setBaseDate(LocalDate.parse(today, DateTimeFormatter.BASIC_ISO_DATE));
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                    Date parsedDate = sdf.parse(today);
+
+                    fxRate.setBaseDate(parsedDate);
 
                     fxRateMapper.upsertFxRate(fxRate);
                     log.info("환율 저장 완료: {} → {}", curUnit, countryId);
@@ -70,7 +76,9 @@ public class FxRateService {
     }
 
     public List<FxRate> getRecentRates(Long countryId) {
-        return fxRateMapper.findRecentByCountry(countryId);
+        List<FxRate> rates = fxRateMapper.findRecentByCountry(countryId);
+        log.debug("최근 환율 조회 결과 (countryId={}): {}", countryId, rates);
+        return rates;
     }
 }
 

@@ -33,17 +33,18 @@
         VALUES (#{countryId}, #{currency}, #{dealBasR}, #{baseDate})
     </insert>
 
-    <!-- 최근 7일치 조회 -->
+    <!-- 최근 1주일치 조회 -->
     <select id="findRecentByCountry" parameterType="long" resultType="com.oneplane.fxrate.domain.FxRate">
-        SELECT fx_rate_id AS fxRateId,
+        SELECT
+        fx_rate_id AS fxRateId,
         country_id AS countryId,
-        currency AS currency,
+        currency,
         deal_bas_r AS dealBasR,
-        base_date AS baseDate
+        base_date
         FROM fx_rate
         WHERE country_id = #{countryId}
+        AND base_date >= TRUNC(SYSDATE) - 7
         ORDER BY base_date DESC
-        FETCH FIRST 7 ROWS ONLY
     </select>
 
 </mapper>

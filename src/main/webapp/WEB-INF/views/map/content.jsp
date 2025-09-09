@@ -134,20 +134,14 @@
                         const response = await fetch(`/fx/${countryId}`);
                         const data = await response.json();
 
-                        // X축 (baseDate)
-                        const labels = data.map(r => {
-                            if (typeof r.baseDate === "string") {
-                                return r.baseDate;
-                            } else if (r.baseDate && r.baseDate.year) {
-                                return `${r.baseDate.year}-${String(r.baseDate.monthValue).padStart(2, "0")}-${String(r.baseDate.dayOfMonth).padStart(2, "0")}`;
-                            }
-                            return "unknown";
-                        });
+                        if (!Array.isArray(data) || data.length === 0) {
+                            console.warn("환율 데이터 없음");
+                            return;
+                        }
 
-                        // Y축 (dealBasR)
+                        const labels = data.map(r => r.baseDate);
                         const values = data.map(r => r.dealBasR);
 
-                        // 차트 생성
                         new Chart(document.getElementById("currencyChart"), {
                             type: "line",
                             data: {
@@ -158,9 +152,16 @@
                                     borderColor: "#30609D",
                                     fill: false
                                 }]
+                            },
+                            options: {
+                                scales: {
+                                    x: { title: { display: true, text: "날짜" } },
+                                    y: { title: { display: true, text: "환율" } }
+                                }
                             }
                         });
                     }
+                    // loadCurrencyChart(134);
                 </script>
 
             </div>
@@ -221,15 +222,9 @@
         fetch("/alerts/all")
           .then(res => res.json())
           .then(alertData => {
-              console.log("alerts/all 응답:", alertData);
               const alertMap = {};
-
               // alertMap 채우기
                 alertData.forEach(d => {
-
-                    // country 객체 키 전부 출력
-                    console.log("country obj:", d.country);
-
                     const rawIso = d.country.isoCode || d.country.iso_code || d.country.ISO_CODE;
                     if (rawIso) {
                         const iso = rawIso.trim().toUpperCase();
@@ -249,7 +244,6 @@
                         style: feature => {
                             const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
                             const level = alertMap[iso];
-                            console.log("Feature ISO:", iso, "Level:", level);
                             return {
                                 fillColor: getColor(level),
                                 weight: 1,
@@ -260,7 +254,6 @@
                         onEachFeature: (feature, layer) => {
                             const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
                             const level = alertMap[iso] || "정보 없음";
-                            console.log("Feature ISO:", iso, "Level:", level);
                             layer.bindPopup(`${feature.properties.admin} : ${level}`);
                         }
                     }).addTo(map);

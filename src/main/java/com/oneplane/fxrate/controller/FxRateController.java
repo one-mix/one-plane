@@ -3,8 +3,12 @@ package com.oneplane.fxrate.controller;
 import com.oneplane.fxrate.domain.FxRate;
 import com.oneplane.fxrate.service.FxRateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -16,7 +20,7 @@ public class FxRateController {
 
     // 환율 API 호출 + DB 저장
     @PostMapping("/update/{countryId}")
-    public String updateFxRates(@PathVariable Long countryId) {
+    public String updateFxRates(@PathVariable Long countryId) throws ParseException {
         fxRateService.fetchAndSaveFxRates();
         return "환율 업데이트 완료";
     }

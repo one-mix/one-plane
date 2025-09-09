@@ -3,6 +3,7 @@ package com.oneplane.fxrate.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class FxRate {
@@ -11,7 +12,6 @@ public class FxRate {
     private String currency;
     private Double dealBasR;
 
-    // LocalDate -> JSON 직렬화 설정
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate baseDate;
+    private Date baseDate;
 }
