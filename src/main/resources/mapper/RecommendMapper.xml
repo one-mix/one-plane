@@ -11,18 +11,13 @@
         VALUES (#{userId}, 'Y', SYSDATE)
     </insert>
 
-    <!-- 최신 recommend_id 가져오기 -->
-    <select id="getLatestRecommendId" parameterType="int" resultType="int">
-        SELECT recommend_id
-        FROM recommend
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC
-            FETCH FIRST 1 ROWS ONLY
-    </select>
-
-    <!-- 최근 agreement 여부 확인 -->
-    <select id="getLatestAgreement" parameterType="int" resultType="string">
-        SELECT agreement
+    <!-- 최신 recommend_id 정보 조회 -->
+    <select id="getLatestRecommend" parameterType="int" resultType="com.oneplane.recommend.dto.RecommendDTO">
+        SELECT recommend_id,
+               user_id,
+               agreement,
+               travel_purpose AS travelPurpose,
+               companion
         FROM recommend
         WHERE user_id = #{userId}
         ORDER BY created_at DESC
@@ -36,16 +31,4 @@
             companion      = #{companion}
         WHERE recommend_id = #{recommendId}
     </update>
-
-    <!-- 최신 입력값 조회 -->
-    <select id="getLatestInput" resultType="com.oneplane.recommend.dto.RecommendDTO">
-        SELECT recommend_id,
-               user_id,
-               travel_purpose AS travelPurpose,
-               companion
-        FROM recommend
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC
-            FETCH FIRST 1 ROWS ONLY
-    </select>
 </mapper>

@@ -21,25 +21,26 @@ public class RecommendServiceImpl implements RecommendService {
 
     @Override
     public Integer saveAgreement(Integer userId) {
-        recommendRepository.insertAgreement(userId);
-        return recommendRepository.getLatestRecommendId(userId);
+        return recommendRepository.insertAgreement(userId);
     }
 
     @Override
     public String getLatestAgreement(Integer userId) {
-        return recommendRepository.getLatestAgreement(userId);
+
+        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
+        return latestRecommend.getAgreement();
     }
 
     @Override
     public void updateInput(RecommendDTO dto) {
-        Integer latestId = recommendRepository.getLatestRecommendId(dto.getUserId());
-        dto.setRecommendId(latestId);
+        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(dto.getUserId());
+        dto.setRecommendId(latestRecommend.getRecommendId());
         recommendRepository.updateInput(dto);
     }
 
     @Override
     public RecommendDTO getLatestInput(Integer userId) {
-        return recommendRepository.getLatestInput(userId);
+        return recommendRepository.getLatestRecommend(userId);
     }
 
     @Override
