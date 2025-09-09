@@ -172,3 +172,4 @@ pids/
 # ChatBot
 *.pkl
 *.csv
+*.pyc
