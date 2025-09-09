@@ -9,7 +9,7 @@ public interface RecommendService {
     Integer saveAgreement(Integer userId);
     String getLatestAgreement(Integer userId);
 
-    void updateInput(RecommendDTO dto);
+    void insertInput(RecommendDTO dto);
     RecommendDTO getLatestInput(Integer userId);
     List<RecommendResultDTO> callFlaskRecommend(Integer userId, String purpose, String companion);
 

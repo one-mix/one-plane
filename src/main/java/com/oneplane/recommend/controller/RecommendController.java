@@ -58,9 +58,10 @@ public class RecommendController {
     /** 여행 목적 + 동행자 저장 */
     @PostMapping("/input")
     @ResponseBody
+
     public String saveInput(@RequestBody RecommendDTO dto) {
         dto.setUserId(SecurityUtil.getCurrentUserId());
-        recommendService.updateInput(dto);
+        recommendService.insertInput(dto);
         return "여행 목적/동행자 저장 완료";
     }
 

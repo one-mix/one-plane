@@ -25,12 +25,10 @@
     </select>
 
     <!-- 여행 목적 + 동행자 업데이트 -->
-    <update id="updateInput" parameterType="com.oneplane.recommend.dto.RecommendDTO">
-        UPDATE recommend
-        SET travel_purpose = #{travelPurpose},
-            companion      = #{companion}
-        WHERE recommend_id = #{recommendId}
-    </update>
+    <insert id="insertInput" parameterType="com.oneplane.recommend.dto.RecommendDTO">
+        INSERT INTO recommend (user_id, agreement, travel_purpose, companion, created_at)
+        VALUES (#{userId}, 'Y', #{travelPurpose}, #{companion}, SYSDATE)
+    </insert>
 
     <!-- countryId 업데이트 -->
     <update id="updateCountryId">

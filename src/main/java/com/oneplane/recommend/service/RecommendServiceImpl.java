@@ -33,10 +33,10 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     @Override
-    public void updateInput(RecommendDTO dto) {
+    public void insertInput(RecommendDTO dto) {
         RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(dto.getUserId());
         dto.setRecommendId(latestRecommend.getRecommendId());
-        recommendRepository.updateInput(dto);
+        recommendRepository.insertInput(dto);
     }
 
     @Override
