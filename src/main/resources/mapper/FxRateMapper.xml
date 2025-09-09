@@ -10,34 +10,34 @@
         MERGE INTO fx_rate t
         USING (
         SELECT
-        #{countryId} AS country_id,
-        #{currencyCode} AS currency_code,
-        #{baseDate} AS base_date
+            #{countryId} AS country_id,
+            #{currency} AS currency,
+            #{baseDate} AS base_date
         FROM dual
         ) s
         ON (
-        t.country_id = s.country_id
-        AND t.currency_code = s.currency_code
-        AND t.base_date = s.base_date
+            t.country_id = s.country_id
+            AND t.currency = s.currency
+            AND t.base_date = s.base_date
         )
         WHEN MATCHED THEN
-        UPDATE SET deal_bas_r = #{dealBasR}
+            UPDATE SET deal_bas_r = #{dealBasR}
         WHEN NOT MATCHED THEN
-        INSERT (fx_rate_id, country_id, currency_code, deal_bas_r, base_date)
-        VALUES (seq_fx_rate.NEXTVAL, #{countryId}, #{currencyCode}, #{dealBasR}, #{baseDate})
+            INSERT (country_id, currency, deal_bas_r, base_date)
+            VALUES (#{countryId}, #{currency}, #{dealBasR}, #{baseDate})
     </insert>
 
     <!-- 환율 Insert (단순) -->
     <insert id="insertFxRate" parameterType="com.oneplane.fxrate.domain.FxRate">
-        INSERT INTO fx_rate (fx_rate_id, country_id, currency_code, deal_bas_r, base_date)
-        VALUES (seq_fx_rate.NEXTVAL, #{countryId}, #{currencyCode}, #{dealBasR}, #{baseDate})
+        INSERT INTO fx_rate (country_id, currency, deal_bas_r, base_date)
+        VALUES (#{countryId}, #{currency}, #{dealBasR}, #{baseDate})
     </insert>
 
     <!-- 최근 7일치 조회 -->
     <select id="findRecentByCountry" parameterType="long" resultType="com.oneplane.fxrate.domain.FxRate">
         SELECT fx_rate_id AS fxRateId,
         country_id AS countryId,
-        currency_code AS currencyCode,
+        currency AS currency,
         deal_bas_r AS dealBasR,
         base_date AS baseDate
         FROM fx_rate

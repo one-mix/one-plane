@@ -13,7 +13,8 @@ public class FxRateScheduler {
 
     private final FxRateService fxRateService;
 
-    @Scheduled(cron = "0 0 9 * * *", zone = "Asia/Seoul")
+    @Scheduled(fixedRate = 10000)  // 10초마다 실행
+    // @Scheduled(cron = "0 0 9 * * *", zone = "Asia/Seoul")
     public void updateDailyFxRates() {
         log.info("매일 환율 자동 업데이트 시작");
 

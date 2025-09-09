@@ -37,8 +37,6 @@ public class FxRateService {
 
         List<Map<String, Object>> response = restTemplate.getForObject(url, List.class);
 
-        log.debug("환율 API 응답 데이터: {}", response);
-
         if (response != null) {
             for (Map<String, Object> item : response) {
                 String curUnit = (String) item.get("cur_unit");
@@ -49,21 +47,24 @@ public class FxRateService {
                     continue;
                 }
 
-                // cur_unit → countryId 매핑
-                Long countryId = countryDao.findCountryIdByCurrency(curUnit);
-                if (countryId == null) {
+                // 통화 단위로 여러 국가 ID 조회
+                List<Long> countryIds = countryDao.findCountryIdsByCurrency(curUnit);
+
+                if (countryIds == null || countryIds.isEmpty()) {
                     log.warn("통화 {} 에 해당하는 countryId 없음", curUnit);
                     continue;
                 }
 
-                FxRate fxRate = new FxRate();
-                fxRate.setCountryId(countryId);
-                fxRate.setCurrencyCode(curUnit);
-                fxRate.setDealBasR(Double.valueOf(dealBasRStr.replace(",", "")));
-                fxRate.setBaseDate(LocalDate.parse(today, DateTimeFormatter.BASIC_ISO_DATE));
+                for (Long countryId : countryIds) {
+                    FxRate fxRate = new FxRate();
+                    fxRate.setCountryId(countryId);
+                    fxRate.setCurrency(curUnit);
+                    fxRate.setDealBasR(Double.valueOf(dealBasRStr.replace(",", "")));
+                    fxRate.setBaseDate(LocalDate.parse(today, DateTimeFormatter.BASIC_ISO_DATE));
 
-                fxRateMapper.upsertFxRate(fxRate);
-                log.info("환율 저장 완료: {}", fxRate);
+                    fxRateMapper.upsertFxRate(fxRate);
+                    log.info("환율 저장 완료: {} → {}", curUnit, countryId);
+                }
             }
         }
     }

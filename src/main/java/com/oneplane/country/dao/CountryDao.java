@@ -23,7 +23,7 @@ public interface CountryDao {
 
     Integer findCountryIdByIsoCode(@Param("isoCode") String isoCode);
 
-    Long findCountryIdByCurrency(@Param("curUnit") String curUnit);
+    List<Long> findCountryIdsByCurrency(@Param("curUnit") String curUnit);
 
     RecommendResultDTO findCountryInfo(@Param("isoCode") String isoCode);
 }

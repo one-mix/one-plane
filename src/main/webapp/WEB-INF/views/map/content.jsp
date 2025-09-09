@@ -130,26 +130,37 @@
                 <h3>환율</h3>
                 <canvas id="currencyChart"></canvas>
                 <script>
-                async function loadCurrencyChart(countryId) {
-                    const response = await fetch(`/fx/${countryId}`);
-                    const data = await response.json();
+                    async function loadCurrencyChart(countryId) {
+                        const response = await fetch(`/fx/${countryId}`);
+                        const data = await response.json();
 
-                    const labels = data.map(r => r.baseDate);
-                    const values = data.map(r => r.dealBasR);
+                        // X축 (baseDate)
+                        const labels = data.map(r => {
+                            if (typeof r.baseDate === "string") {
+                                return r.baseDate;
+                            } else if (r.baseDate && r.baseDate.year) {
+                                return `${r.baseDate.year}-${String(r.baseDate.monthValue).padStart(2, "0")}-${String(r.baseDate.dayOfMonth).padStart(2, "0")}`;
+                            }
+                            return "unknown";
+                        });
 
-                    new Chart(document.getElementById("currencyChart"), {
-                        type: "line",
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: "환율",
-                                data: values,
-                                borderColor: "#30609D",
-                                fill: false
-                            }]
-                        }
-                    });
-                }
+                        // Y축 (dealBasR)
+                        const values = data.map(r => r.dealBasR);
+
+                        // 차트 생성
+                        new Chart(document.getElementById("currencyChart"), {
+                            type: "line",
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: "환율",
+                                    data: values,
+                                    borderColor: "#30609D",
+                                    fill: false
+                                }]
+                            }
+                        });
+                    }
                 </script>
 
             </div>

@@ -41,7 +41,7 @@
         WHERE iso_code = #{isoCode}
     </select>
 
-    <select id="findCountryIdByCurrency" parameterType="string" resultType="long">
+    <select id="findCountryIdsByCurrency" parameterType="string" resultType="long">
         SELECT country_id
         FROM country
         WHERE currency = #{curUnit}
