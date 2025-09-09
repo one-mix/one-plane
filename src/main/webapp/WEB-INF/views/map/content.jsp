@@ -22,8 +22,8 @@
     <%-- 지도 (객체를 사용하기 위해 id 추가) --%>
     <div id="map" class="map">
 
-         <%-- 행동지침 버튼 --%>
          <div class="guideline-buttons">
+
             <!-- 즐겨찾기 -->
             <div class="tooltip-container">
                 <button class="blue">
@@ -36,6 +36,7 @@
                 </div>
             </div>
 
+            <%-- 행동지침 --%>
             <div class="tooltip-container">
                 <button class="yellow">
                     <span class="level">1단계</span>
@@ -116,7 +117,7 @@
                 <div class="panel-country">
                     <img id="country-flag" src="" alt="국기" class="flag">
                     <span id="country-name">국가명</span>
-                    <span id="country-continent">(대륙명)</span>
+                    <span id="country-continent">대륙명</span>
                 </div>
                 <button onclick="closeInfoPanel()" class="close-btn">✕</button>
             </div>
@@ -143,7 +144,7 @@
         * [37.5665, 126.9780]: 서울 시청 근처 좌표
         * 13: 줌 레벨 (0=전세계, 18=아주 세밀하게)
         */
-        const map = L.map('map').setView([37.5665, 126.9780], 10);
+        const map = L.map('map').setView([37.5665, 126.9780], 13);
 
         /*
         * 지도 타일 불러오기
@@ -156,18 +157,24 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // === 여행경보 색칠 ===
+        // 지도에 여행경보 색칠
         function getColor(level) {
+            const rootStyles = getComputedStyle(document.documentElement);
             switch(level) {
-                case "여행유의": return "#FEE33C";   // 노랑
-                case "여행자제": return "#FAAD14";   // 주황
-                case "철수권고": return "#FF4D4F";   // 빨강
-                case "여행금지": return "#000000";   // 검정
-                default: return "#D9D9D9";            // 정보 없음
+                case "여행유의":
+                    return rootStyles.getPropertyValue("--semantic-caution").trim();   // 노랑
+                case "여행자제":
+                    return rootStyles.getPropertyValue("--semantic-warning").trim();   // 주황
+                case "철수권고":
+                    return rootStyles.getPropertyValue("--semantic-error").trim();   // 빨강
+                case "여행금지":
+                    return rootStyles.getPropertyValue("--main-900").trim();   // 검정
+                default:
+                    return rootStyles.getPropertyValue("--main-100").trim();  // 정보 없음
             }
         }
 
-        // 여행경보 + GeoJSON 불러오기
+        // 여행경보 불러오기
         fetch("/alerts/all")
           .then(res => res.json())
           .then(alertData => {
