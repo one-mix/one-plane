@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.fxrate.repository.FxRateMapper">
+
+    <!-- 환율 Upsert -->
+    <insert id="upsertFxRate" parameterType="com.oneplane.fxrate.domain.FxRate">
+        MERGE INTO fx_rate t
+        USING (
+        SELECT
+        #{countryId} AS country_id,
+        #{currencyCode} AS currency_code,
+        #{baseDate} AS base_date
+        FROM dual
+        ) s
+        ON (
+        t.country_id = s.country_id
+        AND t.currency_code = s.currency_code
+        AND t.base_date = s.base_date
+        )
+        WHEN MATCHED THEN
+        UPDATE SET deal_bas_r = #{dealBasR}
+        WHEN NOT MATCHED THEN
+        INSERT (fx_rate_id, country_id, currency_code, deal_bas_r, base_date)
+        VALUES (seq_fx_rate.NEXTVAL, #{countryId}, #{currencyCode}, #{dealBasR}, #{baseDate})
+    </insert>
+
+    <!-- 환율 Insert (단순) -->
+    <insert id="insertFxRate" parameterType="com.oneplane.fxrate.domain.FxRate">
+        INSERT INTO fx_rate (fx_rate_id, country_id, currency_code, deal_bas_r, base_date)
+        VALUES (seq_fx_rate.NEXTVAL, #{countryId}, #{currencyCode}, #{dealBasR}, #{baseDate})
+    </insert>
+
+    <!-- 최근 7일치 조회 -->
+    <select id="findRecentByCountry" parameterType="long" resultType="com.oneplane.fxrate.domain.FxRate">
+        SELECT fx_rate_id AS fxRateId,
+        country_id AS countryId,
+        currency_code AS currencyCode,
+        deal_bas_r AS dealBasR,
+        base_date AS baseDate
+        FROM fx_rate
+        WHERE country_id = #{countryId}
+        ORDER BY base_date DESC
+        FETCH FIRST 7 ROWS ONLY
+    </select>
+
+</mapper>

@@ -1,10 +1,12 @@
 package com.oneplane.fxrate.service;
 
-import com.oneplane.fxrate.dao.FxRateMapper;
+import com.oneplane.country.dao.CountryDao;
+import com.oneplane.fxrate.repository.FxRateMapper;
 import com.oneplane.fxrate.domain.FxRate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -17,11 +19,13 @@ import java.util.*;
 public class FxRateService {
 
     private final FxRateMapper fxRateMapper;
+    private final CountryDao countryDao; // country 테이블 조회용
     private final RestTemplate restTemplate = new RestTemplate();
 
     private static final String API_KEY = "FM8C7ym8k05QP6k7jbysogAPUygHEuvq";
 
-    public void fetchAndSaveFxRates(Long countryId) {
+    @Transactional
+    public void fetchAndSaveFxRates() {
         String today = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
 
         String url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
@@ -31,8 +35,7 @@ public class FxRateService {
 
         log.debug("환율 API 호출 URL: {}", url);
 
-        List<Map<String, Object>> response =
-                restTemplate.getForObject(url, List.class);
+        List<Map<String, Object>> response = restTemplate.getForObject(url, List.class);
 
         log.debug("환율 API 응답 데이터: {}", response);
 
@@ -40,23 +43,28 @@ public class FxRateService {
             for (Map<String, Object> item : response) {
                 String curUnit = (String) item.get("cur_unit");
                 String dealBasRStr = (String) item.get("deal_bas_r");
-                String date = (String) item.get("date");
 
-                log.info("통화: {}, 기준환율: {}, 날짜: {}",
-                        curUnit, dealBasRStr, date);
+                if (dealBasRStr == null || dealBasRStr.equals("-")) {
+                    log.warn("{} 환율 데이터 없음, 스킵", curUnit);
+                    continue;
+                }
+
+                // cur_unit → countryId 매핑
+                Long countryId = countryDao.findCountryIdByCurrency(curUnit);
+                if (countryId == null) {
+                    log.warn("통화 {} 에 해당하는 countryId 없음", curUnit);
+                    continue;
+                }
 
                 FxRate fxRate = new FxRate();
                 fxRate.setCountryId(countryId);
-                fxRate.setCurrencyCode((String) item.get("cur_unit"));
-                fxRate.setDealBasR(Double.valueOf(((String) item.get("deal_bas_r")).replace(",", "")));
-                fxRate.setBaseDate(LocalDate.parse((String) item.get("date"), DateTimeFormatter.ofPattern("yyyyMMdd")));
+                fxRate.setCurrencyCode(curUnit);
+                fxRate.setDealBasR(Double.valueOf(dealBasRStr.replace(",", "")));
+                fxRate.setBaseDate(LocalDate.parse(today, DateTimeFormatter.BASIC_ISO_DATE));
 
-                fxRateMapper.insertFxRate(fxRate);
-
-                log.debug("DB 저장 완료: {}", fxRate);
+                fxRateMapper.upsertFxRate(fxRate);
+                log.info("환율 저장 완료: {}", fxRate);
             }
-        } else {
-            log.warn("환율 API 응답이 null입니다.");
         }
     }
 
@@ -64,3 +72,4 @@ public class FxRateService {
         return fxRateMapper.findRecentByCountry(countryId);
     }
 }
+

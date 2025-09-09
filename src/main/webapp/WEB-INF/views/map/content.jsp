@@ -168,7 +168,15 @@
         * [37.5665, 126.9780]: 서울 시청 근처 좌표
         * 13: 줌 레벨 (0=전세계, 18=아주 세밀하게)
         */
-        const map = L.map('map').setView([37.5665, 126.9780], 13);
+        const map = L.map("map", {
+            minZoom: 2,
+            maxZoom: 10,
+            maxBounds: [
+                [30, 70],   // 남서쪽 좌표 (중국 남부~타이완 서쪽 근처)
+                [45, 70]    // 북동쪽 좌표 (일본 홋카이도 포함, 태평양 쪽 잘림)
+            ],
+            maxBoundsViscosity: 1.0
+        }).setView([37.5665, 126.9780], 2); // 서울 중심
 
         /*
         * 지도 타일 불러오기
@@ -258,7 +266,6 @@
         */
         let marker = L.marker([37.5665, 126.9780])
             .addTo(map)
-            .bindPopup("여기는 서울입니다.")
             .openPopup();
 
         // 검색 기능
@@ -296,7 +303,7 @@
                     const lon = data[0].lon;
 
                     // 지도 이동
-                    map.setView([lat, lon], 6);
+                    map.setView([lat, lon], 2);
 
                     // 기존 마커 제거 후 새 마커 추가
                     marker.setLatLng([lat, lon])
@@ -323,9 +330,7 @@
             }
         });
 
-        // ==============================
         // 국가 데이터 (백엔드 → countryMap)
-        // ==============================
         let countryMap = {};
 
         async function loadCountries() {

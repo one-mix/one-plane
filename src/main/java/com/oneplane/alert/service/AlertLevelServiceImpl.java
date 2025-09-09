@@ -5,7 +5,7 @@ import com.oneplane.alert.domain.AlertLevel;
 import com.oneplane.alert.dto.AlertLevelDTO;
 import com.oneplane.alert.dto.TravelWarningApiResponse;
 import com.oneplane.alert.repository.AlertLevelRepository;
-import com.oneplane.country.repository.CountryRepository;
+import com.oneplane.country.dao.CountryDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class AlertLevelServiceImpl implements AlertLevelService {
 
     private final AlertLevelRepository alertLevelRepository;
-    private final CountryRepository countryRepository;
+    private final CountryDao countryRepository;
     private final RestTemplate restTemplate;
     private final AlertLevelDao alertLevelDao;
 

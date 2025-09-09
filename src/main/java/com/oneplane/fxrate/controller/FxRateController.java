@@ -17,7 +17,7 @@ public class FxRateController {
     // 환율 API 호출 + DB 저장
     @PostMapping("/update/{countryId}")
     public String updateFxRates(@PathVariable Long countryId) {
-        fxRateService.fetchAndSaveFxRates(countryId);
+        fxRateService.fetchAndSaveFxRates();
         return "환율 업데이트 완료";
     }
 

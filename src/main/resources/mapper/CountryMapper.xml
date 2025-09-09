@@ -6,21 +6,19 @@
 <mapper namespace="com.oneplane.country.dao.CountryDao">
 
     <select id="findByName" parameterType="string" resultType="com.oneplane.country.domain.Country">
-        SELECT
-        country_id   AS countryId,
+        SELECT country_id   AS countryId,
         country_name AS countryName,
         country_en_name AS countryEnName,
         iso_code     AS isoCode,
         continent,
         img
         FROM country
-        WHERE country_name LIKE '%' || #{name} || '%'
-        OR country_en_name LIKE '%' || #{name} || '%'
+        WHERE country_name = #{name}
+        OR country_en_name = #{name}
     </select>
 
     <select id="findByIsoCode" parameterType="string" resultType="com.oneplane.country.domain.Country">
-        SELECT
-        country_id   AS countryId,
+        SELECT country_id   AS countryId,
         country_name AS countryName,
         country_en_name AS countryEnName,
         iso_code     AS isoCode,
@@ -32,16 +30,21 @@
 
     <select id="findCountryInfo" parameterType="string" resultType="com.oneplane.recommend.dto.RecommendResultDTO">
         SELECT continent,
-               img AS countryImg
+        img AS countryImg
         FROM country
         WHERE iso_code = #{isoCode}
     </select>
 
-    <!-- iso_code를 기준으로 countryId 조회 -->
-    <select id="findCountryIdByIsoCode" resultType="java.lang.Integer" parameterType="java.lang.String">
+    <select id="findCountryIdByIsoCode" parameterType="string" resultType="java.lang.Integer">
         SELECT country_id
         FROM country
         WHERE iso_code = #{isoCode}
+    </select>
+
+    <select id="findCountryIdByCurrency" parameterType="string" resultType="long">
+        SELECT country_id
+        FROM country
+        WHERE currency = #{curUnit}
     </select>
 
 </mapper>
