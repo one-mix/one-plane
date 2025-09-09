@@ -41,7 +41,7 @@ spring:
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mapper/**/*.xml
-  type-aliases-package: com.oneplane.*.domain
+  type-aliases-package: com.oneplane.*.domain, com.oneplane.alert.domain
 
 # 파일 업로드
 file:

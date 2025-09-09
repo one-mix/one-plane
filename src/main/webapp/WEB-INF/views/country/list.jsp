@@ -29,7 +29,7 @@
                                  alt="${country.countryName}" width="80" height="50">
                         </c:when>
                         <c:otherwise>
-                            <img src="/images/default.png" alt="no image" width="80" height="50">
+                            <span>?</span>
                         </c:otherwise>
                     </c:choose>
                 </td>

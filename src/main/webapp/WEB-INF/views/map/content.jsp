@@ -299,6 +299,24 @@
             }
         });
 
+        // ==============================
+        // 국가 데이터 (백엔드 → countryMap)
+        // ==============================
+        let countryMap = {};
+
+        async function loadCountries() {
+            try {
+                const res = await fetch("/countries/all");
+                const data = await res.json();
+                data.forEach(c => {
+                    countryMap[c.isoCode.toUpperCase()] = c;
+                });
+                console.log("countryMap:", countryMap);
+            } catch (err) {
+                console.error("국가 데이터 불러오기 실패", err);
+            }
+        }
+
         // 통계 패널 열기 함수
         async function openInfoPanel(countryName) {
             document.getElementById("country-info-panel").classList.add("show");
@@ -308,7 +326,7 @@
                 const country = await res.json();
 
                 // 패널 정보 채우기
-                document.getElementById("country-flag").src = country.img || `/images/default.png`;
+                document.getElementById("country-flag").src = country.img || `/images/aimg.png`;
                 document.getElementById("country-name").innerText = country.countryName;
                 document.getElementById("country-continent").innerText = country.continent;
 

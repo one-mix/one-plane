@@ -17,5 +17,5 @@ public interface CountryDao {
 
     Country findByName(@Param("name") String name);
 
-    Country findByIsoCode(String isoCode);
+    Country findByIsoCode(@Param("isoCode") String isoCode);
 }

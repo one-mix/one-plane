@@ -2,6 +2,8 @@ package com.oneplane.country.controller;
 
 import com.oneplane.country.domain.Country;
 import com.oneplane.country.service.CountryService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,12 @@ public class CountryController {
         this.countryService = countryService;
     }
 
+    // 모든 국가 조회
+    @GetMapping("/all")
+    public List<Country> getAllCountries() {
+        return countryService.getAllCountries();
+    }
+
     // 전체 국가 조회
     @GetMapping("/list")
     public String list(Model model) {
@@ -27,20 +35,14 @@ public class CountryController {
         return "layout/layout";
     }
 
-    // CountryController.java
     @GetMapping("/search")
-    @ResponseBody
-    public Country searchByName(@RequestParam String name) {
-        return countryService.getCountryByName(name);
-    }
-
-
-    // 수동 동기화 실행용 (API → DB 저장)
-    @GetMapping("/sync")
-    @ResponseBody
-    public Map<String, String> syncCountries() {
-        countryService.updateCountriesFromApi();
-        return Map.of("message", "국가 데이터 동기화 완료");
+    public ResponseEntity<?> searchCountry(@RequestParam String name) {
+        Country c = countryService.getCountryByName(name);
+        if (c == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "국가 없음"));
+        }
+        return ResponseEntity.ok(c);
     }
 
     @GetMapping("/{id}")

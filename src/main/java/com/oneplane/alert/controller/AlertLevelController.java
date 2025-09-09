@@ -12,8 +12,12 @@ public class AlertLevelController {
     private final AlertLevelService alertLevelService;
 
     public AlertLevelController(AlertLevelService alertLevelService) {
-
         this.alertLevelService = alertLevelService;
+    }
+
+    @GetMapping("/all")
+    public List<AlertLevel> getAllAlerts() {
+        return alertLevelService.getAllAlerts();
     }
 
 }

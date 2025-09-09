@@ -8,14 +8,21 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // 여행경보 단계 → 색상 매핑 함수
 function getColor(level) {
-  switch(level) {
-    case "여행유의": return "#FEE33C"; // 노랑
-    case "여행자제": return "#FAAD14"; // 주황
-    case "철수권고": return "#FF4D4F"; // 빨강
-    case "여행금지": return "#000000"; // 검정
-    default: return "#D9D9D9";          // 정보 없음
-  }
+    const rootStyles = getComputedStyle(document.documentElement);
+    switch(level) {
+        case "여행유의":
+            return rootStyles.getPropertyValue("--semantic-caution").trim();   // 노랑
+        case "여행자제":
+            return rootStyles.getPropertyValue("--semantic-warnings").trim();  // 주황
+        case "철수권고":
+            return rootStyles.getPropertyValue("--semantic-error").trim();     // 빨강
+        case "여행금지":
+            return rootStyles.getPropertyValue("--main-900").trim();           // 검정
+        default:
+            return rootStyles.getPropertyValue("--main-100").trim();           // 정보 없음
+    }
 }
+
 
 // 여행경보 데이터 가져오기
 fetch("/alerts/all")  // 백엔드 API (ISO 코드, levelValue 내려줌)
@@ -35,7 +42,7 @@ fetch("/alerts/all")  // 백엔드 API (ISO 코드, levelValue 내려줌)
             fillColor: getColor(alertMap[feature.properties.iso_a3]),
             weight: 1,
             color: "white",
-            fillOpacity: 0.7
+            fillOpacity: 0.5
           }),
           onEachFeature: (feature, layer) => {
             const iso = feature.properties.iso_a3;
