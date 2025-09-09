@@ -5,6 +5,7 @@ import com.oneplane.fxrate.repository.FxRateMapper;
 import com.oneplane.fxrate.domain.FxRate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +28,8 @@ public class FxRateService {
     private final CountryDao countryDao;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private static final String API_KEY = "FM8C7ym8k05QP6k7jbysogAPUygHEuvq";
+    @Value("${api.fxrate.key}")
+    private String apiKey;
 
     /**
      * 최근 7일치 환율을 API에서 가져와 DB에 저장
@@ -40,7 +42,7 @@ public class FxRateService {
                     .format(DateTimeFormatter.BASIC_ISO_DATE);
 
             String url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
-                    + "?authkey=" + API_KEY
+                    + "?authkey=" + apiKey
                     + "&searchdate=" + date
                     + "&data=AP01";
 

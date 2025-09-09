@@ -54,11 +54,3 @@ logging:
     com.oneplane: DEBUG
     org.springframework.web: DEBUG
     org.mybatis: DEBUG
-
-# 외교부_국가별 기본정보 API 인코딩 키
-api:
-  country:
-    key: MC1h4938TtXp1nuIE6%2F9QqHUBp%2BJqtdX3%2FEK%2BZT9ZeyiNvWlQGyN0%2FptcDTNgcS31KJ9qk1Fv6hlpw1WVPXYBQ%3D%3D
-
-  warning:
-    key: 083d3dad8ae646c407f45fed6335de9d72810ee905c8ef5d965c5fcb184e0c58
