@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.alert.repository.AlertLevelRepository">
+
+    <!-- iso_code를 기준으로 countryId 조회 -->
+    <select id="findCountryIdByIsoCode" resultType="java.lang.Long" parameterType="java.lang.String">
+        SELECT id
+        FROM country
+        WHERE iso_code = #{isoCode}
+    </select>
+
+    <!-- update 쿼리 -->
+    <update id="updateAlertLevel">
+        UPDATE alert_level
+        SET level_value = #{levelValue}
+        WHERE country_id = #{countryId}
+    </update>
+
+    <!-- country_id가 존재하는지 체크하는 쿼리 -->
+    <select id="existsByCountryId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM alert_level
+        WHERE country_id = #{countryId}
+    </select>
+
+    <!-- AlertLevel 삽입 -->
+    <insert id="insertAlertLevel">
+        INSERT INTO alert_level (country_id, level_value)
+        VALUES (#{countryId}, #{levelValue})
+    </insert>
+
+</mapper>

@@ -1,0 +1,118 @@
+html, body {
+    height: 100%;
+    font-family: var(--font-main);
+    background-color: var(--semantic-background);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 공통 헤더 */
+.header {
+    padding: 10px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+
+/* 헤더 로고 글씨 */
+.header .logo {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: var(--font-semibold);
+    color: var(--main-700);
+}
+
+/* 헤더 로고 이미지 */
+.logo-img {
+    width: 75px;
+    height: 65px;
+}
+
+/* 네비게이션 탭 */
+.header .nav a {
+    font-size: 20px;
+    font-weight: var(--font-semibold);
+    color: var(--gray-400);
+    text-decoration: none;
+    padding: 28px;
+}
+
+/* 현재 활성화된 헤더 탭 */
+.header .nav a.active {
+    color: var(--main-700);
+    font-weight: var(--font-bold);
+    border-bottom: 2px solid var(--main-700);
+}
+
+/* 헤더 로그인 */
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header .user a {
+    font-size: 16px;
+    font-weight: var(--font-medium);
+    color: var(--gray-500);
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.user form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+/* 로그아웃 버튼 */
+.logout-btn {
+    font-size: 16px;
+    font-weight: var(--font-medium);
+    color: var(--gray-500);
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-family: var(--font-main);
+}
+
+.logout-btn:hover {
+    color: var(--gray-700);
+}
+
+/* 헤더 프로필 이미지 */
+.profile-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+    border: 2px solid var(--gray-100);
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 컨텐츠 (컨텐츠가 상하로 공간 채우도록) */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--semantic-background);
+}
+
+/* 푸터 */
+.footer {
+    background-color: white;
+    text-align: center;
+    padding: 24px 80px;
+    font-size: 14px;
+    color: var(--gray-500);
+}
