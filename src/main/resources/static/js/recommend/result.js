@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let selectedRating = 0;
     let selectedCountry = null;
+    let savedRecommendId = null;
 
     // 카드 선택 시 저장 버튼 활성화
     document.querySelectorAll(".card").forEach(card => {
@@ -26,13 +27,31 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "/recommend";
     });
 
-    // 저장 버튼 → 모달 열기만
+    // 저장 버튼 → 국가 저장 후 모달 열기
     saveBtn.addEventListener("click", () => {
         if (!selectedCountry) {
             alert("저장할 국가를 선택하세요.");
             return;
         }
-        feedbackModal.style.display = "flex";
+        fetch("/api/recommend/saveCountry", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                countryIso3: selectedCountry
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("국가 저장 완료:", data);
+                savedRecommendId = data.recommendId; // 저장된 recommendId 보관
+
+                // 2. 저장 성공 후 피드백 모달 열기
+                feedbackModal.style.display = "flex";
+            })
+            .catch(err => {
+                console.error("국가 저장 실패:", err);
+                alert("국가 저장에 실패했습니다.");
+            });
     });
 
     // 닫기 버튼
@@ -64,18 +83,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const feedbackText = comment.value;
 
-        fetch("/api/recommend/feedback", {
+        fetch("/api/recommend/updateFeedback", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                countryIso3: selectedCountry,
+                recommendId: savedRecommendId,
                 recommendRating: selectedRating,
                 ratingContent: feedbackText
             })
         })
             .then(res => res.text())
             .then(msg => {
-                console.log("✅ 피드백 저장:", msg);
+                console.log("피드백 저장:", msg);
 
                 feedbackModal.style.display = "none";
 
@@ -92,6 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     window.location.href = "/recommend";
                 }, 2500);
             })
-            .catch(err => console.error("❌ 피드백 저장 실패:", err));
+            .catch(err => console.error("피드백 저장 실패:", err));
     });
 });

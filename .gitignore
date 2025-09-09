@@ -168,3 +168,8 @@ pids/
 *.pid
 *.seed
 *.pid.lock
+
+# ChatBot
+*.pkl
+*.csv
+*.pyc

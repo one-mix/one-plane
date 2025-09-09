@@ -7,6 +7,7 @@ import com.oneplane.recommend.repository.RecommendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -21,25 +22,26 @@ public class RecommendServiceImpl implements RecommendService {
 
     @Override
     public Integer saveAgreement(Integer userId) {
-        recommendRepository.insertAgreement(userId);
-        return recommendRepository.getLatestRecommendId(userId);
+        return recommendRepository.insertAgreement(userId);
     }
 
     @Override
     public String getLatestAgreement(Integer userId) {
-        return recommendRepository.getLatestAgreement(userId);
+
+        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
+        return latestRecommend.getAgreement();
     }
 
     @Override
-    public void updateInput(RecommendDTO dto) {
-        Integer latestId = recommendRepository.getLatestRecommendId(dto.getUserId());
-        dto.setRecommendId(latestId);
-        recommendRepository.updateInput(dto);
+    public void insertInput(RecommendDTO dto) {
+        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(dto.getUserId());
+        dto.setRecommendId(latestRecommend.getRecommendId());
+        recommendRepository.insertInput(dto);
     }
 
     @Override
     public RecommendDTO getLatestInput(Integer userId) {
-        return recommendRepository.getLatestInput(userId);
+        return recommendRepository.getLatestRecommend(userId);
     }
 
     @Override
@@ -77,5 +79,30 @@ public class RecommendServiceImpl implements RecommendService {
             }
         }
         return results;
+    }
+
+    @Override
+    public Integer saveSelectedCountry(Integer userId, String country) {
+        // 1. 가장 최근 recommendId 가져오기
+        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
+        if (latestRecommend == null) {
+            throw new IllegalStateException("추천 정보를 찾을 수 없습니다.");
+        }
+
+        // 2. ISO 코드로 countryId 조회
+        Integer countryId = countryRepository.findCountryIdByIsoCode(country);
+        if (countryId == null) {
+            throw new IllegalArgumentException("유효하지 않은 국가 코드입니다: " + country);
+        }
+
+        // 3. countryId 업데이트
+        recommendRepository.updateCountryId(latestRecommend.getRecommendId(), countryId);
+
+        return latestRecommend.getRecommendId();
+    }
+
+    @Override
+    public void updateFeedback(Integer recommendId, Integer rating, String content) {
+        recommendRepository.updateFeedback(recommendId, rating, content);
     }
 }

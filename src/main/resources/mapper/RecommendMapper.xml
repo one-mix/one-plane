@@ -11,36 +11,11 @@
         VALUES (#{userId}, 'Y', SYSDATE)
     </insert>
 
-    <!-- 최신 recommend_id 가져오기 -->
-    <select id="getLatestRecommendId" parameterType="int" resultType="int">
-        SELECT recommend_id
-        FROM recommend
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC
-            FETCH FIRST 1 ROWS ONLY
-    </select>
-
-    <!-- 최근 agreement 여부 확인 -->
-    <select id="getLatestAgreement" parameterType="int" resultType="string">
-        SELECT agreement
-        FROM recommend
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC
-            FETCH FIRST 1 ROWS ONLY
-    </select>
-
-    <!-- 여행 목적 + 동행자 업데이트 -->
-    <update id="updateInput" parameterType="com.oneplane.recommend.dto.RecommendDTO">
-        UPDATE recommend
-        SET travel_purpose = #{travelPurpose},
-            companion      = #{companion}
-        WHERE recommend_id = #{recommendId}
-    </update>
-
-    <!-- 최신 입력값 조회 -->
-    <select id="getLatestInput" resultType="com.oneplane.recommend.dto.RecommendDTO">
+    <!-- 최신 recommend_id 정보 조회 -->
+    <select id="getLatestRecommend" parameterType="int" resultType="com.oneplane.recommend.dto.RecommendDTO">
         SELECT recommend_id,
                user_id,
+               agreement,
                travel_purpose AS travelPurpose,
                companion
         FROM recommend
@@ -48,4 +23,25 @@
         ORDER BY created_at DESC
             FETCH FIRST 1 ROWS ONLY
     </select>
+
+    <!-- 여행 목적 + 동행자 업데이트 -->
+    <insert id="insertInput" parameterType="com.oneplane.recommend.dto.RecommendDTO">
+        INSERT INTO recommend (user_id, agreement, travel_purpose, companion, created_at)
+        VALUES (#{userId}, 'Y', #{travelPurpose}, #{companion}, SYSDATE)
+    </insert>
+
+    <!-- countryId 업데이트 -->
+    <update id="updateCountryId">
+        UPDATE recommend
+        SET country_id = #{countryId}
+        WHERE recommend_id = #{recommendId}
+    </update>
+
+    <!-- 피드백 업데이트 -->
+    <update id="updateFeedback">
+        UPDATE recommend
+        SET recommend_rating = #{recommendRating},
+            rating_content = #{ratingContent}
+        WHERE recommend_id = #{recommendId}
+    </update>
 </mapper>
