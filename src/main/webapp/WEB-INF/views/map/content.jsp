@@ -126,8 +126,32 @@
                 <canvas id="travelChart"></canvas>
                 <h3>방문객</h3>
                 <canvas id="visitChart"></canvas>
+
                 <h3>환율</h3>
                 <canvas id="currencyChart"></canvas>
+                <script>
+                async function loadCurrencyChart(countryId) {
+                    const response = await fetch(`/fx/${countryId}`);
+                    const data = await response.json();
+
+                    const labels = data.map(r => r.baseDate);
+                    const values = data.map(r => r.dealBasR);
+
+                    new Chart(document.getElementById("currencyChart"), {
+                        type: "line",
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: "환율",
+                                data: values,
+                                borderColor: "#30609D",
+                                fill: false
+                            }]
+                        }
+                    });
+                }
+                </script>
+
             </div>
         </div>
      </div>
