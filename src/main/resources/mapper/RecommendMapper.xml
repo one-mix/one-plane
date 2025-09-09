@@ -31,4 +31,19 @@
             companion      = #{companion}
         WHERE recommend_id = #{recommendId}
     </update>
+
+    <!-- countryId 업데이트 -->
+    <update id="updateCountryId">
+        UPDATE recommend
+        SET country_id = #{countryId}
+        WHERE recommend_id = #{recommendId}
+    </update>
+
+    <!-- 피드백 업데이트 -->
+    <update id="updateFeedback">
+        UPDATE recommend
+        SET recommend_rating = #{recommendRating},
+            rating_content = #{ratingContent}
+        WHERE recommend_id = #{recommendId}
+    </update>
 </mapper>

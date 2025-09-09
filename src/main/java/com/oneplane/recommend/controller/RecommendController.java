@@ -91,4 +91,29 @@ public class RecommendController {
 
         return "redirect:/recommend/result";
     }
+
+    // 국가 선택 저장
+    @PostMapping("/saveCountry")
+    public ResponseEntity<?> saveCountry(@RequestBody Map<String, String> request,
+                                         HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        String countryIso3 = request.get("countryIso3");
+
+        // ISO3 코드로 countryId 조회 후 저장
+        Integer recommendId = recommendService.saveSelectedCountry(userId, countryIso3);
+
+        return ResponseEntity.ok(Map.of("recommendId", recommendId, "message", "국가 저장 완료"));
+    }
+
+    // 피드백 업데이트
+    @PostMapping("/updateFeedback")
+    public ResponseEntity<?> updateFeedback(@RequestBody Map<String, Object> request) {
+        Integer recommendId = (Integer) request.get("recommendId");
+        Integer rating = (Integer) request.get("recommendRating");
+        String content = (String) request.get("ratingContent");
+
+        recommendService.updateFeedback(recommendId, rating, content);
+
+        return ResponseEntity.ok("피드백 저장 완료");
+    }
 }
