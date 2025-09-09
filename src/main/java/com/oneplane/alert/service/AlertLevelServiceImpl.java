@@ -6,6 +6,7 @@ import com.oneplane.alert.dto.TravelWarningApiResponse;
 import com.oneplane.alert.repository.AlertLevelRepository;
 import com.oneplane.country.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +22,17 @@ public class AlertLevelServiceImpl implements AlertLevelService {
     private final CountryRepository countryRepository;
     private final RestTemplate restTemplate;
 
-    private String determineLevelValue(TravelWarningApiResponse.Item item) {
+    @Value("${api.serviceKey}")
+    private String serviceKey;
+
+    @Value("${api.pageNo}")
+    private int pageNo;
+
+    @Value("${api.numOfRows}")
+    private int numOfRows;
+
+    @Override
+    public String determineLevelValue(TravelWarningApiResponse.Item item) {
         // 1. 여행금지 (가장 높은 경보)
         if (item.getBanYna() != null || item.getBanYnPartial() != null) {
             return "여행금지";
@@ -48,7 +59,7 @@ public class AlertLevelServiceImpl implements AlertLevelService {
 
     @Override
     public void fetchAndSaveAlertLevels() {
-        String apiUrl = "https://apis.data.go.kr/1262000/TravelWarningServiceV3/getTravelWarningListV3?serviceKey=c4cf266113f2aafb4c9e19e2ecfaa5e23bf786f5433ef674f7a4b32b1d5cb95b&pageNo=1&numOfRows=300";
+        String apiUrl = String.format("https://apis.data.go.kr/1262000/TravelWarningServiceV3/getTravelWarningListV3?serviceKey=%s&pageNo=%d&numOfRows=%d", serviceKey, pageNo, numOfRows);
 
         // RestTemplate을 통해 API 요청
         TravelWarningApiResponse apiResponse = null;
