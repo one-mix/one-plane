@@ -3,11 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oneplane.recommend.repository.CountryRepository">
+<mapper namespace="com.oneplane.country.repository.CountryRepository">
 
-    <select id="findCountryInfo" parameterType="string" resultType="com.oneplane.recommend.dto.RecommendResultDTO">
-        SELECT continent,
-               img AS countryImg
+    <!-- iso_code를 기준으로 countryId 조회 -->
+    <select id="findCountryIdByIsoCode" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT country_id
         FROM country
         WHERE iso_code = #{isoCode}
     </select>

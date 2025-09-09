@@ -1,8 +1,8 @@
 package com.oneplane.recommend.service;
 
+import com.oneplane.country.repository.CountryRepository;
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
-import com.oneplane.recommend.repository.CountryRepository;
 import com.oneplane.recommend.repository.RecommendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
