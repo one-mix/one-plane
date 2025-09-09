@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     .then(data => {
                         if (!data.loggedIn) {
                             // 로그인되지 않으면 로그인 페이지로 리다이렉트
+                            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
                             window.location.href = "/oauth2/authorization/kakao";
                         } else {
                             // 동의 정보 서버에 전송
