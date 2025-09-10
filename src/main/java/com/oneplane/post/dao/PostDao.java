@@ -37,4 +37,22 @@ public interface PostDao {
 
     // 게시글 수정
     int updatePost(Post post);
+
+    // 메인페이지용 최신글 조회 (5개)
+    List<Post> findLatestPostsForMain();
+
+    // 메인페이지용 인기글 조회 (5개)
+    List<Post> findPopularPostsForMain();
+
+    // 메인페이지용 인기 후기 조회 (9개)
+    List<Post> findPopularReviewsForMain();
+
+    // 게시글의 좋아요 수 업데이트
+    int updatePostLikeCount(@Param("postId") Integer postId);
+
+    // 게시글의 댓글 수 업데이트
+    int updatePostCommentCount(@Param("postId") Integer postId);
+
+    // 게시글의 모든 카운트 업데이트 (좋아요 수 + 댓글 수)
+    int updatePostCounts(@Param("postId") Integer postId);
 }
