@@ -41,7 +41,7 @@
     <div class="menu-section">
         <h4>게시글</h4>
         <ul class="menu-list">
-            <li><a href="/section/write" class="${activeMenu == 'write' ? 'active' : ''}">내가 작성한</a></li>
+            <li><a href="/board/myboard" class="${activeMenu == 'write' ? 'active' : ''}">내가 작성한</a></li>
             <li><a href="/section/follower" class="${activeMenu == 'follower' ? 'active' : ''}">팔로워가 작성한</a></li>
         </ul>
     </div>

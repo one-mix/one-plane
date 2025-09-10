@@ -1,14 +1,10 @@
 package com.oneplane.myPage.controller;
 
 import com.oneplane.myPage.dto.TravelHistoryDto;
-import com.oneplane.myPage.model.TravelHistory;
+import com.oneplane.myPage.domain.TravelHistory;
 import com.oneplane.myPage.service.TravelHistoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

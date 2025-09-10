@@ -1,4 +1,4 @@
-package com.oneplane.myPage.model;
+package com.oneplane.myPage.domain;
 
 public class Country {
     private Long countryId;
