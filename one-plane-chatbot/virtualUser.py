@@ -49,4 +49,4 @@ for _ in range(num_users):
 users_df = pd.DataFrame(user_data)[["user_id", "age", "age_bucket", "gender", "disability", "disease", "medication"]]
 
 # CSV 저장
-users_df.to_csv("/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/users_test2.csv", index=False)
+users_df.to_csv("/Users/osuky/Downloads/TodoList/one-plane/one-plane-chatbot/users_test2.csv", index=False)
