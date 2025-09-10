@@ -470,7 +470,15 @@
                     <c:forEach var="post" items="${latestPosts}" varStatus="status">
                         <a href="/post/detail/${post.postId}" class="post-item">
                             <div class="country-and-title">
-                                <span>${post.country}</span>
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${post.category == 'READY'}">준비</c:when>
+                                        <c:when test="${post.category == 'REVIEW'}">후기</c:when>
+                                        <c:when test="${post.category == 'ACCOMPANY'}">동행</c:when>
+                                        <c:when test="${post.category == 'FREE'}">자유</c:when>
+                                        <c:otherwise>${post.category}</c:otherwise>
+                                    </c:choose>
+                                </span>
                                 <span title="${post.title}">
                                         <c:choose>
                                             <c:when test="${fn:length(post.title) > 20}">
@@ -509,7 +517,15 @@
                     <c:forEach var="post" items="${popularPosts}" varStatus="status">
                         <a href="/post/detail/${post.postId}" class="post-item">
                             <div class="country-and-title">
-                                <span>${post.country}</span>
+                                <span class="country">
+                                    <c:choose>
+                                        <c:when test="${post.category == 'READY'}">준비</c:when>
+                                        <c:when test="${post.category == 'REVIEW'}">후기</c:when>
+                                        <c:when test="${post.category == 'ACCOMPANY'}">동행</c:when>
+                                        <c:when test="${post.category == 'FREE'}">자유</c:when>
+                                        <c:otherwise>${post.category}</c:otherwise>
+                                    </c:choose>
+                                </span>
                                 <span title="${post.title}">
                                         <c:choose>
                                             <c:when test="${fn:length(post.title) > 20}">
