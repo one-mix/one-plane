@@ -1,0 +1,338 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 메인 컨테이너 - 사이드바와 함께 작동하도록 수정 */
+.main-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background: #f8f9fa;
+}
+
+/* 콘텐츠 래퍼 - 사이드바 옆에 위치 */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 세로 중앙 정렬 추가 */
+    padding: 20px;
+    width: 100%;
+}
+
+/* 콘텐츠 영역 */
+.content {
+    width: 90%; /* 또는 max-width: 1200px; */
+    max-width: 1400px; /* 최대 너비 설정 */
+    height: auto; /* 높이는 콘텐츠에 맞게 자동 조절 */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+/* 헤더 */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.content-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-add {
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btn-add:hover {
+    background: #555;
+}
+
+/* 빈 상태 */
+.empty-state {
+    background: #fff;
+    padding: 60px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+    color: #666;
+}
+
+.empty-state h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.empty-state p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 그리드 - 반응형 */
+.travel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 0;
+}
+
+/* 카드 */
+.travel-card {
+    position: relative;
+    background: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 300px;
+    transition: transform .3s, box-shadow .3s;
+    cursor: pointer;
+}
+
+.travel-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* 이미지 */
+.card-image-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+}
+
+.card-no-image {
+    width: 100%;
+    height: 100%;
+    background: #d0d0d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 오버레이 */
+.content-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.97);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s, visibility .3s;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.card-image-container:hover .content-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.card-image-container:hover .card-image {
+    transform: scale(1.05);
+}
+
+/* 오버레이 내부 */
+.overlay-header {
+    margin-bottom: 12px;
+}
+
+.overlay-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.overlay-date {
+    font-size: 13px;
+    color: #888;
+}
+
+.overlay-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.overlay-location {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+}
+
+.overlay-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.overlay-stars {
+    color: #FFD700;
+    font-size: 14px;
+}
+
+.overlay-rating-text {
+    font-size: 12px;
+    color: #666;
+}
+
+.overlay-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.overlay-tag {
+    background: #f0f8ff;
+    color: #007AFF;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.overlay-content {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    margin-top: 8px;
+}
+
+.overlay-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.overlay-actions .delete-form {
+    flex: 1;
+}
+
+.btn-edit,
+.btn-delete {
+    flex: 1;
+    padding: 8px 16px;
+    font-size: 12px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-edit {
+    background: #007AFF;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+.btn-edit:hover {
+    background: #0056CC;
+}
+
+.btn-delete {
+    background: #ff4444;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background: #cc3333;
+}
+
+/* 반응형 미디어 쿼리 */
+@media (max-width: 1200px) {
+    .travel-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .travel-card {
+        height: 320px;
+    }
+
+    .content-wrapper {
+        margin-left: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+
+    .content-wrapper {
+        padding: 15px;
+        margin-left: 0; /* 모바일에서는 중앙 마진 제거 */
+    }
+
+    .content-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .content-title {
+        font-size: 20px;
+    }
+
+    .travel-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .travel-card {
+        height: 280px;
+    }
+
+    .overlay-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .travel-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .travel-card {
+        height: 250px;
+    }
+}
