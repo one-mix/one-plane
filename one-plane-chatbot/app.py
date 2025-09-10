@@ -12,7 +12,6 @@ def recommend():
 
     if not user_id or not purpose or not companion:
         return jsonify({"error": "필수값(user_id, purpose, companion) 누락"}), 400
-
     try:
         recs = recommend_for_user(user_id=user_id, purpose=purpose, companion=companion, topk=3)
         recs = recs.rename(columns={
