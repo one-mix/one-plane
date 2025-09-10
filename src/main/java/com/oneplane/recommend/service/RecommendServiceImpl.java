@@ -1,6 +1,6 @@
 package com.oneplane.recommend.service;
 
-import com.oneplane.country.repository.CountryRepository;
+import com.oneplane.country.dao.CountryDao;
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.repository.RecommendRepository;
@@ -17,7 +17,7 @@ import java.util.*;
 public class RecommendServiceImpl implements RecommendService {
 
     private final RecommendRepository recommendRepository;
-    private final CountryRepository countryRepository;
+    private final CountryDao countryDao;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
@@ -71,7 +71,7 @@ public class RecommendServiceImpl implements RecommendService {
         // 각 국가 코드 기준으로 DB에서 continent, img 가져오기
         for (RecommendResultDTO dto : results) {
             if (dto.getCountryIso3() != null) {
-                RecommendResultDTO info = countryRepository.findCountryInfo(dto.getCountryIso3());
+                RecommendResultDTO info = countryDao.findCountryInfo(dto.getCountryIso3());
                 if (info != null) {
                     dto.setContinent(info.getContinent());
                     dto.setCountryImg(info.getCountryImg());
@@ -90,7 +90,7 @@ public class RecommendServiceImpl implements RecommendService {
         }
 
         // 2. ISO 코드로 countryId 조회
-        Integer countryId = countryRepository.findCountryIdByIsoCode(country);
+        Integer countryId = countryDao.findCountryIdByIsoCode(country);
         if (countryId == null) {
             throw new IllegalArgumentException("유효하지 않은 국가 코드입니다: " + country);
         }

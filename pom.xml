@@ -151,7 +151,6 @@
 			<version>1.17.1</version>
 		</dependency>
 
-
 		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -165,6 +164,13 @@
 			<version>3.0.5</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Jackson XML 의존성 추가 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
