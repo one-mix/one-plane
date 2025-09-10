@@ -94,20 +94,12 @@
             AND p.user_id = #{userId}
         </if>
 
-        <!-- 정렬 -->
+        <!-- 정렬 (수정된 부분) -->
         ORDER BY
         <choose>
-            <when test="sortBy == 'view'">p.view_count DESC, p.updated_at DESC, p.created_at DESC</when>
-            <when test="sortBy == 'like'">p.like_count DESC, p.updated_at DESC, p.created_at DESC</when>
-            <otherwise>
-                <!-- 수정시간 -> 작성시간 -->
-                CASE
-                WHEN p.updated_at > p.created_at THEN p.updated_at
-                ELSE p.created_at
-                END DESC,
-                p.updated_at DESC,
-                p.created_at DESC
-            </otherwise>
+            <when test="sortBy == 'view'">p.view_count DESC, p.post_id DESC</when>
+            <when test="sortBy == 'like'">p.like_count DESC, p.post_id DESC</when>
+            <otherwise>p.created_at DESC, p.post_id DESC</otherwise>
         </choose>
 
         <![CDATA[
@@ -144,13 +136,7 @@
         FROM posts p
                  LEFT JOIN users u ON p.user_id = u.user_id
         WHERE p.deleted_at IS NULL
-        ORDER BY
-            CASE
-                WHEN p.updated_at > p.created_at THEN p.updated_at
-                ELSE p.created_at
-                END DESC,
-            p.updated_at DESC,
-            p.created_at DESC
+        ORDER BY p.created_at DESC, p.post_id DESC
     </select>
 
     <!-- 총 게시글 수 조회 -->
@@ -225,7 +211,7 @@
                                                                   LEFT JOIN users u ON p.user_id = u.user_id
                                                          WHERE p.deleted_at IS NULL
                                                            AND p.category = #{category}
-                                                         ORDER BY p.created_at DESC
+                                                         ORDER BY p.created_at DESC, p.post_id DESC
                                                      ) a
                           WHERE ROWNUM <= #{offset} + #{size}
                       )
@@ -252,6 +238,7 @@
                      #{viewCount}, #{likeCount}, #{commentCount}, SYSDATE, SYSDATE
                  )
     </insert>
+
     <!-- 게시글 상세조회 -->
     <select id="findPostById" parameterType="Integer" resultMap="PostResultMap">
         SELECT
@@ -309,5 +296,183 @@
             updated_at = SYSDATE
         WHERE post_id = #{postId}
           AND deleted_at IS NULL
+    </update>
+
+    <!-- 메인페이지용 최신글 조회 -->
+    <select id="findLatestPostsForMain" resultMap="PostResultMap">
+    <![CDATA[
+        SELECT * FROM (
+                          SELECT
+                              p.post_id,
+                              p.user_id,
+                              p.title,
+                              p.content,
+                              p.thumbnail_image,
+                              p.category,
+                              p.country,
+                              p.view_count,
+                              p.like_count,
+                              p.comment_count,
+                              p.created_at,
+                              p.updated_at,
+                              p.deleted_at,
+
+                              u.user_id as user_user_id,
+                              u.email as user_email,
+                              u.name as user_name,
+                              u.nickname as user_nickname,
+                              u.profile_img as user_profile_img
+
+                          FROM posts p
+                                   LEFT JOIN users u ON p.user_id = u.user_id
+                          WHERE p.deleted_at IS NULL
+                          ORDER BY p.created_at DESC, p.post_id DESC
+                      )
+        WHERE ROWNUM <= 5
+        ]]>
+</select>
+
+    <!-- 메인페이지용 인기글 조회 (5개) -->
+    <select id="findPopularPostsForMain" resultMap="PostResultMap">
+<![CDATA[
+        SELECT
+            post_id,
+            user_id,
+            title,
+            content,
+            thumbnail_image,
+            category,
+            country,
+            view_count,
+            like_count,
+            comment_count,
+            created_at,
+            updated_at,
+            deleted_at,
+            user_user_id,
+            user_email,
+            user_name,
+            user_nickname,
+            user_profile_img
+        FROM (
+                 SELECT
+                     p.post_id,
+                     p.user_id,
+                     p.title,
+                     p.content,
+                     p.thumbnail_image,
+                     p.category,
+                     p.country,
+                     p.view_count,
+                     p.like_count,
+                     p.comment_count,
+                     p.created_at,
+                     p.updated_at,
+                     p.deleted_at,
+
+                     u.user_id as user_user_id,
+                     u.email as user_email,
+                     u.name as user_name,
+                     u.nickname as user_nickname,
+                     u.profile_img as user_profile_img,
+
+                     -- 인기도 점수 계산 (가중치 적용)
+                     (NVL(p.view_count, 0) * 1 + NVL(p.like_count, 0) * 1 + NVL(p.comment_count, 0) * 1) as popularity_score
+
+                 FROM posts p
+                          LEFT JOIN users u ON p.user_id = u.user_id
+                 WHERE p.deleted_at IS NULL
+                   AND p.created_at >= SYSDATE - 30  -- 최근 30일 내 게시글만
+                 ORDER BY
+                     (NVL(p.view_count, 0) * 2 + NVL(p.like_count, 0) * 3 + NVL(p.comment_count, 0) * 1) DESC,
+                     p.created_at DESC,
+                     p.post_id DESC
+             )
+        WHERE ROWNUM <= 5
+        ]]>
+</select>
+
+    <!-- 메인페이지용 인기 후기 조회 (9개) -->
+    <select id="findPopularReviewsForMain" resultMap="PostResultMap">
+<![CDATA[
+        SELECT
+            post_id,
+            user_id,
+            title,
+            content,
+            thumbnail_image,
+            category,
+            country,
+            view_count,
+            like_count,
+            comment_count,
+            created_at,
+            updated_at,
+            deleted_at,
+            user_user_id,
+            user_email,
+            user_name,
+            user_nickname,
+            user_profile_img
+        FROM (
+                 SELECT
+                     p.post_id,
+                     p.user_id,
+                     p.title,
+                     p.content,
+                     p.thumbnail_image,
+                     p.category,
+                     p.country,
+                     p.view_count,
+                     p.like_count,
+                     p.comment_count,
+                     p.created_at,
+                     p.updated_at,
+                     p.deleted_at,
+
+                     u.user_id as user_user_id,
+                     u.email as user_email,
+                     u.name as user_name,
+                     u.nickname as user_nickname,
+                     u.profile_img as user_profile_img,
+
+                     -- 인기도 점수 계산 (가중치 적용)
+                     (NVL(p.view_count, 0) * 1 + NVL(p.like_count, 0) * 1 + NVL(p.comment_count, 0) * 1) as popularity_score
+
+                 FROM posts p
+                          LEFT JOIN users u ON p.user_id = u.user_id
+                 WHERE p.deleted_at IS NULL
+                   AND p.category = 'REVIEW'
+                   AND p.created_at >= SYSDATE - 30  -- 최근 30일 내 게시글만
+                 ORDER BY
+                     (NVL(p.view_count, 0) * 2 + NVL(p.like_count, 0) * 3 + NVL(p.comment_count, 0) * 1) DESC,
+                     p.created_at DESC,
+                     p.post_id DESC
+             )
+        WHERE ROWNUM <= 9
+        ]]>
+</select>
+
+    <!-- 게시글의 좋아요 수 업데이트 -->
+    <update id="updatePostLikeCount" parameterType="Integer">
+        UPDATE posts
+        SET like_count = (
+            SELECT COUNT(*)
+            FROM post_like
+            WHERE post_id = #{postId}
+        )
+        WHERE post_id = #{postId}
+    </update>
+
+    <!-- 게시글의 댓글 수 업데이트 -->
+    <update id="updatePostCommentCount" parameterType="Integer">
+        UPDATE posts
+        SET comment_count = (
+            SELECT COUNT(*)
+            FROM comments
+            WHERE post_id = #{postId}
+              AND deleted_at IS NULL
+        )
+        WHERE post_id = #{postId}
     </update>
 </mapper>
