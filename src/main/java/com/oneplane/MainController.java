@@ -1,11 +1,12 @@
 package com.oneplane;
 
+import com.oneplane.myPage.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class MainController {
+public class MainController extends BaseController {
 
     // 메인 페이지 (지도)
     @GetMapping("/")
@@ -72,4 +73,7 @@ public class MainController {
         model.addAttribute("contentPage", "login/main.jsp");
         return "layout/layout";
     }
+
+
 }
+
