@@ -82,4 +82,39 @@ public class PostDaoImpl implements PostDao {
         log.debug("게시글 수정 - postId: {}", post.getPostId());
         return sqlSession.update(namespace + "updatePost", post);
     }
+
+    @Override
+    public List<Post> findLatestPostsForMain() {
+        log.debug("메인페이지용 최신글 5개 조회");
+        return sqlSession.selectList(namespace + "findLatestPostsForMain");
+    }
+
+    @Override
+    public List<Post> findPopularPostsForMain() {
+        log.debug("메인페이지용 인기글 5개 조회");
+        return sqlSession.selectList(namespace + "findPopularPostsForMain");
+    }
+
+    @Override
+    public List<Post> findPopularReviewsForMain() {
+        log.debug("메인페이지용 인기 후기 9개 조회");
+        return sqlSession.selectList(namespace + "findPopularReviewsForMain");
+    }
+    @Override
+    public int updatePostLikeCount(Integer postId) {
+        log.debug("게시글 좋아요 수 업데이트 - postId: {}", postId);
+        return sqlSession.update(namespace + "updatePostLikeCount", postId);
+    }
+
+    @Override
+    public int updatePostCommentCount(Integer postId) {
+        log.debug("게시글 댓글 수 업데이트 - postId: {}", postId);
+        return sqlSession.update(namespace + "updatePostCommentCount", postId);
+    }
+
+    @Override
+    public int updatePostCounts(Integer postId) {
+        log.debug("게시글 모든 카운트 업데이트 - postId: {}", postId);
+        return sqlSession.update(namespace + "updatePostCounts", postId);
+    }
 }

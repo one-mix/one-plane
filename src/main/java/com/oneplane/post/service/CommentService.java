@@ -14,6 +14,8 @@ public class CommentService {
 
     @Autowired
     private CommentDao commentDao;
+    @Autowired
+    private PostService postService;
 
     // 댓글 작성
     public Integer createComment(Comment comment) {
@@ -37,10 +39,10 @@ public class CommentService {
         }
 
         // 댓글 내용 트림 처리
-        comment.setContent(comment.getContent().trim());
-
         int result = commentDao.insertComment(comment);
         if (result > 0) {
+            // 게시글의 댓글 수 업데이트
+            postService.updatePostCommentCount(comment.getPostId());
             return comment.getCommentId();
         } else {
             throw new RuntimeException("댓글 작성에 실패했습니다.");
@@ -67,7 +69,12 @@ public class CommentService {
             throw new IllegalArgumentException("댓글 삭제 권한이 없습니다.");
         }
 
-        return commentDao.deleteComment(commentId) > 0;
+        boolean deleted = commentDao.deleteComment(commentId) > 0;
+        if (deleted) {
+            // 게시글의 댓글 수 업데이트
+            postService.updatePostCommentCount(existingComment.getPostId());
+        }
+        return deleted;
     }
 
     // 댓글 1건 조회

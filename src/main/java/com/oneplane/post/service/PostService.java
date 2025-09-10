@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -448,6 +449,110 @@ public class PostService {
         } catch (Exception e) {
             log.error("게시글 수정 중 오류 발생 - postId: {}", postId, e);
             throw new RuntimeException("게시글 수정에 실패했습니다: " + e.getMessage());
+        }
+    }
+
+    // 메인페이지용 최신글 조회 (5개)
+    @Transactional(readOnly = true)
+    public List<Post> getLatestPostsForMain() {
+        try {
+            log.info("메인페이지용 최신글 5개 조회");
+
+            List<Post> posts = postDao.findLatestPostsForMain();
+
+            // 게시글 데이터 후처리
+            posts.forEach(this::processPostData);
+
+            log.info("메인페이지용 최신글 조회 완료 - 조회 건수: {}", posts.size());
+            return posts;
+
+        } catch (Exception e) {
+            log.error("메인페이지용 최신글 조회 중 오류 발생", e);
+            return new ArrayList<>();
+        }
+    }
+    /**
+     * 메인페이지용 인기글 조회 (5개)
+     * 인기도 = 조회수 + 좋아요수 + 댓글수
+     */
+    @Transactional(readOnly = true)
+    public List<Post> getPopularPostsForMain() {
+        try {
+            log.info("메인페이지용 인기글 5개 조회");
+
+            List<Post> posts = postDao.findPopularPostsForMain();
+
+            // 게시글 데이터 후처리
+            posts.forEach(this::processPostData);
+
+            log.info("메인페이지용 인기글 조회 완료 - 조회 건수: {}", posts.size());
+            return posts;
+
+        } catch (Exception e) {
+            log.error("메인페이지용 인기글 조회 중 오류 발생", e);
+            return new ArrayList<>();
+        }
+    }
+
+    // 메인페이지용 인기 후기 조회 (9개)
+    @Transactional(readOnly = true)
+    public List<Post> getPopularReviewsForMain() {
+        try {
+            log.info("메인페이지용 인기 후기 9개 조회");
+
+            List<Post> posts = postDao.findPopularReviewsForMain();
+
+            // 게시글 데이터 후처리
+            posts.forEach(this::processPostData);
+
+            log.info("메인페이지용 인기 후기 조회 완료 - 조회 건수: {}", posts.size());
+            return posts;
+
+        } catch (Exception e) {
+            log.error("메인페이지용 인기 후기 조회 중 오류 발생", e);
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 게시글의 좋아요 수 업데이트
+     */
+    @Transactional
+    public void updatePostLikeCount(Integer postId) {
+        try {
+            postDao.updatePostLikeCount(postId);
+            log.debug("게시글 좋아요 수 업데이트 완료 - postId: {}", postId);
+        } catch (Exception e) {
+            log.error("게시글 좋아요 수 업데이트 실패 - postId: {}", postId, e);
+            throw new RuntimeException("좋아요 수 업데이트에 실패했습니다.");
+        }
+    }
+
+    /**
+     * 게시글의 댓글 수 업데이트
+     */
+    @Transactional
+    public void updatePostCommentCount(Integer postId) {
+        try {
+            postDao.updatePostCommentCount(postId);
+            log.debug("게시글 댓글 수 업데이트 완료 - postId: {}", postId);
+        } catch (Exception e) {
+            log.error("게시글 댓글 수 업데이트 실패 - postId: {}", postId, e);
+            throw new RuntimeException("댓글 수 업데이트에 실패했습니다.");
+        }
+    }
+
+    /**
+     * 게시글의 모든 카운트 업데이트 (좋아요 수 + 댓글 수)
+     */
+    @Transactional
+    public void updatePostCounts(Integer postId) {
+        try {
+            postDao.updatePostCounts(postId);
+            log.debug("게시글 카운트 업데이트 완료 - postId: {}", postId);
+        } catch (Exception e) {
+            log.error("게시글 카운트 업데이트 실패 - postId: {}", postId, e);
+            throw new RuntimeException("게시글 카운트 업데이트에 실패했습니다.");
         }
     }
 }
