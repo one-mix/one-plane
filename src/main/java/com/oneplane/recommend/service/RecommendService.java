@@ -4,6 +4,7 @@ import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RecommendService {
     Integer saveAgreement(Integer userId);
@@ -18,4 +19,7 @@ public interface RecommendService {
 
     // 피드백 업데이트
     void updateFeedback(Integer recommendId, Integer rating, String content);
+    List<RecommendResultDTO> getRecommendHistory(Integer userId, int page);
+    int getTotalRecommendHistoryCount(Integer userId);
+    Map<String, Object> getRecommendHistoryWithPagination(Integer userId, int page);
 }
