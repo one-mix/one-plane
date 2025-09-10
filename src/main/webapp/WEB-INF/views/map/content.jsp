@@ -318,7 +318,7 @@
                           .openPopup();
 
                     // 국가 상세 조회
-                     const countryRes = await fetch(`/countries/search?name=${encodeURIComponent(country)}`);
+                    const countryRes = await fetch("/countries/search?name=" + encodeURIComponent(country));
                      const countryData = await countryRes.json();
 
                     // 사이드 패널 열기
