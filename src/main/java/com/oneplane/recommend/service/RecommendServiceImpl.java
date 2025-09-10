@@ -1,6 +1,8 @@
 package com.oneplane.recommend.service;
 
+import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.country.dao.CountryDao;
+import com.oneplane.alert.dto.AlertLevelDTO;
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.repository.RecommendRepository;
@@ -18,6 +20,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     private final RecommendRepository recommendRepository;
     private final CountryDao countryDao;
+    private final AlertLevelDao alertLevelDao;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
@@ -75,6 +78,21 @@ public class RecommendServiceImpl implements RecommendService {
                 if (info != null) {
                     dto.setContinent(info.getContinent());
                     dto.setCountryImg(info.getCountryImg());
+                }
+
+                // 알림 테이블에서 여행 경보 정보 가져오기 (국가 코드로 검색)
+                AlertLevelDTO alertLevel = alertLevelDao.findByIsoCode(dto.getCountryIso3());
+                if (alertLevel != null) {
+                    // 경보 레벨이 없으면 "안전"으로 처리
+                    if (alertLevel.getLevelValue() == null || alertLevel.getLevelValue().isEmpty()) {
+                        alertLevel.setLevelValue("안전");
+                    }
+                    String levelValue = alertLevel.getLevelValue();
+                    dto.setAlertLevel(levelValue);
+                } else {
+                    // 만약 경보 정보가 없으면 "안전"으로 처리
+                    String safeLevel = "안전";
+                    dto.setAlertLevel(safeLevel);
                 }
             }
         }

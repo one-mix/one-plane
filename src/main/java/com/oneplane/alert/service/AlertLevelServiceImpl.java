@@ -4,7 +4,6 @@ import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.alert.domain.AlertLevel;
 import com.oneplane.alert.dto.AlertLevelDTO;
 import com.oneplane.alert.dto.TravelWarningApiResponse;
-import com.oneplane.alert.repository.AlertLevelRepository;
 import com.oneplane.country.dao.CountryDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AlertLevelServiceImpl implements AlertLevelService {
 
-    private final AlertLevelRepository alertLevelRepository;
     private final CountryDao countryRepository;
     private final RestTemplate restTemplate;
     private final AlertLevelDao alertLevelDao;
@@ -118,11 +116,11 @@ public class AlertLevelServiceImpl implements AlertLevelService {
                 alertLevel.setCountryId(countryId);
 
                 // 이미 존재하는 country_id에 대해 UPDATE 또는 새로운 country_id에 대해 INSERT
-                Integer exists = alertLevelRepository.existsByCountryId(countryId);
+                Integer exists = alertLevelDao.existsByCountryId(countryId);
                 if (exists != null && exists > 0) {
-                    alertLevelRepository.updateAlertLevel(alertLevel);
+                    alertLevelDao.updateAlertLevel(alertLevel);
                 } else {
-                    alertLevelRepository.insertAlertLevel(alertLevel);
+                    alertLevelDao.insertAlertLevel(alertLevel);
                 }
             } else {
                 // isoCode와 일치하는 countryId가 없을 경우 로그
