@@ -32,4 +32,15 @@
         VALUES (#{countryId}, #{levelValue})
     </insert>
 
+    <!-- iso_code를 기준으로 alert_level 조회 -->
+    <select id="findByIsoCode" resultType="com.oneplane.alert.dto.AlertLevelDTO" parameterType="java.lang.String">
+        SELECT
+            al.country_id AS countryId,
+            al.level_value AS levelValue
+        FROM alert_level al
+                 INNER JOIN country c ON al.country_id = c.country_id
+        WHERE c.iso_code = #{isoCode}
+    </select>
+
+
 </mapper>

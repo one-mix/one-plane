@@ -8,4 +8,5 @@ public interface AlertLevelRepository {
     Integer existsByCountryId(Integer countryId);
     void insertAlertLevel(AlertLevelDTO alertLevel);
     void updateAlertLevel(AlertLevelDTO alertLevel);
+    AlertLevelDTO findByIsoCode(String isoCode);
 }
