@@ -1,6 +1,6 @@
 package com.oneplane.myPage.domain;
 
-public class Country {
+public class MyPageCountry {
     private Long countryId;
     private String countryName;
     private String countryEnName;
@@ -13,7 +13,7 @@ public class Country {
     private Integer distance;
 
     // 생성자
-    public Country() {}
+    public MyPageCountry() {}
 
     // Getter & Setter
     public Long getCountryId() { return countryId; }
