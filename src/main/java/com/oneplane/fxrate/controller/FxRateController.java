@@ -4,6 +4,7 @@ import com.oneplane.fxrate.domain.FxRate;
 import com.oneplane.fxrate.service.FxRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class FxRateController {
     }
 
     // 최근 환율 조회
-    @GetMapping("/{countryId}")
+    @GetMapping(value = "/{countryId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FxRate> getFxRates(@PathVariable Long countryId) {
         return fxRateService.getRecentRates(countryId);
     }
