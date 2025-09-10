@@ -43,7 +43,7 @@
                 </form>
 
                     <%-- 프로필 이미지 --%>
-                <a href="/mypage">
+                <a href="/mypage/dashboard">
                     <c:choose>
                         <c:when test="${not empty sessionScope.user.profileImg}">
                             <img src="${sessionScope.user.profileImg}" alt="Profile" class="profile-img" />

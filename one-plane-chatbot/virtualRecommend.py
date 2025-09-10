@@ -8,7 +8,7 @@ users_df = pd.read_csv("/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/
 
 # 국가 및 도시 데이터 정의 (제공받은 리스트 기반)
 countries_data = [
-    # 아시아
+    # 아시아git
     {"country_id": 1, "country_iso3": "JPN", "country_name_ko": "일본", "cities": ["도쿄", "오사카", "교토", "후쿠오카"]},
     {"country_id": 2, "country_iso3": "CHN", "country_name_ko": "중국", "cities": ["베이징", "상하이", "광저우", "선전"]},
     {"country_id": 3, "country_iso3": "HKG", "country_name_ko": "홍콩", "cities": ["홍콩"]},
