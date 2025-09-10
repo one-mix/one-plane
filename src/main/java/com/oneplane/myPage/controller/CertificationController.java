@@ -88,17 +88,6 @@ public class CertificationController extends BaseController{
         return "layout/layout";
     }
 
-    public Long getUserIdFromSession(HttpSession session) {
-        Object userIdObj = session.getAttribute("userId");
-        if (userIdObj == null) return null;
-
-        if (userIdObj instanceof Long) return (Long) userIdObj;
-        if (userIdObj instanceof Integer) return ((Integer) userIdObj).longValue();
-        if (userIdObj instanceof String) return Long.parseLong((String) userIdObj);
-
-        return null;
-    }
-
     // CertificationController.java에 추가할 메서드
 
     @GetMapping("/timeline")
@@ -112,10 +101,10 @@ public class CertificationController extends BaseController{
         List<Map<String, Object>> certifications = certificationService.getUserCertifications(userId);
 
         // 총 거리 계산 (인스턴스 메서드 호출)
-        int totalDistance = certificationDao.getTotalCertificationDistance(userId);
+        int totalDistance = certificationService.getTotalCertificationDistance(userId);
 
         // 총 사진 수 계산 (인스턴스 메서드 호출)
-        int totalPhotos = certificationDao.getTotalPhotosCount(userId);
+        int totalPhotos = certificationService.getTotalPhotosCount(userId);
 
         model.addAttribute("certifications", certifications);
         model.addAttribute("totalDistance", totalDistance);

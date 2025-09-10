@@ -137,4 +137,11 @@ public class CertificationService {
     }
 
 
+    public int getTotalCertificationDistance(Long userId) {
+        return certificationDao.getTotalCertificationDistance(userId);
+    }
+
+    public int getTotalPhotosCount(Long userId) {
+        return certificationDao.getTotalPhotosCount(userId);
+    }
 }
