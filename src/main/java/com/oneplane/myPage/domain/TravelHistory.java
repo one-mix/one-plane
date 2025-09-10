@@ -1,4 +1,4 @@
-package com.oneplane.myPage.model;
+package com.oneplane.myPage.domain;
 
 import java.time.LocalDate;
 import java.util.Date;

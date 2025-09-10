@@ -1,6 +1,6 @@
 package com.oneplane.myPage.dao;
 
-import com.oneplane.myPage.model.TravelHistory;
+import com.oneplane.myPage.domain.TravelHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

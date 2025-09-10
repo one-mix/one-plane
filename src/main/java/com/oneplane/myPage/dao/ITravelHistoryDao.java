@@ -1,6 +1,6 @@
 package com.oneplane.myPage.dao;
 
-import com.oneplane.myPage.model.TravelHistory;
+import com.oneplane.myPage.domain.TravelHistory;
 import java.util.List;
 
 public interface ITravelHistoryDao {

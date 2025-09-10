@@ -2,7 +2,7 @@ package com.oneplane.myPage.service;
 
 import com.oneplane.myPage.dao.TravelHistoryDao;
 import com.oneplane.myPage.dto.TravelHistoryDto;
-import com.oneplane.myPage.model.TravelHistory;
+import com.oneplane.myPage.domain.TravelHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
