@@ -1,7 +1,7 @@
 package com.oneplane.myPage.service;
 
 import com.oneplane.myPage.dao.CertificationDao;
-import com.oneplane.myPage.dao.CountryDao;
+import com.oneplane.myPage.dao.MypageCountryDao;
 import com.oneplane.myPage.dao.UserDao;
 import com.oneplane.myPage.dto.CertificationDto;
 import com.oneplane.myPage.dto.CertificationTimelineDto;
@@ -29,7 +29,7 @@ public class CertificationService {
     private CertificationDao certificationDao;
 
     @Autowired
-    private CountryDao countryDao;
+    private MypageCountryDao mypageCountryDao;
 
     @Autowired
     private UserDao userDao;
@@ -37,7 +37,7 @@ public class CertificationService {
     public boolean registerCountryCertification(CertificationDto dto, Long userId) {
         try {
             // 1) countryName → countryId 조회
-            Long countryId = countryDao.findCountryIdByName(dto.getCountryName());
+            Long countryId = mypageCountryDao.findCountryIdByName(dto.getCountryName());
             if (countryId == null) {
                 throw new IllegalArgumentException("등록되지 않은 국가명: " + dto.getCountryName());
             }

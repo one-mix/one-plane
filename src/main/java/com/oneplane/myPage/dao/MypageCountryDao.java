@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class CountryDao {
+public class MypageCountryDao {
 
     @Autowired
     private JdbcTemplate jdbc;

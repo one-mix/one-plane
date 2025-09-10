@@ -1,6 +1,6 @@
 package com.oneplane.myPage.service;
 
-import com.oneplane.myPage.dao.CountryDao;
+import com.oneplane.myPage.dao.MypageCountryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +11,17 @@ import java.util.Map;
 public class CountryService {
 
     @Autowired
-    private CountryDao countryDao;
+    private MypageCountryDao mypageCountryDao;
 
     public List<Map<String, Object>> getAllCountries() {
-        return countryDao.getAllCountries();
+        return mypageCountryDao.getAllCountries();
     }
 
     public Map<String, Object> getCountryInfo(Long countryId) {
-        return countryDao.getCountryInfo(countryId);
+        return mypageCountryDao.getCountryInfo(countryId);
     }
 
     public Long findCountryIdByName(String countryName) {
-        return countryDao.findCountryIdByName(countryName);
+        return mypageCountryDao.findCountryIdByName(countryName);
     }
 }
