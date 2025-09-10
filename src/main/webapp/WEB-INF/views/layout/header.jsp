@@ -23,7 +23,7 @@
         </a>
         <a href="/post/list"
             class="${activeMenu eq 'post' ? 'active' : ''}">
-            게시판
+            커뮤니티
         </a>
     </nav>
 

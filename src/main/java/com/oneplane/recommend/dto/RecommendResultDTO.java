@@ -11,4 +11,5 @@ public class RecommendResultDTO {
 
     private String continent;
     private String countryImg;
+    private String alertLevel;
 }

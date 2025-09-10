@@ -38,11 +38,12 @@
     height: 100%;
     background: #fff;
     box-shadow: -2px 0 8px rgba(0,0,0,0.1);
-    padding: 20px;
+    padding: 40px;
+    gap: 40px;
     overflow-y: auto;
     transition: transform 0.3s ease;
     transform: translateX(100%);
-    z-index: 999;
+    z-index: 3000;
 }
 
 .country-info-panel.show {
@@ -53,26 +54,42 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
-.country-info-panel .panel-title {
+.country-info-panel .panel-country {
+    gap: 10px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 18px;
-    font-weight: bold;
 }
 
 .country-info-panel .flag {
-    width: 28px;
-    height: 20px;
+    width: 32px;
+    height: 24px;
     object-fit: cover;
 }
 
-.country-info-panel .continent {
+.country-info-panel #country-name {
+    font-size: 20px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+    margin-left: 10px;
+}
+
+.country-info-panel #country-continent {
     font-size: 14px;
-    color: #666;
+    color: var(--gray-400);
+    font-weight: var(--font-regular);
+}
+
+#country-continent::before {
+    content: "(";
+    margin-right: 2px;
+}
+
+#country-continent::after {
+    content: ")";
+    margin-left: 2px;
 }
 
 .close-btn {
@@ -80,14 +97,14 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
 }
 
 .country-info-panel .panel-body h3 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+    font-size: 14px;
+    font-weight: var(--font-medium);
+    color: var(--gray-900);
 }
 
 /* ===== 행동지침 버튼 ===== */
@@ -429,7 +446,7 @@
 /* 카드 상단: 썸네일 */
 .review-card .thumbnail {
     width: 100%;
-    height: 140px;
+    height: 190px;
     border-radius: 10px 10px 0 0;
     background-color: var(--gray-100);
     object-fit: cover;

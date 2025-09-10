@@ -192,3 +192,38 @@ button.submit {
     opacity: 1;
     bottom: 50px;
 }
+
+.alert-danger {
+    color: white;
+    background-color: red; /* 빨간색 - 여행금지 */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.alert-warning {
+    color: white;
+    background-color: orange; /* 주황색 - 철수권고 */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.alert-info {
+    color: white;
+    background-color: yellow; /* 노란색 - 여행자제 */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.alert-caution {
+    color: white;
+    background-color: yellowgreen; /* 노란 초록색 - 여행유의 */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.alert-safe {
+    color: white;
+    background-color: green; /* 초록색 - 안전 */
+    padding: 5px;
+    border-radius: 5px;
+}

@@ -19,6 +19,7 @@ import java.util.List;
 public class PostLikeService {
     private final PostLikeDao postLikeDao;
     private final PostDao postDao;
+    private final PostService postService;
 
     /**
      * 좋아요 토글 (좋아요/취소)
@@ -37,13 +38,14 @@ public class PostLikeService {
             boolean isLiked = postLikeDao.existsPostLike(userId, postId);
 
             if (isLiked) {
-                // 좋아요 취소 (물리적 삭제)
+                // 좋아요 취소
                 int deleted = postLikeDao.deletePostLike(userId, postId);
                 if (deleted > 0) {
+                    // 게시글의 좋아요 수 업데이트
+                    postService.updatePostLikeCount(postId);
                     log.info("좋아요 취소 성공 - userId: {}, postId: {}", userId, postId);
-                    return false; // 좋아요 취소됨
+                    return false;
                 } else {
-                    log.warn("좋아요 취소 실패 - userId: {}, postId: {}", userId, postId);
                     throw new RuntimeException("좋아요 취소에 실패했습니다.");
                 }
             } else {
@@ -51,10 +53,11 @@ public class PostLikeService {
                 PostLike postLike = PostLike.create(userId, postId);
                 int inserted = postLikeDao.insertPostLike(postLike);
                 if (inserted > 0) {
+                    // 게시글의 좋아요 수 업데이트
+                    postService.updatePostLikeCount(postId);
                     log.info("좋아요 추가 성공 - userId: {}, postId: {}", userId, postId);
-                    return true; // 좋아요 추가됨
+                    return true;
                 } else {
-                    log.warn("좋아요 추가 실패 - userId: {}, postId: {}", userId, postId);
                     throw new RuntimeException("좋아요 추가에 실패했습니다.");
                 }
             }

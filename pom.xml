@@ -166,6 +166,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Jackson XML 의존성 추가 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

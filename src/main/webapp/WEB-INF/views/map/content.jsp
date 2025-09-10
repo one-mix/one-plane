@@ -1,6 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%-- EL 해석 무시 --%>
-<%@ page isELIgnored="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%-- EL 해석 활성화 --%>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
     <%-- CSS 연결 --%>
@@ -23,28 +26,21 @@
     <%-- 지도 (객체를 사용하기 위해 id 추가) --%>
     <div id="map" class="map">
 
-         <%-- 행동지침 버튼 --%>
          <div class="guideline-buttons">
+
             <!-- 즐겨찾기 -->
             <div class="tooltip-container">
                 <button class="blue">
                     <span>즐겨찾기</span>
                 </button>
                 <div class="tooltip-content scrollable">
-                    <ui>
-                        <li class="tooltip-country">가나</li>
-                        <li class="tooltip-country">대한민국</li>
-                        <li class="tooltip-country">미국</li>
-                        <li class="tooltip-country">일본</li>
-                        <li class="tooltip-country">중국</li>
-                        <li class="tooltip-country">프랑스</li>
-                        <li class="tooltip-country">영국</li>
-                        <li class="tooltip-country">호주</li>
-                        <li class="tooltip-country">브라질</li>
-                        <li class="tooltip-country">캐나다</li>
-                    </ui>
+                    <ul id="favorites-list">
+                        <!-- JS로 <li> 자동 생성 -->
+                    </ul>
                 </div>
             </div>
+
+            <%-- 행동지침 --%>
             <div class="tooltip-container">
                 <button class="yellow">
                     <span class="level">1단계</span>
@@ -122,23 +118,60 @@
         <!-- 국가 통계 패널 -->
         <div id="country-info-panel" class="country-info-panel hidden">
             <div class="panel-header">
-                <img id="country-flag" src="" alt="국기" class="flag">
-                <span id="country-name">국가명</span>
+                <div class="panel-country">
+                    <img id="country-flag" src="" alt="국기" class="flag">
+                    <span id="country-name">국가명</span>
+                    <span id="country-continent">대륙명</span>
+                </div>
                 <button onclick="closeInfoPanel()" class="close-btn">✕</button>
             </div>
-
             <div class="panel-body">
                 <h3>여행경보</h3>
                 <canvas id="travelChart"></canvas>
-
                 <h3>방문객</h3>
                 <canvas id="visitChart"></canvas>
 
                 <h3>환율</h3>
                 <canvas id="currencyChart"></canvas>
+                <script>
+                    async function loadCurrencyChart(countryId) {
+                        const response = await fetch(`/fx/${countryId}`);
+                        const data = await response.json();
+
+                        console.log("환율 api 응답:", data)
+
+                        if (!Array.isArray(data) || data.length === 0) {
+                            console.warn("환율 데이터 없음");
+                            return;
+                        }
+
+                        const labels = data.map(r => r.baseDate);
+                        const values = data.map(r => r.dealBasR);
+
+                        // 이미 차트가 있으면 제거
+                        if (currencyChartInstance) {
+                            currencyChartInstance.destroy();
+                        }
+
+                        const ctx = document.getElementById("currencyChart").getContext("2d");
+                        currencyChartInstance = new Chart(ctx, {
+                            type: "line",
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: "환율",
+                                    data: values,
+                                    borderColor: "#30609D",
+                                    fill: false,
+                                    tension: 0.1
+                                }]
+                            }
+                        });
+                    }
+                </script>
+
             </div>
         </div>
-
      </div>
 
     <%-- Leaflet 라이브러 사용을 위한 JS 연결 --%>
@@ -153,7 +186,15 @@
         * [37.5665, 126.9780]: 서울 시청 근처 좌표
         * 13: 줌 레벨 (0=전세계, 18=아주 세밀하게)
         */
-        const map = L.map('map').setView([37.5665, 126.9780], 13);
+        const map = L.map("map", {
+            minZoom: 2,
+            maxZoom: 10,
+            maxBounds: [
+                [30, 70],   // 남서쪽 좌표 (중국 남부~타이완 서쪽 근처)
+                [45, 70]    // 북동쪽 좌표 (일본 홋카이도 포함, 태평양 쪽 잘림)
+            ],
+            maxBoundsViscosity: 1.0
+        }).setView([37.5665, 126.9780], 2); // 서울 중심
 
         /*
         * 지도 타일 불러오기
@@ -166,6 +207,66 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
+        // 지도에 여행경보 색칠
+        function getColor(level) {
+            const rootStyles = getComputedStyle(document.documentElement);
+            switch(level) {
+                case "여행유의":
+                    return rootStyles.getPropertyValue("--semantic-caution").trim();   // 노랑
+                case "여행자제":
+                    return rootStyles.getPropertyValue("--semantic-warning").trim();   // 주황
+                case "철수권고":
+                    return rootStyles.getPropertyValue("--semantic-error").trim();   // 빨강
+                case "여행금지":
+                    return rootStyles.getPropertyValue("--main-900").trim();   // 검정
+                default:
+                    return rootStyles.getPropertyValue("--main-100").trim();  // 정보 없음
+            }
+        }
+
+        // 여행경보 불러오기
+        fetch("/alerts/all")
+          .then(res => res.json())
+          .then(alertData => {
+              const alertMap = {};
+              // alertMap 채우기
+                alertData.forEach(d => {
+                    const rawIso = d.country.isoCode || d.country.iso_code || d.country.ISO_CODE;
+                    if (rawIso) {
+                        const iso = rawIso.trim().toUpperCase();
+                        alertMap[iso] = d.levelValue;
+                    }
+                });
+
+              console.log("alertMap 최종:", alertMap);
+
+              // GeoJSON 불러오기
+              fetch("/geojson/custom.geo.json")
+                .then(res => res.json())
+                .then(geoData => {
+                    console.log("GeoJSON:", geoData);
+
+                    L.geoJson(geoData, {
+                        style: feature => {
+                            const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
+                            const level = alertMap[iso];
+                            return {
+                                fillColor: getColor(level),
+                                weight: 1,
+                                color: "white",
+                                fillOpacity: 0.7
+                            };
+                        },
+                        onEachFeature: (feature, layer) => {
+                            const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
+                            const level = alertMap[iso] || "정보 없음";
+                            layer.bindPopup(`${feature.properties.admin} : ${level}`);
+                        }
+                    }).addTo(map);
+                });
+          });
+
+
         /*
         * 변수형 마커 추가 (검색 시 재활용하기 위함)
         * L.marker([위도, 경도]): 지도 위에 마커 생성
@@ -175,7 +276,6 @@
         */
         let marker = L.marker([37.5665, 126.9780])
             .addTo(map)
-            .bindPopup("여기는 서울입니다.")
             .openPopup();
 
         // 검색 기능
@@ -188,10 +288,8 @@
 
             // 국가명이 비어있을 경우
             if (!country) {
-
                 // 콘솔 경고 메시지 확인
                 console.warn("검색어가 비어있습니다.");
-
                 // 검색 요청 보내지 않음
                 return;
             }
@@ -212,45 +310,66 @@
                     const lat = data[0].lat;
                     const lon = data[0].lon;
 
-                    // 지도 이동
-                    map.setView([lat, lon], 6);
-
-                    // 기존 마커 제거 후 새 마커 추가
+                    // 지도 이동 & 마커 갱신
+                    map.setView([lat, lon], 2);
                     marker.setLatLng([lat, lon])
+                          .unbindPopup()
+                          .bindPopup("여기는 " + country + " 입니다.")
+                          .openPopup();
 
-                    // 기존 팝업 완전히 제거
-                    marker.unbindPopup();
-
-                    /*
-                    * ${} 사용 시 JSP EL 문법과 JS 템플릿 리터럴이 충돌나고 서버에서 가로채서 country 출력 안됨
-                    * + (문자열 연결 방식) 로 변경
-                    */
-                    marker.bindPopup("여기는 " + country + " 입니다.").openPopup();
+                    // 국가 상세 조회
+                    const countryRes = await fetch("/countries/search?name=" + encodeURIComponent(country));
+                     const countryData = await countryRes.json();
 
                     // 사이드 패널 열기
-                    openInfoPanel(country);
+                    openInfoPanel(countryData);
 
+                    // 환율 차트 렌더링
+                    if (countryData && countryData.countryId) {
+                        loadCurrencyChart(countryData.countryId);
+                    } else {
+                        console.warn("countryId 없음:", countryData);
+                    }
                 } else {
-                     // 응답이 없을 경우 알림창 뜸
                      alert("국가를 찾을 수 없습니다.");
                 }
             } catch (err) {
-                // 콘솔로 에러 메시지 확인
                 console.error("검색 오류", err);
             }
         });
 
+        // 국가 데이터 (백엔드 → countryMap)
+        let countryMap = {};
+
+        async function loadCountries() {
+            try {
+                const res = await fetch("/countries/all");
+                const data = await res.json();
+                data.forEach(c => {
+                    countryMap[c.isoCode.toUpperCase()] = c;
+                });
+                console.log("countryMap:", countryMap);
+            } catch (err) {
+                console.error("국가 데이터 불러오기 실패", err);
+            }
+        }
+
         // 통계 패널 열기 함수
-        function openInfoPanel(country) {
-            document.getElementById("country-name").innerText = country;
+        async function openInfoPanel(countryData) {
             document.getElementById("country-info-panel").classList.add("show");
 
-            // flag API에서 국기 불러오기
-            document.getElementById("country-flag").src =
-              `https://countryflagsapi.com/png/${country}`;
+            // 패널 정보 채우기
+            document.getElementById("country-flag").src = countryData.img || `/images/aimg.png`;
+            document.getElementById("country-name").innerText = countryData.countryName;
+            document.getElementById("country-continent").innerText = countryData.continent;
 
-            // 차트 데이터 바인딩 (Chart.js 사용)
+            // 차트 렌더링
             renderCharts();
+
+            // 환율 차트는 따로 실행
+            if (countryData && countryData.countryId) {
+                loadCurrencyChart(countryData.countryId);
+            }
         }
 
         // 통계 패널 닫기 함수
@@ -258,9 +377,20 @@
             document.getElementById("country-info-panel").classList.remove("show");
         }
 
+        // 차트 인스턴스 전역 변수
+         let travelChartInstance, visitChartInstance, currencyChartInstance;
+
         function renderCharts() {
+            const travelCtx = document.getElementById("travelChart").getContext("2d");
+            const visitCtx = document.getElementById("visitChart").getContext("2d");
+            const currencyCtx = document.getElementById("currencyChart").getContext("2d");
+
+            if (travelChartInstance) travelChartInstance.destroy();
+            if (visitChartInstance) visitChartInstance.destroy();
+            if (currencyChartInstance) currencyChartInstance.destroy();
+
             // 여행 경보 통계
-            new Chart(document.getElementById("travelChart"), {
+            travelChartInstance = new Chart(travelCtx, {
                 type: "doughnut",
                 data: {
                     labels: ["여행유의", "여행자제"],
@@ -269,20 +399,11 @@
             });
 
             // 방문객 통계
-            new Chart(document.getElementById("visitChart"), {
+            visitChartInstance = new Chart(visitCtx, {
                 type: "bar",
                 data: {
                     labels: ["4월","5월","6월","7월","8월","9월"],
                     datasets: [{ data: [10,20,15,25,18,22], backgroundColor: "#5A90D2" }]
-                }
-            });
-
-            // 환율 통계
-            new Chart(document.getElementById("currencyChart"), {
-                type: "line",
-                data: {
-                    labels: Array.from({length: 30}, (_,i)=>i+1),
-                    datasets: [{ data: Array.from({length:30}, ()=>Math.random()*100), borderColor: "#4caf50" }]
                 }
             });
         }
@@ -333,215 +454,208 @@
         <%-- 최신글 --%>
         <div class="section posts">
 
-           <%-- 최신글 + 더보기--%>
-           <div class="title-and-more">
-               <span class="title">최신글</span>
-               <a href="http://localhost:8080/post/list" class="more">더보기 →</a>
-           </div>
-
-            <%-- 최신글 목록 (5개만 표시) --%>
-            <div class="post-list">
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-            </div>
+        <%-- 최신글 + 더보기--%>
+        <div class="title-and-more">
+            <span class="title">최신글</span>
+            <a href="/post/list" class="more">더보기 →</a>
         </div>
 
-        <%-- 인기글 --%>
-        <div class="section posts">
-
-           <%-- 인기글 + 더보기--%>
-           <div class="title-and-more">
-               <span class="title">인기글</span>
-               <a href="http://localhost:8080/post/list" class="more">더보기 →</a>
-           </div>
-
-           <%-- 인기글 목록 (5개만 표시) --%>
-            <div class="post-list">
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="http://localhost:8080/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-            </div>
+        <%-- 최신글 목록 (5개만 표시) --%>
+        <div class="post-list">
+            <c:choose>
+                <c:when test="${empty latestPosts}">
+                    <div class="no-posts">등록된 게시글이 없습니다.</div>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="post" items="${latestPosts}" varStatus="status">
+                        <a href="/post/detail/${post.postId}" class="post-item">
+                            <div class="country-and-title">
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${post.category == 'READY'}">준비</c:when>
+                                        <c:when test="${post.category == 'REVIEW'}">후기</c:when>
+                                        <c:when test="${post.category == 'ACCOMPANY'}">동행</c:when>
+                                        <c:when test="${post.category == 'FREE'}">자유</c:when>
+                                        <c:otherwise>${post.category}</c:otherwise>
+                                    </c:choose>
+                                </span>
+                                <span title="${post.title}">
+                                        <c:choose>
+                                            <c:when test="${fn:length(post.title) > 20}">
+                                                ${fn:substring(post.title, 0, 20)}...
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${post.title}
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                            </div>
+                            <span><fmt:formatDate value="${post.createdAt}" pattern="yyyy-MM-dd" /></span>
+                        </a>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 
-    <%-- 인기 후기 --%>
-    <div class="popular-reviews">
-        <span class="review-title">인기 후기</span>
+    <%-- 인기글 --%>
+    <div class="section posts">
 
-        <div class="carousel">
+        <%-- 인기글 + 더보기--%>
+        <div class="title-and-more">
+            <span class="title">인기글</span>
+            <a href="/post/list" class="more">더보기 →</a>
+        </div>
+
+        <%-- 인기글 목록 (5개만 표시) --%>
+        <div class="post-list">
+            <c:choose>
+                <c:when test="${empty popularPosts}">
+                    <div class="no-posts">등록된 게시글이 없습니다.</div>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="post" items="${popularPosts}" varStatus="status">
+                        <a href="/post/detail/${post.postId}" class="post-item">
+                            <div class="country-and-title">
+                                <span class="country">
+                                    <c:choose>
+                                        <c:when test="${post.category == 'READY'}">준비</c:when>
+                                        <c:when test="${post.category == 'REVIEW'}">후기</c:when>
+                                        <c:when test="${post.category == 'ACCOMPANY'}">동행</c:when>
+                                        <c:when test="${post.category == 'FREE'}">자유</c:when>
+                                        <c:otherwise>${post.category}</c:otherwise>
+                                    </c:choose>
+                                </span>
+                                <span title="${post.title}">
+                                        <c:choose>
+                                            <c:when test="${fn:length(post.title) > 20}">
+                                                ${fn:substring(post.title, 0, 20)}...
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${post.title}
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                            </div>
+                            <span><fmt:formatDate value="${post.createdAt}" pattern="yyyy-MM-dd" /></span>
+                        </a>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+</div>
+
+<%-- 인기 후기 --%>
+<div class="popular-reviews">
+    <span class="review-title">인기 후기</span>
+
+    <div class="carousel">
 
         <%-- 왼쪽 화살표 --%>
         <button class="carousel-btn prev">❮</button>
 
-            <div class="carousel-track-container">
-                <div class="carousel-track">
+        <div class="carousel-track-container">
+            <div class="carousel-track">
 
-                <%-- 슬라이드 1p (3개의 카드 표시) --%>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-
-                <%-- 슬라이드 2p (3개의 카드 표시) --%>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-
-                <%-- 슬라이드 3p (3개의 카드 표시) --%>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
-                <a href="http://localhost:8080/post/list?category=REVIEW" class="review-card">
-                    <img class="thumbnail" src="/images/sample.png" alt="썸네일">
-                    <div class="info">
-                        <span class="country">나라</span>
-                        <span class="review-title">제목</span>
-                        <span class="date">YYYY-MM-DD</span>
-                    </div>
-                </a>
+                <%-- 인기 후기 카드들 (최대 9개) --%>
+                <c:choose>
+                    <c:when test="${empty popularReviews}">
+                        <div class="no-reviews">등록된 후기가 없습니다.</div>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="review" items="${popularReviews}" varStatus="status">
+                            <a href="/post/detail/${review.postId}" class="review-card">
+                                <c:choose>
+                                    <c:when test="${not empty review.thumbnailImage}">
+                                        <img class="thumbnail" src="${review.thumbnailImage}" alt="썸네일">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="thumbnail" src="/images/sample.png" alt="썸네일">
+                                    </c:otherwise>
+                                </c:choose>
+                                <div class="info">
+                                    <span class="country">${review.country}</span>
+                                    <span class="review-card-title" title="${review.title}">
+                                        <c:choose>
+                                            <c:when test="${fn:length(review.title) > 25}">
+                                                ${fn:substring(review.title, 0, 25)}...
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${review.title}
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                    <span class="date"><fmt:formatDate value="${review.createdAt}" pattern="yyyy-MM-dd" /></span>
+                                </div>
+                            </a>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
-        <%-- 인디케이터 --%>
-        <div class="carousel-indicators">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+            <%-- 인디케이터 (최대 3개 - 9개 카드를 3개씩 나누면 3페이지) --%>
+            <div class="carousel-indicators">
+                <c:if test="${not empty popularReviews}">
+                    <c:choose>
+                        <c:when test="${fn:length(popularReviews) <= 3}">
+                            <span class="dot active"></span>
+                        </c:when>
+                        <c:when test="${fn:length(popularReviews) <= 6}">
+                            <span class="dot active"></span>
+                            <span class="dot"></span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="dot active"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+            </div>
         </div>
-    </div>
 
         <%-- 오른쪽 화살표 --%>
         <button class="carousel-btn next">❯</button>
-        </div>
+    </div>
 
-    <%-- 커설 js 연결 --%>
+    <%-- 캐러셀 js 연결 --%>
     <script src="/js/carousel.js"></script>
+
+    <%-- 캐러셀 호환성 확인 스크립트 --%>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 캐러셀이 제대로 동작하는지 확인
+            const reviewCards = document.querySelectorAll('.review-card');
+            const dots = document.querySelectorAll('.carousel-indicators .dot');
+
+            console.log('리뷰 카드 개수:', reviewCards.length);
+            console.log('인디케이터 개수:', dots.length);
+
+            // 리뷰 카드가 없는 경우 캐러셀 버튼과 인디케이터 숨김
+            if (reviewCards.length === 0) {
+                const prevBtn = document.querySelector('.carousel-btn.prev');
+                const nextBtn = document.querySelector('.carousel-btn.next');
+                const indicators = document.querySelector('.carousel-indicators');
+
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                if (indicators) indicators.style.display = 'none';
+            }
+
+            // 3개 이하인 경우 네비게이션 버튼 숨김 (한 페이지에 다 들어가므로)
+            if (reviewCards.length <= 3) {
+                const prevBtn = document.querySelector('.carousel-btn.prev');
+                const nextBtn = document.querySelector('.carousel-btn.next');
+
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+            }
+        });
+    </script>
+
+    <%-- 즐겨찾기 국가 js 연결 --%>
+    <script src="/js/favorites.js"></script>
 
 </body>
 </html>

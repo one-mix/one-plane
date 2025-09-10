@@ -49,6 +49,14 @@
       color: #215BAF;
       margin-bottom: 10px;
       font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo img{
+      width: 75px;
+      height: 65px;
     }
 
     .welcome-text {
@@ -181,7 +189,7 @@
     }
 
     .nickname-check-btn {
-      background: #215CAA;
+      background: #215BAF;
       color: white;
       border: none;
       border-radius: 10px;

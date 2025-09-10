@@ -18,8 +18,30 @@
                 <div class="card-content">
                     <p class="country">${rec.countryNameKo}</p>
                     <h3 class="place">${rec.city}</h3>
-                    <p class="extra">유사도: <fmt:formatNumber value="${rec.score * 100}" pattern="##0"/>%</p>
                     <p class="extra">대륙: ${rec.continent}</p>
+
+                    <!-- 여행 경보 표시 -->
+                    <c:if test="${not empty rec.alertLevel}">
+                        <div class="alert-level">
+                            <c:choose>
+                                <c:when test="${rec.alertLevel == '여행금지'}">
+                                    <span class="alert-danger">여행금지</span>
+                                </c:when>
+                                <c:when test="${rec.alertLevel == '철수권고'}">
+                                    <span class="alert-warning">철수권고</span>
+                                </c:when>
+                                <c:when test="${rec.alertLevel == '여행자제'}">
+                                    <span class="alert-info">여행자제</span>
+                                </c:when>
+                                <c:when test="${rec.alertLevel == '여행유의'}">
+                                    <span class="alert-caution">여행자제</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="alert-safe">안전</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </c:if>
                 </div>
             </div>
         </c:forEach>
