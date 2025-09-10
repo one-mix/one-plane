@@ -23,9 +23,8 @@
 //
 
 
-package com.oneplane.myBoard.controller;
+package com.oneplane.post.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,9 +43,11 @@ public class MyBoardController{
 
         model.addAttribute("activeMenu", "write");
         model.addAttribute("showSidebar", false);
-        model.addAttribute("contentPage", "board/myBoard.jsp");
+        model.addAttribute("contentPage", "post/myBoard.jsp");
         model.addAttribute("pageTitle", "내가 작성한 글");
 
         return "layout/layout";
     }
+
+
 }

@@ -555,4 +555,5 @@ public class PostService {
             throw new RuntimeException("게시글 카운트 업데이트에 실패했습니다.");
         }
     }
+
 }
