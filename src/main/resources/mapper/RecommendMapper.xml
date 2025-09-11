@@ -58,6 +58,7 @@
                      r.rating_content AS ratingContent,
                      r.created_at AS createdAt,
                      r.country_id AS countryId,
+                     r.city AS city,
                      c.country_name AS countryNameKo,
                      c.continent AS continent,
                      c.img AS countryImg,
