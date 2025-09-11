@@ -20,6 +20,7 @@
     <body class="${activeMenu}">
         <%-- 공통 헤더 --%>
          <jsp:include page="header.jsp" />
+
          <div class="container">
             <%-- 컨텐츠 영역 --%>
             <div class="content">

@@ -47,6 +47,13 @@
     </div>
 
     <div class="menu-section">
+        <h4>팔로우</h4>
+        <ul class="menu-list">
+            <li><a href="/friends" class="${activeMenu == 'following' ? 'active' : ''}">팔로우</a></li>
+        </ul>
+    </div>
+
+    <div class="menu-section">
         <h4>회원정보</h4>
         <ul class="menu-list">
             <li><a href="/mypage/profile/edit" class="${activeMenu == 'profile' ? 'active' : ''}">프로필 편집</a></li>
