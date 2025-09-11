@@ -475,4 +475,14 @@
         )
         WHERE post_id = #{postId}
     </update>
+
+    <!--내가 작성한 게시글 조회  -->
+    <select id="selectPostsByAuthor" parameterType="java.lang.String" resultType="Post">
+        SELECT *
+        FROM posts
+        WHERE user_id = #{userid}
+        ORDER BY created_at DESC
+    </select>
+
+
 </mapper>

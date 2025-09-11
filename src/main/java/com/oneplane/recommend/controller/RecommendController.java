@@ -93,17 +93,18 @@ public class RecommendController {
         return "redirect:/recommend/result";
     }
 
-    // 국가 선택 저장
+    // 국가 도시 선택 저장
     @PostMapping("/saveCountry")
     public ResponseEntity<?> saveCountry(@RequestBody Map<String, String> request,
                                          HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
         String countryIso3 = request.get("countryIso3");
+        String city = request.get("city");
 
         // ISO3 코드로 countryId 조회 후 저장
-        Integer recommendId = recommendService.saveSelectedCountry(userId, countryIso3);
+        Integer recommendId = recommendService.saveSelectedCountry(userId, countryIso3, city);
 
-        return ResponseEntity.ok(Map.of("recommendId", recommendId, "message", "국가 저장 완료"));
+        return ResponseEntity.ok(Map.of("recommendId", recommendId, "message", "국가/도시 저장 완료"));
     }
 
     // 피드백 업데이트
