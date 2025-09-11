@@ -14,7 +14,7 @@
     <!-- CSRF 토큰 메타태그 -->
     <meta name="_csrf" content="${_csrf.token}">
     <meta name="_csrf_header" content="${_csrf.headerName}">
-
+    <jsp:include page="../layout/sidebar.jsp" />
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userDetails" />
         <meta name="user-id" content="${userDetails.userId}">
