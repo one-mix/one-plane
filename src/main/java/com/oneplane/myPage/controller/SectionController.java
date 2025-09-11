@@ -17,7 +17,7 @@ public class SectionController extends BaseController {
             return "redirect:/login";
         }
 
-        model.addAttribute("contentPage", "section/recommend.jsp");
+        model.addAttribute("contentPage", "mypage/recommend.jsp");
         model.addAttribute("activeMenu", "recommend");  // 추가
         model.addAttribute("showSidebar", true);  // 추가
         model.addAttribute("pageTitle", "여행 추천");  // 추가

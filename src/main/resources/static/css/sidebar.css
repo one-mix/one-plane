@@ -10,7 +10,7 @@
     height: fit-content;
     position: fixed;
     top: 155px;
-    left: 360px;
+    left: 250px;
     overflow-y: auto;
     z-index: 100;
     transform: scale(0.7);
@@ -153,4 +153,26 @@
 .content-with-sidebar {
     margin-left: 290px; /* 사이드바 너비 + 여백 */
     padding: 20px;
+}
+
+.grade-badge {
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between; /* 텍스트 왼쪽, 아이콘 오른쪽 */
+    align-items: center;
+    margin-top: 12px;
+    font-weight: 500;
+    min-width: 160px; /* 살짝 고정폭 주면 더 안정적 */
+}
+
+.grade-text {
+    flex: 1;
+    text-align: left;
+}
+
+.grade-icon {
+    width: 40px;
+    height: 40px;
 }
