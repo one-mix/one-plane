@@ -74,5 +74,9 @@
         WHERE c.iso_code = #{isoCode}
     </select>
 
-
+    <update id="updateCountryLevelAdmin" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
+        UPDATE alert_level
+        SET level_value = #{levelValue}
+        WHERE country_id = #{countryId}
+    </update>
 </mapper>

@@ -6,15 +6,25 @@ body {
     font-weight: var(--font-regular);
 }
 
-.admin-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+/*.admin-wrapper {*/
+/*    min-height: 100vh;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*}*/
 
 .admin-container {
     display: flex;
+    width: 100%;
+    min-height: 100vh;
     flex: 1;
+}
+
+.admin-main {
+    flex: 1;              /* 남은 공간 다 차지 */
+    width: 100%;          /* 사이드바 제외 나머지 꽉 채움 */
+    padding: 20px;        /* 필요하면 여백만 남김 */
+    box-sizing: border-box;
+    overflow-x: auto;     /* 테이블 가로 스크롤 */
 }
 
 /* Layout Variables */

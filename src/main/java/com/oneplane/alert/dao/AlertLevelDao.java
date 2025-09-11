@@ -2,6 +2,7 @@ package com.oneplane.alert.dao;
 
 import com.oneplane.alert.domain.AlertLevel;
 import com.oneplane.alert.dto.AlertLevelDTO;
+import com.oneplane.alert.dto.CountryAlertDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +23,5 @@ public interface AlertLevelDao {
     void insertAlertLevel(AlertLevelDTO alertLevel);
     void updateAlertLevel(AlertLevelDTO alertLevel);
     AlertLevelDTO findByIsoCode(String isoCode);
+    void updateCountryLevelAdmin(CountryAlertDTO country);
 }
