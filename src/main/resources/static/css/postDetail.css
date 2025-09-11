@@ -566,7 +566,15 @@
 }
 
 .follow-btn.following:hover {
-    background: #47b085;
+    background: #dc3545;
+}
+.follow-btn.following:hover .follow-text {
+    display: none;
+}
+
+.follow-btn.following:hover::after {
+    content: '언팔로우';
+    font-size: 12px;
 }
 
 .follow-btn i {
@@ -772,4 +780,65 @@
 .comment-login-required a:hover {
     background: var(--main-200);
     text-decoration: none;
+}
+
+/* 댓글 팔로우 버튼 스타일 */
+.comment-follow-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 8px;
+}
+
+.comment-follow-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.comment-follow-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.comment-follow-btn.following {
+    background-color: #28a745;
+}
+
+.comment-follow-btn.following:hover {
+    background-color: #dc3545;
+}
+
+.comment-follow-btn.following:hover .follow-text {
+    display: none;
+}
+
+.comment-follow-btn.following:hover::after {
+    content: '언팔로우';
+    font-size: 12px;
+}
+
+.comment-follow-btn i {
+    font-size: 12px;
+}
+
+/* 댓글 액션 버튼들 간격 조정 */
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.comment-delete-btn {
+    padding: 4px 8px;
+    font-size: 12px;
 }
