@@ -99,6 +99,7 @@ public class FriendController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("contentPage", "friend/friends.jsp");
         model.addAttribute("activeMenu", "following");
+        model.addAttribute("showSidebar", true);
 
         // 통계 정보 (사이드바용)
         try {
