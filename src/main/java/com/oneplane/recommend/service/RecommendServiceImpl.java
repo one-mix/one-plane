@@ -101,7 +101,7 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     @Override
-    public Integer saveSelectedCountry(Integer userId, String country) {
+    public Integer saveSelectedCountry(Integer userId, String country, String city) {
         // 1. 가장 최근 recommendId 가져오기
         RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
         if (latestRecommend == null) {
@@ -115,7 +115,7 @@ public class RecommendServiceImpl implements RecommendService {
         }
 
         // 3. countryId 업데이트
-        recommendRepository.updateCountryId(latestRecommend.getRecommendId(), countryId);
+        recommendRepository.updateCountryAndCity(latestRecommend.getRecommendId(), countryId, city);
 
         return latestRecommend.getRecommendId();
     }

@@ -12,7 +12,7 @@ public interface RecommendRepository {
     Integer insertAgreement(Integer userId);
     RecommendDTO getLatestRecommend(Integer userId);
     void insertInput(RecommendDTO dto);
-    void updateCountryId(Integer recommendId, Integer countryId);
+    void updateCountryAndCity(Integer recommendId, Integer countryId, String city);
     void updateFeedback(Integer recommendId, Integer recommendRating, String ratingContent);
     List<RecommendResultDTO> findRecommendHistoryByUserId(
             @Param("userId") Integer userId,
