@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let selectedRating = 0;
     let selectedCountry = null;
+    let selectedCity = null;
     let savedRecommendId = null;
 
     // 카드 선택 시 저장 버튼 활성화
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
             card.classList.add("selected");
             selectedCountry = card.dataset.country; // countryIso3 값
+            selectedCity = card.dataset.city;
             saveBtn.disabled = false;
         });
     });
@@ -37,7 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                countryIso3: selectedCountry
+                countryIso3: selectedCountry,
+                city: selectedCity
             })
         })
             .then(res => res.json())

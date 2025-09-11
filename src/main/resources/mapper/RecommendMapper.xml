@@ -30,10 +30,11 @@
         VALUES (#{userId}, 'Y', #{travelPurpose}, #{companion}, SYSDATE)
     </insert>
 
-    <!-- countryId 업데이트 -->
-    <update id="updateCountryId">
+    <!-- country, city 업데이트 -->
+    <update id="updateCountryAndCity">
         UPDATE recommend
-        SET country_id = #{countryId}
+        SET country_id = #{countryId},
+            city = #{city}
         WHERE recommend_id = #{recommendId}
     </update>
 
@@ -57,6 +58,7 @@
                      r.rating_content AS ratingContent,
                      r.created_at AS createdAt,
                      r.country_id AS countryId,
+                     r.city AS city,
                      c.country_name AS countryNameKo,
                      c.continent AS continent,
                      c.img AS countryImg,
