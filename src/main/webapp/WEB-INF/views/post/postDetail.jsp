@@ -75,10 +75,12 @@
       <div class="post-actions-right">
         <!-- 팔로우 버튼 -->
         <sec:authorize access="isAuthenticated()">
-          <button type="button" class="follow-btn" onclick="toggleFollow(${post.userId})">
-            <i class="bi bi-person-plus"></i>
-            <span class="follow-text">팔로우</span>
-          </button>
+          <c:if test="${post.userId != userDetails.userId}">
+            <button type="button" class="follow-btn" id="followBtn" onclick="toggleFollow(${post.userId})">
+              <i class="bi bi-person-plus"></i>
+              <span class="follow-text">팔로우</span>
+            </button>
+          </c:if>
         </sec:authorize>
       </div>
     </div>
@@ -173,6 +175,9 @@
     if (currentPostId) {
       loadLikeStatus(currentPostId);
       loadComments(currentPostId, 1);
+
+      // 팔로우 상태 로드 (자기 자신의 글이 아닌 경우에만)
+      loadFollowStatus();
     }
 
     // 이미지 클릭 시 확대 보기
@@ -207,6 +212,60 @@
         closeImageModal();
       }
     });
+  }
+
+  // 팔로우 상태 로드 함수 추가
+  function loadFollowStatus() {
+    const followBtn = $('#followBtn');
+    if (followBtn.length === 0) return; // 팔로우 버튼이 없으면 종료
+
+    // URL에서 게시글 작성자 ID 추출 (또는 다른 방법으로 가져오기)
+    const postAuthorId = getPostAuthorId(); // 이 함수는 아래에서 구현
+
+    if (!postAuthorId || !currentUserId) return;
+
+    $.ajax({
+      url: '/friends/status/' + postAuthorId,
+      type: 'GET',
+      success: function(response) {
+        if (response.success) {
+          updateFollowButton(response.isFollowing);
+        }
+      },
+      error: function(xhr) {
+        console.error('팔로우 상태 확인 실패:', xhr);
+      }
+    });
+  }
+
+  // 게시글 작성자 ID 가져오기 (onclick 속성에서 추출)
+  function getPostAuthorId() {
+    const followBtn = $('#followBtn');
+    if (followBtn.length === 0) return null;
+
+    const onclickAttr = followBtn.attr('onclick');
+    if (onclickAttr) {
+      const match = onclickAttr.match(/toggleFollow\((\d+)\)/);
+      return match ? parseInt(match[1]) : null;
+    }
+    return null;
+  }
+
+  // 팔로우 버튼 상태 업데이트
+  function updateFollowButton(isFollowing) {
+    const followBtn = $('#followBtn');
+    const followText = $('.follow-text');
+    const followIcon = followBtn.find('i');
+
+    if (isFollowing) {
+      followBtn.addClass('following');
+      followText.text('팔로잉');
+      followIcon.removeClass('bi-person-plus').addClass('bi-person-check');
+    } else {
+      followBtn.removeClass('following');
+      followText.text('팔로우');
+      followIcon.removeClass('bi-person-check').addClass('bi-person-plus');
+    }
   }
 
   // URL에서 게시글 ID 추출
@@ -287,26 +346,26 @@
     });
 
     commentsList.html(html);
+
+    loadCommentFollowStates(comments);
   }
 
   function createCommentHtml(comment) {
     const isDeleted = comment.deletedAt !== null;
     const isAuthor = currentUserId && currentUserId === comment.userId;
+    const isMyComment = currentUserId === comment.userId; // 내 댓글인지 확인
     const formattedDate = formatDate(new Date(comment.createdAt));
 
-    // 프로필 이미지 결정 로직 개선
-    let profileImg = '/images/profile.png'; // 기본값
-
-    // 1순위: comment.user.profileImg (Association 매핑된 사용자 정보)
+    // 프로필 이미지 결정 로직
+    let profileImg = '/images/profile.png';
     if (comment.user && comment.user.profileImg) {
       profileImg = comment.user.profileImg;
     }
-    // 2순위: comment.profileImg (직접 매핑된 프로필 이미지)
     else if (comment.profileImg) {
       profileImg = comment.profileImg;
     }
 
-    // 닉네임 결정 로직 개선
+    // 닉네임 결정 로직
     let nickname = '익명';
     if (comment.user && comment.user.nickname) {
       nickname = comment.user.nickname;
@@ -316,7 +375,7 @@
       nickname = comment.authorName;
     }
 
-    // 삭제 버튼 HTML을 별도로 생성
+    // 삭제 버튼 HTML
     let deleteButtonHtml = '';
     if (isAuthor && !isDeleted) {
       deleteButtonHtml = '<button type="button" class="comment-delete-btn" onclick="deleteComment(' + comment.commentId + ')">' +
@@ -324,7 +383,18 @@
               '</button>';
     }
 
-    return '<div class="comment-item" data-comment-id="' + comment.commentId + '">' +
+    // 팔로우 버튼 HTML
+    let followButtonHtml = '';
+    if (currentUserId && !isMyComment && !isDeleted) {
+      followButtonHtml = '<button type="button" class="comment-follow-btn" ' +
+              'data-user-id="' + comment.userId + '" ' +
+              'onclick="toggleCommentFollow(' + comment.userId + ', this)">' +
+              '<i class="bi bi-person-plus"></i>' +
+              '<span class="follow-text">팔로우</span>' +
+              '</button>';
+    }
+
+    return '<div class="comment-item" data-comment-id="' + comment.commentId + '" data-user-id="' + comment.userId + '">' +
             '  <div class="comment-header">' +
             '    <div class="comment-author">' +
             '      <img src="' + profileImg + '" alt="' + escapeHtml(nickname) + '의 프로필" class="comment-avatar" ' +
@@ -334,6 +404,7 @@
             '      <span class="comment-date">' + formattedDate + '</span>' +
             '    </div>' +
             '    <div class="comment-actions">' +
+            '      ' + followButtonHtml + // 팔로우 버튼 추가
             '      ' + deleteButtonHtml +
             '    </div>' +
             '  </div>' +
@@ -645,23 +716,68 @@
     });
   }
 
-  // 팔로우 토글 (추후 구현)
-  function toggleFollow(userId) {
-    const followBtn = $('.follow-btn');
-    const followText = $('.follow-text');
-    const isFollowing = followBtn.hasClass('following');
-
-    if (isFollowing) {
-      followBtn.removeClass('following');
-      followText.text('팔로우');
-      followBtn.find('i').removeClass('bi-person-check').addClass('bi-person-plus');
-      alert('언팔로우했습니다.');
-    } else {
-      followBtn.addClass('following');
-      followText.text('팔로잉');
-      followBtn.find('i').removeClass('bi-person-plus').addClass('bi-person-check');
-      alert('팔로우했습니다.');
+  // 팔로우 토글 함수 수정
+  function toggleFollow(targetUserId) {
+    if (!currentUserId) {
+      if (confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
+        window.location.href = '/oauth2/authorization/kakao';
+      }
+      return;
     }
+
+    const followBtn = $('#followBtn');
+    const followText = $('.follow-text');
+    const followIcon = followBtn.find('i');
+
+    // 버튼 비활성화
+    followBtn.prop('disabled', true);
+
+    $.ajax({
+      url: '/friends/toggle',
+      type: 'POST',
+      data: {
+        targetUserId: targetUserId
+      },
+      beforeSend: function(xhr) {
+        const token = $('meta[name="_csrf"]').attr('content');
+        const header = $('meta[name="_csrf_header"]').attr('content');
+        if (token && header) {
+          xhr.setRequestHeader(header, token);
+        }
+      },
+      success: function(response) {
+        if (response.success) {
+          if (response.action === 'followed') {
+            // 팔로우 상태로 변경
+            followBtn.addClass('following');
+            followText.text('팔로잉');
+            followIcon.removeClass('bi-person-plus').addClass('bi-person-check');
+            showSuccess('팔로우했습니다.');
+          } else {
+            // 언팔로우 상태로 변경
+            followBtn.removeClass('following');
+            followText.text('팔로우');
+            followIcon.removeClass('bi-person-check').addClass('bi-person-plus');
+            showSuccess('언팔로우했습니다.');
+          }
+        } else {
+          showError(response.message || '팔로우 처리에 실패했습니다.');
+        }
+      },
+      error: function(xhr) {
+        if (xhr.status === 401) {
+          if (confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
+            window.location.href = '/oauth2/authorization/kakao';
+          }
+        } else {
+          showError('팔로우 처리 중 오류가 발생했습니다.');
+        }
+      },
+      complete: function() {
+        // 버튼 재활성화
+        followBtn.prop('disabled', false);
+      }
+    });
   }
 
   // 이미지 확대 모달
@@ -683,4 +799,130 @@
       $(this).remove();
     });
   }
+
+  // 댓글에서 팔로우 토글
+  function toggleCommentFollow(targetUserId, buttonElement) {
+    if (!currentUserId) {
+      if (confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
+        window.location.href = '/oauth2/authorization/kakao';
+      }
+      return;
+    }
+
+    const $button = $(buttonElement);
+    const $followText = $button.find('.follow-text');
+    const $followIcon = $button.find('i');
+
+    // 버튼 비활성화
+    $button.prop('disabled', true);
+
+    $.ajax({
+      url: '/friends/toggle',
+      type: 'POST',
+      data: {
+        targetUserId: targetUserId
+      },
+      beforeSend: function(xhr) {
+        const token = $('meta[name="_csrf"]').attr('content');
+        const header = $('meta[name="_csrf_header"]').attr('content');
+        if (token && header) {
+          xhr.setRequestHeader(header, token);
+        }
+      },
+      success: function(response) {
+        if (response.success) {
+          if (response.action === 'followed') {
+            // 팔로우 상태로 변경
+            $button.addClass('following');
+            $followText.text('팔로잉');
+            $followIcon.removeClass('bi-person-plus').addClass('bi-person-check');
+
+            // 같은 사용자의 다른 댓글들도 업데이트
+            updateAllUserFollowButtons(targetUserId, true);
+
+          } else {
+            // 언팔로우 상태로 변경
+            $button.removeClass('following');
+            $followText.text('팔로우');
+            $followIcon.removeClass('bi-person-check').addClass('bi-person-plus');
+
+            // 같은 사용자의 다른 댓글들도 업데이트
+            updateAllUserFollowButtons(targetUserId, false);
+          }
+
+          // 메인 팔로우 버튼도 업데이트 (게시글 작성자와 같은 사용자인 경우)
+          const mainFollowBtn = $('#followBtn');
+          const mainAuthorId = getPostAuthorId();
+          if (mainAuthorId === targetUserId && mainFollowBtn.length > 0) {
+            updateFollowButton(response.action === 'followed');
+          }
+
+        } else {
+          showError(response.message || '팔로우 처리에 실패했습니다.');
+        }
+      },
+      error: function(xhr) {
+        if (xhr.status === 401) {
+          if (confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
+            window.location.href = '/oauth2/authorization/kakao';
+          }
+        } else {
+          showError('팔로우 처리 중 오류가 발생했습니다.');
+        }
+      },
+      complete: function() {
+        // 버튼 재활성화
+        $button.prop('disabled', false);
+      }
+    });
+  }
+
+  // 동일한 사용자의 모든 팔로우 버튼 상태 업데이트
+  function updateAllUserFollowButtons(userId, isFollowing) {
+    $('.comment-follow-btn[data-user-id="' + userId + '"]').each(function() {
+      const $button = $(this);
+      const $followText = $button.find('.follow-text');
+      const $followIcon = $button.find('i');
+
+      if (isFollowing) {
+        $button.addClass('following');
+        $followText.text('팔로잉');
+        $followIcon.removeClass('bi-person-plus').addClass('bi-person-check');
+      } else {
+        $button.removeClass('following');
+        $followText.text('팔로우');
+        $followIcon.removeClass('bi-person-check').addClass('bi-person-plus');
+      }
+    });
+  }
+
+  // 댓글들의 팔로우 상태 로드
+  function loadCommentFollowStates(comments) {
+    if (!currentUserId || !comments || comments.length === 0) return;
+
+    // 중복 제거를 위해 Set 사용
+    const userIds = [...new Set(comments
+            .filter(comment => comment.userId && comment.userId !== currentUserId && !comment.deletedAt)
+            .map(comment => comment.userId)
+    )];
+
+    if (userIds.length === 0) return;
+
+    // 각 사용자의 팔로우 상태 확인
+    userIds.forEach(function(userId) {
+      $.ajax({
+        url: '/friends/status/' + userId,
+        type: 'GET',
+        success: function(response) {
+          if (response.success) {
+            updateAllUserFollowButtons(userId, response.isFollowing);
+          }
+        },
+        error: function(xhr) {
+          console.error('댓글 팔로우 상태 확인 실패:', xhr);
+        }
+      });
+    });
+  }
+
 </script>

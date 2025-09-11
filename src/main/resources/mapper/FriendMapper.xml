@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.friend.mapper.FriendMapper">
+
+    <!-- Friend ResultMap -->
+    <resultMap id="friendResultMap" type="com.oneplane.friend.domain.Friend">
+        <id property="friendId" column="friend_id"/>
+        <result property="followerId" column="follower_id"/>
+        <result property="followingId" column="following_id"/>
+        <result property="createdAt" column="created_at"/>
+
+        <!-- 팔로워 정보 (나를 팔로우한 사람) -->
+        <result property="followerNickname" column="follower_nickname"/>
+        <result property="followerName" column="follower_name"/>
+        <result property="followerProfileImg" column="follower_profile_img"/>
+
+        <!-- 팔로잉 정보 (내가 팔로우한 사람) -->
+        <result property="followingNickname" column="following_nickname"/>
+        <result property="followingName" column="following_name"/>
+        <result property="followingProfileImg" column="following_profile_img"/>
+    </resultMap>
+
+    <!-- 사용자 검색용 ResultMap -->
+    <resultMap id="userSearchResultMap" type="com.oneplane.friend.domain.Friend">
+        <result property="followingId" column="user_id"/>
+        <result property="followingNickname" column="nickname"/>
+        <result property="followingName" column="name"/>
+        <result property="followingProfileImg" column="profile_img"/>
+    </resultMap>
+
+    <!-- 팔로우 관계 생성 -->
+    <insert id="insertFriend" parameterType="com.oneplane.friend.domain.Friend">
+        <selectKey keyProperty="friendId" resultType="Integer" order="BEFORE">
+            SELECT SEQ_FRIENDS.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO FRIENDS (
+        FRIEND_ID,
+        FOLLOWER_ID,
+        FOLLOWING_ID,
+        CREATED_AT
+        ) VALUES (
+        #{friendId},
+        #{followerId},
+        #{followingId},
+        #{createdAt}
+        )
+    </insert>
+
+    <!-- 팔로우 관계 삭제 (언팔로우) -->
+    <delete id="deleteFriend">
+        DELETE FROM FRIENDS
+        WHERE FOLLOWER_ID = #{followerId}
+          AND FOLLOWING_ID = #{followingId}
+    </delete>
+
+    <!-- 팔로우 상태 확인 -->
+    <select id="isFollowing" resultType="Integer">
+        SELECT COUNT(*)
+        FROM FRIENDS
+        WHERE FOLLOWER_ID = #{followerId}
+          AND FOLLOWING_ID = #{followingId}
+    </select>
+
+    <!-- 내가 팔로우한 사람들 목록 (페이징) -->
+    <select id="findFollowingList" resultMap="friendResultMap">
+        SELECT * FROM (
+                          SELECT
+                              f.FRIEND_ID as friend_id,
+                              f.FOLLOWER_ID as follower_id,
+                              f.FOLLOWING_ID as following_id,
+                              f.CREATED_AT as created_at,
+                              u.NICKNAME as following_nickname,
+                              u.NAME as following_name,
+                              u.PROFILE_IMG as following_profile_img,
+                              ROW_NUMBER() OVER (ORDER BY f.CREATED_AT DESC) as rn
+                          FROM FRIENDS f
+                                   JOIN USERS u ON f.FOLLOWING_ID = u.USER_ID
+                          WHERE f.FOLLOWER_ID = #{userId}
+                            AND u.DELETED_AT IS NULL
+                      ) WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{limit}
+    </select>
+
+    <!-- 나를 팔로우한 사람들 목록 (페이징) -->
+    <select id="findFollowerList" resultMap="friendResultMap">
+        SELECT * FROM (
+                          SELECT
+                              f.FRIEND_ID as friend_id,
+                              f.FOLLOWER_ID as follower_id,
+                              f.FOLLOWING_ID as following_id,
+                              f.CREATED_AT as created_at,
+                              u.NICKNAME as follower_nickname,
+                              u.NAME as follower_name,
+                              u.PROFILE_IMG as follower_profile_img,
+                              ROW_NUMBER() OVER (ORDER BY f.CREATED_AT DESC) as rn
+                          FROM FRIENDS f
+                                   JOIN USERS u ON f.FOLLOWER_ID = u.USER_ID
+                          WHERE f.FOLLOWING_ID = #{userId}
+                            AND u.DELETED_AT IS NULL
+                      ) WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{limit}
+    </select>
+
+    <!-- 내가 팔로우한 사람 수 -->
+    <select id="countFollowing" resultType="Integer">
+        SELECT COUNT(*)
+        FROM FRIENDS f
+                 JOIN USERS u ON f.FOLLOWING_ID = u.USER_ID
+        WHERE f.FOLLOWER_ID = #{userId}
+          AND u.DELETED_AT IS NULL
+    </select>
+
+    <!-- 나를 팔로우한 사람 수 -->
+    <select id="countFollower" resultType="Integer">
+        SELECT COUNT(*)
+        FROM FRIENDS f
+                 JOIN USERS u ON f.FOLLOWER_ID = u.USER_ID
+        WHERE f.FOLLOWING_ID = #{userId}
+          AND u.DELETED_AT IS NULL
+    </select>
+
+    <!-- 닉네임으로 사용자 검색 (친구 기능용) -->
+    <select id="searchUsersByNickname" resultMap="userSearchResultMap">
+        SELECT * FROM (
+                          SELECT
+                              u.USER_ID as user_id,
+                              u.NICKNAME as nickname,
+                              u.NAME as name,
+                              u.PROFILE_IMG as profile_img,
+                              CASE WHEN f.FRIEND_ID IS NOT NULL THEN 1 ELSE 0 END as is_following,
+                              ROW_NUMBER() OVER (ORDER BY u.NICKNAME) as rn
+                          FROM USERS u
+                                   LEFT JOIN FRIENDS f ON (f.FOLLOWER_ID = #{currentUserId} AND f.FOLLOWING_ID = u.USER_ID)
+                          WHERE u.NICKNAME LIKE #{nickname}
+                            AND u.USER_ID != #{currentUserId}
+                            AND u.DELETED_AT IS NULL
+                            AND u.NAME IS NOT NULL
+                            AND u.NICKNAME IS NOT NULL
+                      ) WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{limit}
+    </select>
+
+    <!-- 닉네임 검색 결과 총 개수 -->
+    <select id="countSearchResults" resultType="Integer">
+        SELECT COUNT(*)
+        FROM USERS u
+        WHERE u.NICKNAME LIKE #{nickname}
+          AND u.USER_ID != #{currentUserId}
+          AND u.DELETED_AT IS NULL
+          AND u.NAME IS NOT NULL
+          AND u.NICKNAME IS NOT NULL
+    </select>
+
+</mapper>
