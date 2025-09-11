@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <main class="hero">
+    <link rel="stylesheet" href="<c:url value='/css/recommend/main.css'/>">
     <section class="intro">
         <h1><span class="highlight">AI</span>와 함께<br>여행지 알아보기</h1>
         <p>${user.nickname}님의 여행 이력과 정보를 바탕으로<br>

@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // 토스트 닫힌 후 메인으로 이동
                 setTimeout(() => {
-                    window.location.href = "/recommend";
+                    window.location.href = "/";
                 }, 2500);
             })
             .catch(err => console.error("피드백 저장 실패:", err));
