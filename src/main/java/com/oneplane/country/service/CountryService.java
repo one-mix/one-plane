@@ -2,6 +2,7 @@ package com.oneplane.country.service;
 
 import com.oneplane.country.domain.Country;
 import java.util.List;
+import java.util.Map;
 
 public interface CountryService {
     Country getCountryById(Long id);
@@ -15,4 +16,6 @@ public interface CountryService {
 
     // 외교부 국가별 기본정보 API -> DB 업데이트
     void updateCountriesFromApi();
+
+    Map<String, Double> getWorldGdpShare(int year, String countryName);
 }

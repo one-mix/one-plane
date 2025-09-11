@@ -6,15 +6,13 @@ import com.oneplane.country.dao.CountryDao;
 import com.oneplane.country.domain.Country;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -137,11 +135,57 @@ public class CountryServiceImpl implements CountryService {
         }
     }
 
-    /**
-     * 매일 새벽 3시에 자동 실행
-     */
-    @Scheduled(cron = "0 0 3 * * *")
-    public void scheduledUpdateCountries() {
-        updateCountriesFromApi();
+    @Override
+    public Map<String, Double> getWorldGdpShare(int year, String countryName) {
+        List<Object> response = null;
+        try {
+            String url = String.format(
+                    "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD?format=json&date=%d",
+                    year
+            );
+
+            WebClient client = WebClient.create();
+            response = client.get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(List.class)
+                    .block();
+
+            if (response == null || response.size() < 2) {
+                return Collections.emptyMap();
+            }
+            List<Map<String, Object>> data = (List<Map<String, Object>>) response.get(1);
+            Double worldGdp = 0.0;
+            Double countryGdp = 0.0;
+
+            for (Map<String, Object> entry : data) {
+                Map<String, Object> country = (Map<String, Object>) entry.get("country");
+                String name = (String) country.get("value");
+                Object valueObj = entry.get("value");
+
+                if (valueObj == null) continue;
+                Double gdp = Double.valueOf(valueObj.toString());
+
+                if ("World".equalsIgnoreCase(name)) {
+                    worldGdp = gdp;
+                }
+                if (name.equalsIgnoreCase(countryName)) {
+                    countryGdp = gdp;
+                }
+            }
+
+            if (worldGdp > 0 && countryGdp > 0) {
+                Map<String, Double> result = new LinkedHashMap<>();
+                result.put(countryName, countryGdp);
+                result.put("Rest of World", worldGdp - countryGdp);
+                return result;
+            }
+            return Collections.emptyMap();
+
+        } catch (Exception e) {
+            log.error("World Bank GDP API 호출 실패", e);
+            return Collections.emptyMap();
+        }
     }
+
 }

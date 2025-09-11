@@ -23,7 +23,6 @@
 
     <%-- 지도 (객체를 사용하기 위해 id 추가) --%>
     <div id="map" class="map">
-
          <div class="guideline-buttons">
 
             <!-- 즐겨찾기 -->
@@ -124,8 +123,61 @@
                 <button onclick="closeInfoPanel()" class="close-btn">✕</button>
             </div>
             <div class="panel-body">
-                <h3>여행경보</h3>
+                <h3>GDP</h3>
                 <canvas id="travelChart"></canvas>
+                <p id="gdp-message" style="color: gray; font-size: 14px; margin-top: 8px;"></p>
+                <script>
+                    async function loadGdpCharts(countryName) {
+                        const currentYear = new Date().getFullYear();
+                        const startYear = 2020;
+                        const endYear = currentYear - 1; // 올해 전 해까지만
+
+                        const gdpData = {};
+                        for (let y = startYear; y <= endYear; y++) {
+                            const response = await fetch("/api/countries/gdp/" + y + "/" + encodeURIComponent(countryName));
+                            const data = await response.json();
+                            if (data[countryName]) {
+                                gdpData[y] = data[countryName];
+                            }
+                        }
+
+                        const labels = Object.keys(gdpData);
+                        const values = Object.values(gdpData);
+
+                        if (labels.length === 0) {
+                            document.getElementById("gdp-message").innerText = "GDP 수집중입니다.";
+                            return;
+                        } else {
+                            document.getElementById("gdp-message").innerText = "";
+                        }
+
+                        const ctx = document.getElementById("travelChart").getContext("2d");
+                        if (travelChartInstance) {
+                            travelChartInstance.destroy();
+                        }
+                        travelChartInstance = new Chart(ctx, {
+                            type: "line",
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: countryName + " GDP",
+                                    data: values,
+                                    borderColor: "#36A2EB",
+                                    fill: false
+                                }]
+                            },
+                            options: {
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: `${countryName} GDP (2020 ~ ${endYear})`
+                                    }
+                                }
+                            }
+                        });
+                    }
+                </script>
+
                 <h3>방문객</h3>
                 <canvas id="visitChart"></canvas>
 
@@ -362,13 +414,11 @@
             document.getElementById("country-name").innerText = countryData.countryName;
             document.getElementById("country-continent").innerText = countryData.continent;
 
+            // GDP 차트 호출
+            loadGdpCharts(countryData.countryName)
+
             // 차트 렌더링
             renderCharts();
-
-            // 환율 차트는 따로 실행
-            if (countryData && countryData.countryId) {
-                loadCurrencyChart(countryData.countryId);
-            }
         }
 
         // 통계 패널 닫기 함수
@@ -387,15 +437,6 @@
             if (travelChartInstance) travelChartInstance.destroy();
             if (visitChartInstance) visitChartInstance.destroy();
             if (currencyChartInstance) currencyChartInstance.destroy();
-
-            // 여행 경보 통계
-            travelChartInstance = new Chart(travelCtx, {
-                type: "doughnut",
-                data: {
-                    labels: ["여행유의", "여행자제"],
-                    datasets: [{ data: [80, 20], backgroundColor: ["#FEE33C", "#FAAD14"] }]
-                }
-            });
 
             // 방문객 통계
             visitChartInstance = new Chart(visitCtx, {
