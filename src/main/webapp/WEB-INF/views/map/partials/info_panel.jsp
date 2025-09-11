@@ -19,16 +19,17 @@
 
     <div class="panel-body">
         <div class="info-body">
+
             <!-- GDP 차트 -->
             <div class="chart-section">
                 <h3>GDP</h3>
                 <canvas id="gdpChart"></canvas>
             </div>
 
-            <!-- 환율 차트 -->
+            <!-- 탄소 배출량 차트 -->
             <div class="chart-section">
-                <h3>환율</h3>
-                <canvas id="currencyChart"></canvas>
+                <h3>탄소 배출량</h3>
+                <canvas id="carbonChart"></canvas>
             </div>
         </div>
     </div>
@@ -128,6 +129,48 @@ async function loadCurrencyChart(countryId) {
     }
 }
 
+/** 탄소 배출량 차트 로드 */
+async function loadCarbonChart(countryId) {
+    try {
+        const res = await fetch(`/api/countries/carbon/${countryId}`);
+        if (!res.ok) throw new Error("탄소 배출량 데이터 없음");
+
+        const data = await res.json();
+        if (!Array.isArray(data) || data.length === 0) {
+            document.getElementById("carbonChart").outerHTML = "<p>탄소 배출량 데이터 없음</p>";
+            return;
+        }
+
+        const labels = data.map(d => d.year);
+        const values = data.map(d => d.emission);
+
+        if (carbonChartInstance) carbonChartInstance.destroy();
+
+        const ctx = document.getElementById("carbonChart").getContext("2d");
+        carbonChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "탄소 배출량 (kt CO₂)",
+                    data: values,
+                    backgroundColor: "#1cc88a"
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                interaction: { mode: 'nearest', axis: 'x', intersect: false }
+            }
+        });
+    } catch (err) {
+        console.error("탄소 배출량 차트 로드 실패:", err);
+        document.getElementById("carbonChart").outerHTML = "<p>탄소 배출량 차트 로드 실패</p>";
+    }
+}
 
 /** 통합 차트 렌더링 */
 function renderCharts(countryData) {

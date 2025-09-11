@@ -1,6 +1,7 @@
 package com.oneplane.country.controller;
 
 import com.oneplane.country.domain.Country;
+import com.oneplane.country.service.CarbonService;
 import com.oneplane.country.service.CountryService;
 import com.oneplane.country.service.GdpService;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,12 @@ public class CountryApiController {
     private final CountryService countryService;
     private final GdpService gdpService;
 
-    public CountryApiController(CountryService countryService, GdpService gdpService) {
+    private final CarbonService carbonService;
+
+    public CountryApiController(CountryService countryService, GdpService gdpService, CarbonService carbonService) {
         this.countryService = countryService;
         this.gdpService = gdpService;
+        this.carbonService = carbonService;
     }
 
     // 전체 국가 조회 (JSON)
@@ -46,5 +50,18 @@ public class CountryApiController {
 
         Map<String, Object> gdpData = gdpService.getGdpByCountryAndYear(country.getIsoCode(), year);
         return ResponseEntity.ok(gdpData);
+    }
+
+
+    // 국가별 탄소 배출량 조회
+    @GetMapping("/carbon/{countryName}")
+    public ResponseEntity<?> getCountryCarbon(@PathVariable String countryName) {
+        Country country = countryService.findByName(countryName);
+        if (country == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Map<String, Object>> carbonData = carbonService.getCarbonByCountry(country.getIsoCode());
+        return ResponseEntity.ok(carbonData);
     }
 }
