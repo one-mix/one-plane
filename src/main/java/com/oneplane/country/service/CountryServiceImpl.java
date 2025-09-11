@@ -188,4 +188,14 @@ public class CountryServiceImpl implements CountryService {
         }
     }
 
+    @Override
+    public String getIsoCodeByName(String name) {
+        Country country = countryDao.findByName(name);
+        return country != null ? country.getIsoCode() : null;
+    }
+
+    @Override
+    public Country findByName(String name) {
+        return countryDao.findByName(name);
+    }
 }

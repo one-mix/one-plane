@@ -82,8 +82,6 @@
                     // 캐러셀이 제대로 동작하는지 확인
                     const reviewCards = document.querySelectorAll('.review-card');
                     const dots = document.querySelectorAll('.carousel-indicators .dot');
-                    console.log('리뷰 카드 개수:', reviewCards.length);
-                    console.log('인디케이터 개수:', dots.length);
                     // 리뷰 카드가 없는 경우 캐러셀 버튼과 인디케이터 숨김
                     if (reviewCards.length === 0) {
                         const prevBtn = document.querySelector('.carousel-btn.prev');

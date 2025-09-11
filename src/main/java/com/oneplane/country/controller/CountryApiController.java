@@ -2,6 +2,8 @@ package com.oneplane.country.controller;
 
 import com.oneplane.country.domain.Country;
 import com.oneplane.country.service.CountryService;
+import com.oneplane.country.service.GdpService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,10 +14,11 @@ import java.util.Map;
 public class CountryApiController {
 
     private final CountryService countryService;
+    private final GdpService gdpService;
 
-    public CountryApiController(CountryService countryService) {
-
+    public CountryApiController(CountryService countryService, GdpService gdpService) {
         this.countryService = countryService;
+        this.gdpService = gdpService;
     }
 
     // 전체 국가 조회 (JSON)
@@ -30,9 +33,18 @@ public class CountryApiController {
         return countryService.getCountryById(id);
     }
 
-    // 전세계 GDP 비율 조회 (JSON)
-    @GetMapping(value = "/gdp/{year}/{country}", produces = "application/json")
-    public Map<String, Double> getWorldGdp(@PathVariable int year, @PathVariable("country") String countryName) {
-        return countryService.getWorldGdpShare(year, countryName);
+    // 국가별 GDP 조회
+    @GetMapping("/gdp/{year}/{countryName}")
+    public ResponseEntity<?> getCountryGdp(
+            @PathVariable int year,
+            @PathVariable String countryName) {
+
+        Country country = countryService.findByName(countryName);
+        if (country == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Map<String, Object> gdpData = gdpService.getGdpByCountryAndYear(country.getIsoCode(), year);
+        return ResponseEntity.ok(gdpData);
     }
 }

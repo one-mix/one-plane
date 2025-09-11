@@ -1,115 +1,152 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
+    <title>Country Info Panel</title>
 </head>
 <body>
-        <div id="country-info-panel" class="country-info-panel hidden">
-            <div class="panel-header">
-                <div class="panel-country">
-                    <img id="country-flag" src="" alt="국기" class="flag">
-                    <span id="country-name">국가명</span>
-                    <span id="country-continent">대륙명</span>
-                </div>
-                <button onclick="closeInfoPanel()" class="close-btn">✕</button>
-            </div>
-            <div class="panel-body">
+<div id="country-info-panel" class="country-info-panel hidden">
+    <div class="panel-header">
+        <div class="panel-country">
+            <img id="country-flag" src="" alt="국기" class="flag">
+            <span id="country-name">국가명</span>
+            <span id="country-continent">대륙명</span>
+        </div>
+        <button onclick="closeInfoPanel()" class="close-btn">✕</button>
+    </div>
+
+    <div class="panel-body">
+        <div class="info-body">
+            <!-- GDP 차트 -->
+            <div class="chart-section">
                 <h3>GDP</h3>
-                <canvas id="travelChart"></canvas>
-                <p id="gdp-message" style="color: gray; font-size: 14px; margin-top: 8px;"></p>
-                <script>
-                    async function loadGdpCharts(countryName) {
-                        const currentYear = new Date().getFullYear();
-                        const startYear = 2020;
-                        const endYear = currentYear - 1; // 올해 전 해까지만
+                <canvas id="gdpChart"></canvas>
+            </div>
 
-                        const gdpData = {};
-                        for (let y = startYear; y <= endYear; y++) {
-                            const response = await fetch("/api/countries/gdp/" + y + "/" + encodeURIComponent(countryName));
-                            const data = await response.json();
-                            if (data[countryName]) {
-                                gdpData[y] = data[countryName];
-                            }
-                        }
-
-                        const labels = Object.keys(gdpData);
-                        const values = Object.values(gdpData);
-
-                        if (labels.length === 0) {
-                            document.getElementById("gdp-message").innerText = "GDP 수집중입니다.";
-                            return;
-                        } else {
-                            document.getElementById("gdp-message").innerText = "";
-                        }
-
-                        const ctx = document.getElementById("travelChart").getContext("2d");
-                        if (travelChartInstance) {
-                            travelChartInstance.destroy();
-                        }
-                        travelChartInstance = new Chart(ctx, {
-                            type: "line",
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: countryName + " GDP",
-                                    data: values,
-                                    borderColor: "#36A2EB",
-                                    fill: false
-                                }]
-                            },
-                            options: {
-                                plugins: {
-                                    title: {
-                                        display: true,
-                                        text: `${countryName} GDP (2020 ~ ${endYear})`
-                                    }
-                                }
-                            }
-                        });
-                    }
-                </script>
-
-                <h3>방문객</h3>
-                <canvas id="visitChart"></canvas>
-
+            <!-- 환율 차트 -->
+            <div class="chart-section">
                 <h3>환율</h3>
                 <canvas id="currencyChart"></canvas>
-                <script>
-                    async function loadCurrencyChart(countryId) {
-                        const response = await fetch("/fx/" + countryId);
-                        const data = await response.json();
-
-                        console.log("환율 api 응답:", data)
-
-                        if (!Array.isArray(data) || data.length === 0) {
-                            console.warn("환율 데이터 없음");
-                            return;
-                        }
-
-                        const labels = data.map(r => r.baseDate);
-                        const values = data.map(r => r.dealBasR);
-
-                        // 이미 차트가 있으면 제거
-                        if (currencyChartInstance) {
-                            currencyChartInstance.destroy();
-                        }
-
-                        const ctx = document.getElementById("currencyChart").getContext("2d");
-                        currencyChartInstance = new Chart(ctx, {
-                            type: "line",
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: "환율",
-                                    data: values,
-                                    borderColor: "#30609D",
-                                    fill: false,
-                                    tension: 0.1
-                                }]
-                            }
-                        });
-                    }
-                </script>
             </div>
         </div>
+    </div>
+</div>
+
+<script>
+// 전역 변수
+let gdpChartInstance = null
+let currencyChartInstance = null;
+
+/** GDP 차트 로드 */
+async function loadGdpCharts(countryId, countryName) {
+    try {
+        const years = [2020, 2021, 2022, 2023, 2024];
+        const gdpValues = [];
+
+        for (let year of years) {
+            const res = await fetch("/api/countries/gdp/" + year + "/" + encodeURIComponent(countryId));
+            const data = await res.json();
+            console.log("loadGdpCharts data: ", data);
+            gdpValues.push(data?.gdpRaw ?? null);
+        }
+
+        if (gdpChartInstance) gdpChartInstance.destroy();
+
+        const ctx = document.getElementById("gdpChart").getContext("2d");
+        gdpChartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: years,
+                datasets: [{
+                    label: "GDP",
+                    data: gdpValues,
+                    borderColor: "#4e73df",
+                    fill: false
+                }]
+            },
+        });
+    } catch (err) {
+        console.error("GDP 차트 로드 실패:", err);
+        document.getElementById("gdpChart").outerHTML = "<p>GDP 수집중입니다</p>";
+    }
+}
+
+/** GDP 차트 로드 */
+async function loadCurrencyChart(countryId) {
+    try {
+        const response = await fetch(`/fx/${countryId}`);
+        if (!response.ok) throw new Error("HTTP error " + response.status);
+
+        const data = await response.json();
+        console.log("환율 API 응답:", data);
+
+        if (!Array.isArray(data) || data.length === 0) {
+            console.warn("환율 데이터 없음");
+            document.getElementById("currencyChart").outerHTML = "<p>환율 데이터 없음</p>";
+            return;
+        }
+
+        const labels = data.map(r => r.baseDate ?? "");
+        const values = data.map(r => r.dealBasR ?? null);
+
+        // 기존 차트 제거
+        if (currencyChartInstance) {
+            currencyChartInstance.destroy();
+        }
+
+        const ctx = document.getElementById("currencyChart").getContext("2d");
+        currencyChartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "환율",
+                    data: values,
+                    borderColor: "#30609D",
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: { mode: 'index', intersect: false },
+                    legend: { display: true }
+                },
+                interaction: { mode: 'nearest', axis: 'x', intersect: false }
+            }
+        });
+    } catch (err) {
+        console.error("환율 차트 로드 실패:", err);
+        document.getElementById("currencyChart").outerHTML = "<p>환율 차트 로드 실패</p>";
+    }
+}
+
+
+/** 통합 차트 렌더링 */
+function renderCharts(countryData) {
+    if (!countryData?.countryId) {
+        console.warn("countryId 없음:", countryData);
+        document.getElementById("gdpChart").outerHTML = "<p>GDP 데이터 없음</p>";
+        document.getElementById("currencyChart").outerHTML = "<p>환율 데이터 없음</p>";
+        return;
+    }
+
+    loadGdpCharts(countryData.countryId, countryData.countryName);
+    loadCurrencyChart(countryData.countryId);
+}
+
+
+/** 패널 닫기 */
+function closeInfoPanel() {
+    document.getElementById("country-info-panel").classList.add("hidden");
+}
+</script>
 </body>
 </html>

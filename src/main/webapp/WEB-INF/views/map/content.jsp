@@ -83,8 +83,6 @@
               fetch("/geojson/custom.geo.json")
                 .then(res => res.json())
                 .then(geoData => {
-                    console.log("GeoJSON:", geoData);
-
                     L.geoJson(geoData, {
                         style: feature => {
                             const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
@@ -158,12 +156,6 @@
                     // 사이드 패널 열기
                     openInfoPanel(countryData);
 
-                    // 환율 차트 렌더링
-                    if (countryData && countryData.countryId) {
-                        loadCurrencyChart(countryData.countryId);
-                    } else {
-                        console.warn("countryId 없음:", countryData);
-                    }
                 } else {
                      alert("국가를 찾을 수 없습니다.");
                 }
@@ -197,38 +189,19 @@
             document.getElementById("country-name").innerText = countryData.countryName;
             document.getElementById("country-continent").innerText = countryData.continent;
 
-            // GDP 차트 호출
-            loadGdpCharts(countryData.countryName)
+            // GDP 데이터 로드
+            loadGdpCharts(countryData.countryName);
 
-            // 차트 렌더링
-            renderCharts();
+            // 환율 차트 로드
+            if (countryData && countryData.countryId) {
+                loadCurrencyChart(countryData.countryId);
+            }
+
         }
 
         // 통계 패널 닫기 함수
         function closeInfoPanel() {
             document.getElementById("country-info-panel").classList.remove("show");
-        }
-
-        // 차트 인스턴스 전역 변수
-         let travelChartInstance, visitChartInstance, currencyChartInstance;
-
-        function renderCharts() {
-            const travelCtx = document.getElementById("travelChart").getContext("2d");
-            const visitCtx = document.getElementById("visitChart").getContext("2d");
-            const currencyCtx = document.getElementById("currencyChart").getContext("2d");
-
-            if (travelChartInstance) travelChartInstance.destroy();
-            if (visitChartInstance) visitChartInstance.destroy();
-            if (currencyChartInstance) currencyChartInstance.destroy();
-
-            // 방문객 통계
-            visitChartInstance = new Chart(visitCtx, {
-                type: "bar",
-                data: {
-                    labels: ["4월","5월","6월","7월","8월","9월"],
-                    datasets: [{ data: [10,20,15,25,18,22], backgroundColor: "#5A90D2" }]
-                }
-            });
         }
 
         // 모달 열기
@@ -237,6 +210,7 @@
             document.getElementById("modalBody").innerText = body;
             document.getElementById("guidelineModal").style.display = "flex";
         }
+
         // 모달 닫기
         function closeGuideline() {
             document.getElementById("guidelineModal").style.display = "none";

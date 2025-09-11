@@ -18,4 +18,8 @@ public interface CountryService {
     void updateCountriesFromApi();
 
     Map<String, Double> getWorldGdpShare(int year, String countryName);
+
+    String getIsoCodeByName(String countryName);
+
+    Country findByName(String name);
 }
