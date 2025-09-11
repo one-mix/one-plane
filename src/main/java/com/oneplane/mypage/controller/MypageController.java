@@ -105,6 +105,6 @@ public class MyPageController extends BaseController{
         model.addAttribute("hasNext", result.get("hasNext"));
         model.addAttribute("hasPrevious", result.get("hasPrevious"));
 
-        return "mypage/dashboard/recommend";
+        return "mypage/recommend";
     }
 }
