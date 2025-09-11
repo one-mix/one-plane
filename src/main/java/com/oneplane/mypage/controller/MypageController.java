@@ -7,6 +7,9 @@ import com.oneplane.recommend.repository.RecommendRepository;
 import com.oneplane.recommend.service.RecommendService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +42,14 @@ public class MyPageController extends BaseController{
         if (userId == null) {
             return "redirect:/login";
         }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("ROLE_USER"); // 기본값
+
+        model.addAttribute("userRole", role);
 
         // 통계 데이터 조회
         int countryCount   = certificationService.getVisitedCountryCount(userId);
