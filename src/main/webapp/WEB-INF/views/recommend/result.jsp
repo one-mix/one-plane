@@ -11,7 +11,7 @@
 
     <div class="cards">
         <c:forEach var="rec" items="${recommendations}">
-            <div class="card" data-country="${rec.countryIso3}">
+            <div class="card" data-country="${rec.countryIso3}" data-city="${rec.city}">
                 <div class="card-image">
                     <img src="${rec.countryImg}" alt="${rec.countryNameKo} 국기">
                 </div>
