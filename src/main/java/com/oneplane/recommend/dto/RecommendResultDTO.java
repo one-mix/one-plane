@@ -2,6 +2,8 @@ package com.oneplane.recommend.dto;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class RecommendResultDTO {
     private String countryNameKo;
@@ -12,4 +14,10 @@ public class RecommendResultDTO {
     private String continent;
     private String countryImg;
     private String alertLevel;
+
+    private String travelPurpose;
+    private String companion;
+    private String recommendRating;
+    private String ratingContent;
+    private Date createdAt;
 }

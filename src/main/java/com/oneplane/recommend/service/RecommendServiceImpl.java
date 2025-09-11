@@ -3,6 +3,7 @@ package com.oneplane.recommend.service;
 import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.country.dao.CountryDao;
 import com.oneplane.alert.dto.AlertLevelDTO;
+import com.oneplane.country.domain.Country;
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.repository.RecommendRepository;
@@ -122,5 +123,46 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     public void updateFeedback(Integer recommendId, Integer rating, String content) {
         recommendRepository.updateFeedback(recommendId, rating, content);
+    }
+
+    @Override
+    public List<RecommendResultDTO> getRecommendHistory(Integer userId, int page) {
+        int limit = 9; // 한 페이지당 9개씩 표시
+        int offset = (page - 1) * limit;
+
+        // 페이지네이션을 적용한 추천 이력 조회
+        return recommendRepository.findRecommendHistoryByUserId(userId, offset, limit);
+    }
+
+    @Override
+    public int getTotalRecommendHistoryCount(Integer userId) {
+        return recommendRepository.getTotalRecommendHistoryCount(userId);
+    }
+
+    public Map<String, Object> getRecommendHistoryWithPagination(Integer userId, int page) {
+        if (page < 1) {
+            page = 1; // 최소 페이지는 1
+        }
+
+        int limit = 9;
+        int totalCount = getTotalRecommendHistoryCount(userId);
+        int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+        // 페이지가 총 페이지 수를 초과하지 않도록 제한
+        if (page > totalPages && totalPages > 0) {
+            page = totalPages;
+        }
+
+        List<RecommendResultDTO> recommendHistory = getRecommendHistory(userId, page);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("recommendHistory", recommendHistory);
+        result.put("currentPage", page);
+        result.put("totalPages", totalPages);
+        result.put("totalCount", totalCount);
+        result.put("hasNext", page < totalPages);
+        result.put("hasPrevious", page > 1);
+
+        return result;
     }
 }

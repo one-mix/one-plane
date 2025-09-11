@@ -1,8 +1,11 @@
 package com.oneplane.recommend.repository;
 
 import com.oneplane.recommend.dto.RecommendDTO;
+import com.oneplane.recommend.dto.RecommendResultDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface RecommendRepository {
@@ -11,4 +14,10 @@ public interface RecommendRepository {
     void insertInput(RecommendDTO dto);
     void updateCountryId(Integer recommendId, Integer countryId);
     void updateFeedback(Integer recommendId, Integer recommendRating, String ratingContent);
+    List<RecommendResultDTO> findRecommendHistoryByUserId(
+            @Param("userId") Integer userId,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
+    int getTotalRecommendHistoryCount(@Param("userId") Integer userId);
 }
