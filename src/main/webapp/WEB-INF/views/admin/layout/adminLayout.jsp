@@ -22,7 +22,6 @@
   <link rel="stylesheet" href="/css/admin/admin.css" />
 </head>
 <body>
-<div class="admin-wrapper">
   <!-- Admin Header -->
   <jsp:include page="adminHeader.jsp" />
 
@@ -31,11 +30,10 @@
     <jsp:include page="adminSidebar.jsp" />
 
     <!-- Main Content -->
-    <main class="admin-main">
-      <c:import url="/WEB-INF/views/admin/${contentPage}" />
-    </main>
+      <main class="admin-main">
+          <c:import url="/WEB-INF/views/admin/${contentPage}" />
+      </main>
   </div>
-</div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
