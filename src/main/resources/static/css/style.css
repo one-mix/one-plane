@@ -75,8 +75,6 @@ html, body {
     background: none;
     border: none;
     cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.2s ease;
     font-family: var(--font-main);
 }
 
