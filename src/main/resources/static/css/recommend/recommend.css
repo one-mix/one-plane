@@ -7,15 +7,6 @@ body.recommend {
     background: #fff;
 }
 
-body.recommend .header,
-body.recommend .footer {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0 80px;
-    box-sizing: border-box;
-}
-
 body.recommend .content {
     max-width: 100%;
     background: linear-gradient(to right, #eaf4ff 0%, #fffbe6 100%);
@@ -65,29 +56,10 @@ body.recommend .content {
     margin-top: 1rem;
 }
 
-.notice p {
-    font-size: 12px;
-    color: #c4c4c4;
-    margin-top: 0.5rem;
-}
-
-button {
-    padding: 0.8rem 1.4rem;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    font-weight: 600;
-    cursor: pointer;
-    background: #fefefe;
-    color: #404040;
-    margin-right: 1rem;
-}
-
-button:disabled {
-    background: #e1e1e1;
+body.recommend .intro .notice p {
+    font-size: 16px;
     color: #888;
-    cursor: not-allowed;
-    box-shadow: none;
+    margin-top: 0.5rem;
 }
 
 .hero-img img {
