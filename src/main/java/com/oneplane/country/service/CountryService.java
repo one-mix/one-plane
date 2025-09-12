@@ -18,8 +18,6 @@ public interface CountryService {
     String getIsoCodeByName(String countryName);
 
     Country findByName(String name);
-    // 외교부 국가별 기본정보 API -> DB 업데이트
-    void updateCountriesFromApi();
 
     List<CountryAlertDTO> getCountries(String levelValue, String keyword);
     CountryAlertDTO getCountryByIdAdmin(Long countryId);

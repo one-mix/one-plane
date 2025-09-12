@@ -74,4 +74,20 @@ public class CountryServiceImpl implements CountryService {
     public Country findByName(String name) {
         return countryDao.findByName(name);
     }
+
+    @Override
+    public List<CountryAlertDTO> getCountries(String levelValue, String keyword) {
+        return countryDao.findCountries(levelValue, keyword);
+    }
+
+    @Override
+    public CountryAlertDTO getCountryByIdAdmin(Long countryId) {
+        return countryDao.findCountryById(countryId);
+    }
+
+    @Override
+    public void updateCountry(CountryAlertDTO country) {
+        countryDao.updateCountryAdmin(country);
+        alertLevelDao.updateCountryLevelAdmin(country);
+    }
 }
