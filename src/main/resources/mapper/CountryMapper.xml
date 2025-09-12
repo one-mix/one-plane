@@ -47,4 +47,62 @@
         WHERE currency = #{curUnit}
     </select>
 
+    <select id="findCountries" resultType="com.oneplane.alert.dto.CountryAlertDTO">
+        SELECT c.country_id      AS countryId,
+        c.country_name    AS countryName,
+        c.country_en_name AS countryEnName,
+        c.iso_code        AS isoCode,
+        a.level_value     AS levelValue
+        FROM country c
+        LEFT JOIN alert_level a
+        ON c.country_id = a.country_id
+        WHERE 1=1
+        <if test="levelValue != null and levelValue != ''">
+            AND a.level_value = #{levelValue}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (c.country_name LIKE '%' || #{keyword} || '%'
+            OR c.country_en_name LIKE '%' || #{keyword} || '%'
+            OR c.iso_code LIKE '%' || #{keyword} || '%')
+        </if>
+        ORDER BY c.country_name
+    </select>
+
+    <select id="findCountryById" parameterType="long" resultType="com.oneplane.alert.dto.CountryAlertDTO">
+        SELECT c.country_id AS countryId,
+               c.country_name AS countryName,
+               c.country_en_name AS countryEnName,
+               c.iso_code AS isoCode,
+               c.img as countryImg,
+               c.latitude as countryLatitude,
+               c.longitude as countryLongitude,
+               a.level_value AS levelValue
+        FROM country c
+                 LEFT JOIN alert_level a ON c.country_id = a.country_id
+        WHERE c.country_id = #{countryId}
+    </select>
+
+    <update id="updateCountryAdmin" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
+        UPDATE country
+        SET country_name = #{countryName},
+            country_en_name = #{countryEnName},
+            iso_code = #{isoCode},
+            latitude = #{countryLatitude},
+            longitude = #{countryLongitude}
+        WHERE country_id = #{countryId}
+    </update>
+
+    <update id="updateCountryLevel" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
+        UPDATE alert_level
+        SET level_value = #{levelValue}
+        WHERE country_id = #{countryId}
+    </update>
+
+    <select id="getCountrySummary" resultType="com.oneplane.country.dto.CountrySummaryDTO">
+        SELECT
+                (SELECT COUNT(*) FROM alert_level) AS totalCountries,
+                (SELECT COUNT(*) FROM alert_level WHERE level_value IS NULL) AS safeCountries,
+                (SELECT COUNT(*) FROM alert_level WHERE level_value = '여행금지') AS bannedCountries
+        FROM dual
+    </select>
 </mapper>

@@ -2,8 +2,11 @@ package com.oneplane.country.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.oneplane.alert.dao.AlertLevelDao;
+import com.oneplane.alert.dto.CountryAlertDTO;
 import com.oneplane.country.dao.CountryDao;
 import com.oneplane.country.domain.Country;
+import com.oneplane.country.dto.CountrySummaryDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ import java.util.List;
 @Service
 public class CountryServiceImpl implements CountryService {
     private final CountryDao countryDao;
+    private final AlertLevelDao alertLevelDao;
 
     @Value("${api.country.key}")
     private String apiKey;   // application.yml에 원본 키(인코딩되지 않은 값) 저장
@@ -27,8 +32,9 @@ public class CountryServiceImpl implements CountryService {
     private final WebClient webClient =
             WebClient.create("https://apis.data.go.kr/1262000/CountryBasicService");
 
-    public CountryServiceImpl(CountryDao countryDao) {
+    public CountryServiceImpl(CountryDao countryDao, AlertLevelDao alertLevelDao) {
         this.countryDao = countryDao;
+        this.alertLevelDao = alertLevelDao;
     }
 
     @Override
@@ -143,5 +149,26 @@ public class CountryServiceImpl implements CountryService {
     @Scheduled(cron = "0 0 3 * * *")
     public void scheduledUpdateCountries() {
         updateCountriesFromApi();
+    }
+
+    @Override
+    public List<CountryAlertDTO> getCountries(String levelValue, String keyword) {
+        return countryDao.findCountries(levelValue, keyword);
+    }
+
+    @Override
+    public CountryAlertDTO getCountryByIdAdmin(Long countryId) {
+        return countryDao.findCountryById(countryId);
+    }
+
+    @Override
+    public void updateCountry(CountryAlertDTO country) {
+        countryDao.updateCountryAdmin(country);
+        alertLevelDao.updateCountryLevelAdmin(country);
+    }
+
+    @Override
+    public CountrySummaryDTO getCountrySummary() {
+        return countryDao.getCountrySummary();
     }
 }

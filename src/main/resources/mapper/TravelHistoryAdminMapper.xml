@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.travelHistory.dao.TravelHistoryAdminDao">
+
+    <select id="getContinentStats" resultType="com.oneplane.travelHistory.dto.ContinentStatsDTO">
+        SELECT c.continent AS continentName,
+               COUNT(th.travel_history_id) AS travelCount
+        FROM travel_history th
+                 JOIN country c ON th.country_id = c.country_id
+        WHERE th.deleted_at IS NULL
+        GROUP BY c.continent
+        ORDER BY travelCount DESC
+    </select>
+
+    <select id="getMonthlyStats" resultType="com.oneplane.travelHistory.dto.MonthlyStatsDTO">
+        SELECT TO_CHAR(th.travel_at, 'YYYY-MM') AS month,
+           COUNT(th.travel_history_id) AS travelCount
+        FROM travel_history th
+        WHERE th.deleted_at IS NULL
+        GROUP BY TO_CHAR(th.travel_at, 'YYYY-MM')
+        ORDER BY month
+    </select>
+</mapper>

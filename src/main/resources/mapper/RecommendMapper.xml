@@ -90,4 +90,14 @@
         AND recommend_rating IS NOT NULL
         AND rating_content IS NOT NULL
     </select>
+
+    <select id="getTopRecommendCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
+        SELECT c.country_name AS countryName,
+               COUNT(r.recommend_id) AS count
+        FROM recommend r
+            JOIN country c ON r.country_id = c.country_id
+        GROUP BY c.country_name
+        ORDER BY count DESC
+            FETCH FIRST 10 ROWS ONLY
+    </select>
 </mapper>
