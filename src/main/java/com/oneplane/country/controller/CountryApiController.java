@@ -7,6 +7,7 @@ import com.oneplane.country.service.GdpService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -17,12 +18,11 @@ public class CountryApiController {
     private final CountryService countryService;
     private final GdpService gdpService;
 
-    private final CarbonService carbonService;
-
-    public CountryApiController(CountryService countryService, GdpService gdpService, CarbonService carbonService) {
+    public CountryApiController(CountryService countryService,
+                                GdpService gdpService,
+                                CarbonService carbonService) {
         this.countryService = countryService;
         this.gdpService = gdpService;
-        this.carbonService = carbonService;
     }
 
     // 전체 국가 조회 (JSON)
@@ -50,26 +50,5 @@ public class CountryApiController {
 
         Map<String, Object> gdpData = gdpService.getGdpByCountryAndYear(country.getIsoCode(), year);
         return ResponseEntity.ok(gdpData);
-    }
-
-
-    // 국가별 탄소 배출량 조회
-    @GetMapping(value = "/carbon/{countryName}", produces = "application/json")
-    public ResponseEntity<?> getCountryCarbon(@PathVariable String countryName) {
-        Country country = countryService.findByName(countryName);
-        if (country == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        List<Map<String, Object>> carbonData = carbonService.getCarbonByCountry(country.getIsoCode());
-        return ResponseEntity.ok(carbonData);
-    }
-
-    @GetMapping("/carbon/id/{id}")
-    public ResponseEntity<?> getCountryCarbonById(@PathVariable Long id) {
-        Country country = countryService.getCountryById(id);
-        if (country == null) return ResponseEntity.notFound().build();
-        List<Map<String, Object>> carbonData = carbonService.getCarbonByCountry(country.getCountryName());
-        return ResponseEntity.ok(carbonData);
     }
 }

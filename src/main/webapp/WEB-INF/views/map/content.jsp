@@ -193,7 +193,7 @@
             loadGdpCharts(countryData.countryName);
 
              // 탄소 차트 로드
-            loadCarbonChart(countryData.countryId);
+            loadCarbonChart(countryData.countryName);
         }
 
         // 통계 패널 닫기 함수

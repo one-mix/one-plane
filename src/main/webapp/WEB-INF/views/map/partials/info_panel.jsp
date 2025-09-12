@@ -76,46 +76,47 @@ async function loadGdpCharts(countryId, countryName) {
 }
 
 /** 탄소 배출량 차트 로드 */
-async function loadCarbonChart(countryId) {
-    if (!countryId) {
-        document.getElementById("carbonChart").innerHTML = "<p>탄소 배출량 데이터 없음</p>";
-        return;
-    }
-
+async function loadCarbonChart(countryId, countryName) {
     try {
-        const res = await fetch("/api/countries/carbon/" + encodeURIComponent(countryId));
-        if (!res.ok) throw new Error("탄소 배출량 데이터 없음!!");
-        const data = await res.json();
+        const years = [2020, 2021, 2022, 2023];
+        const carbonValues = [];
 
-        if (!data || data.length === 0) {
-            document.getElementById("carbonChart").innerHTML = "<p>탄소 데이터 없음 ㅠㅠ </p>";
-            return;
+        for (let year of years) {
+            const res = await fetch("/countries/carbon/" + year + "/" + encodeURIComponent(countryId));
+            const data = await res.json();
+            console.log("loadCarbonChart data: ", data);
+
+            // 응답이 [{YEAR: 2020, VALUE: -10.3889}] 형태라서 첫 번째 요소에서 VALUE 꺼내오기
+            const value = Array.isArray(data) && data.length > 0 ? data[0].VALUE : null;
+            carbonValues.push(value);
         }
-
-        const labels = data.map(d => d.year);
-        const values = data.map(d => d.emission);
 
         if (carbonChartInstance) carbonChartInstance.destroy();
 
-        const ctx = document.getElementById("carbonChart").getContext("2d");
+        const ctxElem = document.getElementById("carbonChart");
+        if (!ctxElem) {
+            console.error("carbonChart 요소 없음");
+            return;
+        }
+        const ctx = ctxElem.getContext("2d");
+
         carbonChartInstance = new Chart(ctx, {
-            type: "bar",
+            type: "line",
             data: {
-                labels,
+                labels: years,
                 datasets: [{
-                    label: "탄소 배출량 (kt CO₂)",
-                    data: values,
-                    backgroundColor: "#1cc88a"
+                    label: "CO₂ Emissions (% change from 1990)",
+                    data: carbonValues,
+                    borderColor: "#e74a3b",
+                    fill: false
                 }]
             },
-            options: { responsive: true }
         });
     } catch (err) {
-        console.error(err);
-        document.getElementById("carbonChart").innerHTML = "<p>탄소 배출량 차트 로드 실패</p>";
+        console.error("탄소 배출량 차트 로드 실패:", err);
+        document.getElementById("carbonChart").parentNode.innerHTML = "<p>탄소 데이터 수집중입니다</p>";
     }
 }
-
 
 /** 통합 차트 렌더링 */
 function renderCharts(countryData) {
@@ -127,7 +128,7 @@ function renderCharts(countryData) {
     }
 
     loadGdpCharts(countryData.countryId, countryData.countryName);
-    loadCarbonChart(countryData.countryId);
+    loadCarbonChart(countryData.countryName);
 }
 
 /** 패널 닫기 */
