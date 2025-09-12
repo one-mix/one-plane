@@ -37,8 +37,9 @@
 
 <script>
 // 전역 변수
-let gdpChartInstance = null
+let gdpChartInstance = null;
 let currencyChartInstance = null;
+let carbonChartInstance = null;
 
 /** GDP 차트 로드 */
 async function loadGdpCharts(countryId, countryName) {
@@ -74,70 +75,20 @@ async function loadGdpCharts(countryId, countryName) {
     }
 }
 
-/** GDP 차트 로드 */
-async function loadCurrencyChart(countryId) {
-    try {
-        const response = await fetch(`/fx/${countryId}`);
-        if (!response.ok) throw new Error("HTTP error " + response.status);
-
-        const data = await response.json();
-        console.log("환율 API 응답:", data);
-
-        if (!Array.isArray(data) || data.length === 0) {
-            console.warn("환율 데이터 없음");
-            document.getElementById("currencyChart").outerHTML = "<p>환율 데이터 없음</p>";
-            return;
-        }
-
-        const labels = data.map(r => r.baseDate ?? "");
-        const values = data.map(r => r.dealBasR ?? null);
-
-        // 기존 차트 제거
-        if (currencyChartInstance) {
-            currencyChartInstance.destroy();
-        }
-
-        const ctx = document.getElementById("currencyChart").getContext("2d");
-        currencyChartInstance = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "환율",
-                    data: values,
-                    borderColor: "#30609D",
-                    fill: false,
-                    tension: 0.1,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    tooltip: { mode: 'index', intersect: false },
-                    legend: { display: true }
-                },
-                interaction: { mode: 'nearest', axis: 'x', intersect: false }
-            }
-        });
-    } catch (err) {
-        console.error("환율 차트 로드 실패:", err);
-        document.getElementById("currencyChart").outerHTML = "<p>환율 차트 로드 실패</p>";
-    }
-}
-
 /** 탄소 배출량 차트 로드 */
 async function loadCarbonChart(countryId) {
-    try {
-        const res = await fetch(`/api/countries/carbon/${countryId}`);
-        if (!res.ok) throw new Error("탄소 배출량 데이터 없음");
+    if (!countryId) {
+        document.getElementById("carbonChart").innerHTML = "<p>탄소 배출량 데이터 없음</p>";
+        return;
+    }
 
+    try {
+        const res = await fetch("/api/countries/carbon/" + encodeURIComponent(countryId));
+        if (!res.ok) throw new Error("탄소 배출량 데이터 없음!!");
         const data = await res.json();
-        if (!Array.isArray(data) || data.length === 0) {
-            document.getElementById("carbonChart").outerHTML = "<p>탄소 배출량 데이터 없음</p>";
+
+        if (!data || data.length === 0) {
+            document.getElementById("carbonChart").innerHTML = "<p>탄소 데이터 없음 ㅠㅠ </p>";
             return;
         }
 
@@ -150,41 +101,34 @@ async function loadCarbonChart(countryId) {
         carbonChartInstance = new Chart(ctx, {
             type: "bar",
             data: {
-                labels: labels,
+                labels,
                 datasets: [{
                     label: "탄소 배출량 (kt CO₂)",
                     data: values,
                     backgroundColor: "#1cc88a"
                 }]
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: true },
-                    tooltip: { mode: 'index', intersect: false }
-                },
-                interaction: { mode: 'nearest', axis: 'x', intersect: false }
-            }
+            options: { responsive: true }
         });
     } catch (err) {
-        console.error("탄소 배출량 차트 로드 실패:", err);
-        document.getElementById("carbonChart").outerHTML = "<p>탄소 배출량 차트 로드 실패</p>";
+        console.error(err);
+        document.getElementById("carbonChart").innerHTML = "<p>탄소 배출량 차트 로드 실패</p>";
     }
 }
+
 
 /** 통합 차트 렌더링 */
 function renderCharts(countryData) {
     if (!countryData?.countryId) {
         console.warn("countryId 없음:", countryData);
         document.getElementById("gdpChart").outerHTML = "<p>GDP 데이터 없음</p>";
-        document.getElementById("currencyChart").outerHTML = "<p>환율 데이터 없음</p>";
+        document.getElementById("carbonChart").outerHTML = "<p>탄소 데이터 없음</p>";
         return;
     }
 
     loadGdpCharts(countryData.countryId, countryData.countryName);
-    loadCurrencyChart(countryData.countryId);
+    loadCarbonChart(countryData.countryId);
 }
-
 
 /** 패널 닫기 */
 function closeInfoPanel() {

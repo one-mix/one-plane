@@ -54,7 +54,7 @@ public class CountryApiController {
 
 
     // 국가별 탄소 배출량 조회
-    @GetMapping("/carbon/{countryName}")
+    @GetMapping(value = "/carbon/{countryName}", produces = "application/json")
     public ResponseEntity<?> getCountryCarbon(@PathVariable String countryName) {
         Country country = countryService.findByName(countryName);
         if (country == null) {
@@ -62,6 +62,14 @@ public class CountryApiController {
         }
 
         List<Map<String, Object>> carbonData = carbonService.getCarbonByCountry(country.getIsoCode());
+        return ResponseEntity.ok(carbonData);
+    }
+
+    @GetMapping("/carbon/id/{id}")
+    public ResponseEntity<?> getCountryCarbonById(@PathVariable Long id) {
+        Country country = countryService.getCountryById(id);
+        if (country == null) return ResponseEntity.notFound().build();
+        List<Map<String, Object>> carbonData = carbonService.getCarbonByCountry(country.getCountryName());
         return ResponseEntity.ok(carbonData);
     }
 }

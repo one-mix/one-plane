@@ -192,11 +192,8 @@
             // GDP 데이터 로드
             loadGdpCharts(countryData.countryName);
 
-            // 환율 차트 로드
-            if (countryData && countryData.countryId) {
-                loadCurrencyChart(countryData.countryId);
-            }
-
+             // 탄소 차트 로드
+            loadCarbonChart(countryData.countryId);
         }
 
         // 통계 패널 닫기 함수
