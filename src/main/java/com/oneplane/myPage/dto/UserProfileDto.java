@@ -6,6 +6,7 @@ public class UserProfileDto {
     private Integer age;
     private String gender;
     private String profileImagePath;
+    private String grade;
 
     // 생성자
     public UserProfileDto() {}
@@ -30,4 +31,7 @@ public class UserProfileDto {
 
     public String getProfileImagePath() { return profileImagePath; }
     public void setProfileImagePath(String profileImagePath) { this.profileImagePath = profileImagePath; }
+
+    public String getGrade() { return grade; }
+    public void setGrade(String grade) { this.grade = grade; }
 }

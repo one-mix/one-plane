@@ -2,6 +2,8 @@ package com.oneplane.country.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.oneplane.alert.dao.AlertLevelDao;
+import com.oneplane.alert.dto.CountryAlertDTO;
 import com.oneplane.country.dao.CountryDao;
 import com.oneplane.country.domain.Country;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -18,6 +21,7 @@ import java.util.*;
 @Service
 public class CountryServiceImpl implements CountryService {
     private final CountryDao countryDao;
+    private final AlertLevelDao alertLevelDao;
 
     @Value("${api.country.key}")
     private String apiKey;   // application.yml에 원본 키(인코딩되지 않은 값) 저장
@@ -25,8 +29,9 @@ public class CountryServiceImpl implements CountryService {
     private final WebClient webClient =
             WebClient.create("https://apis.data.go.kr/1262000/CountryBasicService");
 
-    public CountryServiceImpl(CountryDao countryDao) {
+    public CountryServiceImpl(CountryDao countryDao, AlertLevelDao alertLevelDao) {
         this.countryDao = countryDao;
+        this.alertLevelDao = alertLevelDao;
     }
 
     @Override

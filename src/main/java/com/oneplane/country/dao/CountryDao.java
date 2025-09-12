@@ -1,5 +1,6 @@
 package com.oneplane.country.dao;
 
+import com.oneplane.alert.dto.CountryAlertDTO;
 import com.oneplane.country.domain.Country;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,4 +27,10 @@ public interface CountryDao {
     List<Long> findCountryIdsByCurrency(@Param("curUnit") String curUnit);
 
     RecommendResultDTO findCountryInfo(@Param("isoCode") String isoCode);
+
+    List<CountryAlertDTO> findCountries(String levelValue, String keyword);
+
+    CountryAlertDTO findCountryById(Long countryId);
+
+    void updateCountryAdmin(CountryAlertDTO country);
 }
