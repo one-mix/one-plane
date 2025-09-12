@@ -97,4 +97,12 @@
         SET level_value = #{levelValue}
         WHERE country_id = #{countryId}
     </update>
+
+    <select id="getCountrySummary" resultType="com.oneplane.country.dto.CountrySummaryDTO">
+        SELECT
+                (SELECT COUNT(*) FROM alert_level) AS totalCountries,
+                (SELECT COUNT(*) FROM alert_level WHERE level_value IS NULL) AS safeCountries,
+                (SELECT COUNT(*) FROM alert_level WHERE level_value = '여행금지') AS bannedCountries
+        FROM dual
+    </select>
 </mapper>

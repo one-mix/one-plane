@@ -6,6 +6,7 @@ import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.alert.dto.CountryAlertDTO;
 import com.oneplane.country.dao.CountryDao;
 import com.oneplane.country.domain.Country;
+import com.oneplane.country.dto.CountrySummaryDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -164,5 +165,10 @@ public class CountryServiceImpl implements CountryService {
     public void updateCountry(CountryAlertDTO country) {
         countryDao.updateCountryAdmin(country);
         alertLevelDao.updateCountryLevelAdmin(country);
+    }
+
+    @Override
+    public CountrySummaryDTO getCountrySummary() {
+        return countryDao.getCountrySummary();
     }
 }
