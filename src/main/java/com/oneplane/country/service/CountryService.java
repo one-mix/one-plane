@@ -18,4 +18,6 @@ public interface CountryService {
     void updateCountriesFromApi();
 
     List<CountryAlertDTO> getCountries(String levelValue, String keyword);
+    CountryAlertDTO getCountryByIdAdmin(Long countryId);
+    void updateCountry(CountryAlertDTO country);
 }

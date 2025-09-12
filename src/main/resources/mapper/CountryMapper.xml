@@ -74,6 +74,8 @@
                c.country_en_name AS countryEnName,
                c.iso_code AS isoCode,
                c.img as countryImg,
+               c.latitude as countryLatitude,
+               c.longitude as countryLongitude,
                a.level_value AS levelValue
         FROM country c
                  LEFT JOIN alert_level a ON c.country_id = a.country_id
@@ -84,7 +86,9 @@
         UPDATE country
         SET country_name = #{countryName},
             country_en_name = #{countryEnName},
-            iso_code = #{isoCode}
+            iso_code = #{isoCode},
+            latitude = #{countryLatitude},
+            longitude = #{countryLongitude}
         WHERE country_id = #{countryId}
     </update>
 

@@ -30,6 +30,17 @@
 
         <div class="row mb-3">
             <div class="col-6">
+                <label class="form-label fw-bold">위도</label>
+                <input type="text" name="countryLatitude" class="form-control" value="${country.countryLatitude}"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label fw-bold">경도</label>
+                <input type="text" name="countryLongitude" class="form-control" value="${country.countryLongitude}"/>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-6">
                 <label class="form-label fw-bold">ISO 코드</label>
                 <input type="text" name="isoCode" class="form-control" value="${country.isoCode}"/>
             </div>
