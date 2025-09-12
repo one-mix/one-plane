@@ -2,6 +2,7 @@ package com.oneplane.recommend.repository;
 
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
+import com.oneplane.travelHistory.dto.TopCountryStatsDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +21,5 @@ public interface RecommendRepository {
             @Param("limit") int limit
     );
     int getTotalRecommendHistoryCount(@Param("userId") Integer userId);
+    List<TopCountryStatsDTO> getTopRecommendCountries();
 }

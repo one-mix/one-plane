@@ -2,6 +2,7 @@ package com.oneplane.country.dao;
 
 import com.oneplane.alert.dto.CountryAlertDTO;
 import com.oneplane.country.domain.Country;
+import com.oneplane.country.dto.CountrySummaryDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,4 +34,6 @@ public interface CountryDao {
     CountryAlertDTO findCountryById(Long countryId);
 
     void updateCountryAdmin(CountryAlertDTO country);
+
+    CountrySummaryDTO getCountrySummary();
 }

@@ -55,5 +55,13 @@
         ORDER BY f.favorites_country_id
     </select>
 
-
+    <select id="getTopFavoriteCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
+        SELECT c.country_name AS countryName,
+               COUNT(f.favorites_country_id) AS count
+        FROM favorites_country f
+            JOIN country c ON f.country_id = c.country_id
+        GROUP BY c.country_name
+        ORDER BY count DESC
+            FETCH FIRST 10 ROWS ONLY
+    </select>
 </mapper>
