@@ -95,7 +95,7 @@
                         <!-- 사진이 없다면 빈 사진으로 -->
                         <c:if test="${empty post.thumbnailImage}">
                             <div class="result-icon">
-                                <img src="/images/aimg.png" alt="no image" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; opacity: 0.3;">
+                                <img src="/images/gallery.png" alt="no image" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; opacity: 0.3;">
                             </div>
                         </c:if>
                     </div>

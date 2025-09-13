@@ -19,9 +19,10 @@ public class FavoritesCountryController {
     }
 
     @PostMapping("/add")
+    @ResponseBody
     public String addFavorite(@RequestParam Long countryId, @RequestParam Long userId) {
         favoritesCountryService.addFavorite(countryId, userId);
-        return "redirect:/favorites/list?userId=" + userId;
+        return "success";
     }
 
     @PostMapping("/remove")

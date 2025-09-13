@@ -26,34 +26,56 @@
     </resultMap>
 
     <insert id="insertFavorites" parameterType="com.oneplane.favorites.domain.FavoritesCountry">
-        INSERT INTO favorites_country (favorites_country_id, country_id, user_id)
-        VALUES (seq_favorites_country.NEXTVAL, #{countryId}, #{userId})
+        INSERT INTO favorites_country (country_id, user_id)
+        VALUES (#{countryId}, #{userId})
     </insert>
 
     <delete id="deleteFavorites" parameterType="long">
         DELETE FROM favorites_country WHERE favorites_country_id = #{favoritesCountryId}
     </delete>
 
+    <!-- 즐겨찾기(favorites_country) 목록 + country 정보 + 최신 recommend 국가 목록 -->
     <select id="selectFavoritesByUser" parameterType="long" resultMap="FavoritesCountryMap">
         SELECT
-        f.favorites_country_id,
-        f.country_id,
-        f.user_id,
-        c.country_id AS c_country_id,
-        c.country_name,
-        c.country_en_name,
-        c.iso_code,
-        c.continent,
-        c.img,
-        c.latitude,
-        c.longitude,
-        c.currency,
-        c.distance
-        FROM favorites_country f
-        LEFT JOIN country c ON f.country_id = c.country_id
-        WHERE f.user_id = #{userId}
-        ORDER BY f.favorites_country_id
+            f.favorites_country_id,
+            f.country_id,
+            f.user_id,
+            c.country_id     AS c_country_id,
+            c.country_name,
+            c.country_en_name,
+            c.iso_code,
+            c.continent,
+            c.img,
+            c.latitude,
+            c.longitude,
+            c.currency,
+            c.distance
+            FROM favorites_country f
+            JOIN country c
+            ON f.country_id = c.country_id
+            WHERE f.user_id = #{userId}
+        UNION ALL
+            SELECT
+            NULL                AS favorites_country_id,
+            r.country_id,
+            r.user_id,
+            c.country_id        AS c_country_id,
+            c.country_name,
+            c.country_en_name,
+            c.iso_code,
+            c.continent,
+            c.img,
+            c.latitude,
+            c.longitude,
+            c.currency,
+            c.distance
+        FROM recommend r
+            JOIN country c
+            ON r.country_id = c.country_id
+        WHERE r.user_id = #{userId}
     </select>
+
+
 
     <select id="getTopFavoriteCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
         SELECT c.country_name AS countryName,
