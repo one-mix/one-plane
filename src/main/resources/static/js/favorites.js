@@ -18,7 +18,32 @@ fetch("/favorites/api/list/1")
     data.forEach(item => {
       const li = document.createElement("li");
       li.className = "tooltip-country";
-      li.textContent = item.country.countryName;
+
+      // 국가명
+      const span = document.createElement("span");
+      span.textContent = item.country.countryName;
+
+      // X 버튼
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "X";
+      removeBtn.className = "remove-btn";
+
+      removeBtn.onclick = () => {
+        fetch("/favorites/remove", {
+            method: "POST",
+             headers: { "Content-Type": "application/x-www-form-urlencoded" },
+             body: `favoritesCountryId=${item.favoritesCountryId}&userId=${item.userId}`
+        })
+        .then(() => {
+            li.remove();
+            alert(`즐겨찾기 국가에서 삭제되었습니다.`)
+        })
+        .catch(err => console.error("삭제 실패", err));
+      };
+
+      // 자식 요소로 추가
+      li.appendChild(span);
+      li.appendChild(removeBtn);
       list.appendChild(li);
     });
   })
