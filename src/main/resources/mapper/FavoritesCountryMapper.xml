@@ -34,26 +34,14 @@
         DELETE FROM favorites_country WHERE favorites_country_id = #{favoritesCountryId}
     </delete>
 
+    <!-- 추천받은 국가 저장한 즐겨찾기 목록 -->
     <select id="selectFavoritesByUser" parameterType="long" resultMap="FavoritesCountryMap">
-        SELECT
-        f.favorites_country_id,
-        f.country_id,
-        f.user_id,
-        c.country_id AS c_country_id,
-        c.country_name,
-        c.country_en_name,
-        c.iso_code,
-        c.continent,
-        c.img,
-        c.latitude,
-        c.longitude,
-        c.currency,
-        c.distance
-        FROM favorites_country f
-        LEFT JOIN country c ON f.country_id = c.country_id
-        WHERE f.user_id = #{userId}
-        ORDER BY f.favorites_country_id
+        SELECT c.country_name
+        FROM recommend r
+        JOIN country c ON r.country_id = c.country_id
+        WHERE r.user_id = #{userId}
     </select>
+
 
     <select id="getTopFavoriteCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
         SELECT c.country_name AS countryName,
