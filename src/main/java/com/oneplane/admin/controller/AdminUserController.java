@@ -1,0 +1,160 @@
+package com.oneplane.admin.controller;
+
+import com.oneplane.admin.domain.AdminUser;
+import com.oneplane.admin.service.AdminUserService;
+import com.oneplane.user.domain.User;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/admin")
+@RequiredArgsConstructor
+@Slf4j
+public class AdminUserController {
+
+    private final AdminUserService adminUserService;
+
+    /**
+     * 전체 사용자 목록 페이지
+     */
+    @GetMapping("/userList")
+    public String userList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "role", required = false) String role,
+            @RequestParam(value = "grade", required = false) String grade,
+            Model model) {
+
+        log.info("전체 사용자 목록 조회 - page: {}, search: {}, role: {}, grade: {}", page, search, role, grade);
+
+        try {
+            // 페이지 크기 (한 페이지당 20개)
+            int pageSize = 20;
+
+            Map<String, Object> result = adminUserService.getUserList(page, pageSize, search);
+
+            // 통계 정보 조회 (우선 기본값으로 설정)
+            Map<String, Object> stats = new HashMap<>();
+            try {
+                stats = adminUserService.getUserStats();
+            } catch (Exception e) {
+                stats.put("totalUsers", result.get("totalCount") != null ? result.get("totalCount") : 0);
+                stats.put("activeUsers", result.get("totalCount") != null ? result.get("totalCount") : 0);
+                stats.put("monthlySignups", 0);
+                stats.put("deletedUsers", 0);
+            }
+
+            // 모델에 데이터 추가
+            model.addAttribute("users", result.get("users"));
+            model.addAttribute("currentPage", result.get("currentPage"));
+            model.addAttribute("totalPages", result.get("totalPages"));
+            model.addAttribute("totalCount", result.get("totalCount"));
+            model.addAttribute("hasNext", result.get("hasNext"));
+            model.addAttribute("hasPrevious", result.get("hasPrevious"));
+            model.addAttribute("startRow", result.get("startRow"));
+            model.addAttribute("endRow", result.get("endRow"));
+            model.addAttribute("search", search);
+            model.addAttribute("role", role);
+            model.addAttribute("grade", grade);
+            model.addAttribute("stats", stats);
+
+            // 검색 파라미터 문자열 생성 (페이징에 사용)
+            StringBuilder searchParams = new StringBuilder();
+            if (search != null && !search.trim().isEmpty()) {
+                searchParams.append("&search=").append(search);
+            }
+            if (role != null && !role.trim().isEmpty()) {
+                searchParams.append("&role=").append(role);
+            }
+            if (grade != null && !grade.trim().isEmpty()) {
+                searchParams.append("&grade=").append(grade);
+            }
+            model.addAttribute("searchParams", searchParams.toString());
+
+            // 페이지 정보
+            model.addAttribute("contentPage", "userList.jsp");
+            model.addAttribute("activeMenu", "userList");
+
+        } catch (Exception e) {
+            log.error("사용자 목록 조회 중 오류 발생", e);
+            model.addAttribute("error", "사용자 목록을 불러오는데 실패했습니다: " + e.getMessage());
+
+            // 오류 시에도 기본 데이터 설정
+            model.addAttribute("users", List.of());
+            model.addAttribute("totalCount", 0);
+            model.addAttribute("stats", Map.of(
+                    "totalUsers", 0,
+                    "activeUsers", 0,
+                    "todaySignups", 0,
+                    "monthlySignups", 0
+            ));
+        }
+
+        return "admin/layout/adminLayout";
+    }
+
+    /**
+     * 사용자 상세보기 페이지
+     */
+    @GetMapping("/userDetail/{userId}")
+    public String userDetail(@PathVariable Integer userId, Model model) {
+            AdminUser user = adminUserService.getUserById(userId);
+
+            model.addAttribute("user", user);
+            model.addAttribute("contentPage", "userDetail.jsp");
+            model.addAttribute("activeMenu", "userList");
+
+        return "admin/layout/adminLayout";
+    }
+
+    /**
+     * 사용자 삭제 (논리 삭제)
+     */
+    @PostMapping("/users/{userId}/delete")
+    public String deleteUser(@PathVariable Integer userId) {
+        log.info("사용자 삭제 - userId: {}", userId);
+        adminUserService.deleteUser(userId);
+        return "redirect:/admin/userList";
+    }
+
+    /**
+     * 탈퇴 사용자 목록 페이지
+     */
+    @GetMapping("/userDeleted")
+    public String deletedUsers(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "search", required = false) String search,
+            Model model) {
+            int pageSize = 20;
+            Map<String, Object> result = adminUserService.getDeletedUserList(page, pageSize, search);
+
+            model.addAttribute("users", result.get("users"));
+            model.addAttribute("currentPage", result.get("currentPage"));
+            model.addAttribute("totalPages", result.get("totalPages"));
+            model.addAttribute("totalCount", result.get("totalCount"));
+            model.addAttribute("hasNext", result.get("hasNext"));
+            model.addAttribute("hasPrevious", result.get("hasPrevious"));
+            model.addAttribute("startRow", result.get("startRow"));
+            model.addAttribute("endRow", result.get("endRow"));
+            model.addAttribute("search", search);
+
+            // 검색 파라미터 문자열 생성
+            String searchParams = "";
+            if (search != null && !search.trim().isEmpty()) {
+                searchParams = "&search=" + search;
+            }
+            model.addAttribute("searchParams", searchParams);
+
+            model.addAttribute("contentPage", "userDeleted.jsp");
+            model.addAttribute("activeMenu", "user-del");
+
+        return "admin/layout/adminLayout";
+    }
+}
