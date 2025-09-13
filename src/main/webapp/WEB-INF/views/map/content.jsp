@@ -53,17 +53,20 @@
             const rootStyles = getComputedStyle(document.documentElement);
             switch(level) {
                 case "여행유의":
-                    return rootStyles.getPropertyValue("--semantic-caution").trim();   // 노랑
+                    return rootStyles.getPropertyValue("--semantic-success").trim();
                 case "여행자제":
-                    return rootStyles.getPropertyValue("--semantic-warning").trim();   // 주황
+                    return rootStyles.getPropertyValue("--semantic-caution").trim();
                 case "철수권고":
-                    return rootStyles.getPropertyValue("--semantic-error").trim();   // 빨강
+                    return rootStyles.getPropertyValue("--semantic-error").trim();
                 case "여행금지":
-                    return rootStyles.getPropertyValue("--main-900").trim();   // 검정
+                    return rootStyles.getPropertyValue("--gray-900").trim();
                 default:
-                    return rootStyles.getPropertyValue("--main-100").trim();  // 정보 없음
+                    return rootStyles.getPropertyValue("--gray-100").trim();
             }
         }
+
+        // 전역 변수로 GeoJSON 레이어 저장
+        let geoLayer;
 
         // 여행경보 불러오기
         fetch("/alerts/all")
@@ -83,7 +86,7 @@
               fetch("/geojson/custom.geo.json")
                 .then(res => res.json())
                 .then(geoData => {
-                    L.geoJson(geoData, {
+                    geoLayer = L.geoJson(geoData, {
                         style: feature => {
                             const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
                             const level = alertMap[iso];
@@ -124,7 +127,52 @@
                         }
                     }).addTo(map);
                 });
-          });
+          })
+
+            .then(() => {
+              document.querySelectorAll(".category-container").forEach(el => {
+                el.addEventListener("click", () => {
+                  const category = el.querySelector(".category-title").innerText.trim();
+
+                  const continentMap = {
+                    "전체": null,
+                    "미주": ["North America", "South America"],
+                    "유럽": ["Europe"],
+                    "아주": ["Asia"],
+                    "중동": "MiddleEast",   // 커스텀 태그
+                    "아프리카": ["Africa"]
+                  };
+
+                  // 중동 국가 목록 (ISO 코드 기준)
+                  const middleEastCountries = [
+                    "SAU","IRN","IRQ","ISR","JOR","SYR","LBN","TUR",
+                    "ARE","QAT","KWT","OMN","YEM","BHR","EGY"
+                  ];
+
+                  const selected = continentMap[category];
+
+                  geoLayer.eachLayer(layer => {
+                    const cont = layer.feature.properties.continent;
+                    const iso = (layer.feature.properties.iso_a3 || "").trim().toUpperCase();
+
+                    let match = false;
+                    if (!selected) {
+                      match = true; // 전체
+                    } else if (selected === "MiddleEast") {
+                      match = middleEastCountries.includes(iso);
+                    } else if (Array.isArray(selected)) {
+                      match = selected.includes(cont);
+                    } else {
+                      match = cont === selected;
+                    }
+
+                    layer.setStyle({
+                      fillOpacity: match ? 0.7 : 0.1
+                    });
+                  });
+                });
+              });
+            });
 
 
         // 지도 위에 마커 생성
@@ -142,9 +190,7 @@
 
             // 국가명이 비어있을 경우
             if (!country) {
-                // 콘솔 경고 메시지 확인
                 console.warn("검색어가 비어있습니다.");
-                // 검색 요청 보내지 않음
                 return;
             }
 

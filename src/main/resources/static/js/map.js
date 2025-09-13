@@ -11,15 +11,15 @@ function getColor(level) {
     const rootStyles = getComputedStyle(document.documentElement);
     switch(level) {
         case "여행유의":
-            return rootStyles.getPropertyValue("--semantic-caution").trim();   // 노랑
+            return rootStyles.getPropertyValue("--semantic-success").trim();   // 노랑
         case "여행자제":
-            return rootStyles.getPropertyValue("--semantic-warnings").trim();  // 주황
+            return rootStyles.getPropertyValue("--semantic-caution").trim();  // 주황
         case "철수권고":
             return rootStyles.getPropertyValue("--semantic-error").trim();     // 빨강
         case "여행금지":
-            return rootStyles.getPropertyValue("--main-900").trim();           // 검정
+            return rootStyles.getPropertyValue("--gray-900").trim();           // 검정
         default:
-            return rootStyles.getPropertyValue("--main-100").trim();           // 정보 없음
+            return rootStyles.getPropertyValue("--gray-100").trim();           // 정보 없음
     }
 }
 
