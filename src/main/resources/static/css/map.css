@@ -92,6 +92,16 @@
     margin-left: 2px;
 }
 
+.chart-section {
+  margin: 48px 0;
+}
+
+.chart-section-title {
+    font-size: 14px;
+    color: var(--gray-900);
+    font-weight: var(--font-medium);
+}
+
 .close-btn {
     background: none;
     border: none;
@@ -101,10 +111,27 @@
     font-weight: var(--font-semibold);
 }
 
-.country-info-panel .panel-body h3 {
-    font-size: 14px;
-    font-weight: var(--font-medium);
-    color: var(--gray-900);
+/* 로딩 스피너 */
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--main-700);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 28px;
+    font-size: 12px;
+    text-align: center;
+    color: var(--gray-300;);
 }
 
 /* ===== 행동지침 버튼 ===== */

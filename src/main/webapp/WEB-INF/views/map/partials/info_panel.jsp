@@ -4,7 +4,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>Country Info Panel</title>
+    <%-- CSS 연결 --%>
+    <link rel="stylesheet" href="/css/map.css" />
 </head>
 <body>
 <div id="country-info-panel" class="country-info-panel hidden">
@@ -18,18 +19,20 @@
     </div>
 
     <div class="panel-body">
-        <div class="info-body">
 
-            <!-- GDP 차트 -->
-            <div class="chart-section">
-                <h3>GDP</h3>
-                <canvas id="gdpChart"></canvas>
+        <!-- GDP 차트 -->
+        <div class="chart-section">
+            <span class="chart-section-title">국내 총생산</span>
+            <div id="gdpChartWrapper">
+                <div class="spinner"></div>
             </div>
+        </div>
 
-            <!-- 탄소 배출량 차트 -->
-            <div class="chart-section">
-                <h3>탄소 배출량</h3>
-                <canvas id="carbonChart"></canvas>
+        <!-- 탄소 배출량 차트 -->
+        <div class="chart-section">
+            <span class="chart-section-title">탄소 배출량</span>
+            <div id="carbonChartWrapper">
+                <div class="spinner"></div>
             </div>
         </div>
     </div>
@@ -38,11 +41,13 @@
 <script>
 // 전역 변수
 let gdpChartInstance = null;
-let currencyChartInstance = null;
 let carbonChartInstance = null;
 
 /** GDP 차트 로드 */
 async function loadGdpCharts(countryId, countryName) {
+    const wrapper = document.getElementById("gdpChartWrapper");
+    wrapper.innerHTML = '<div class="spinner"></div><p class="loading-text">로딩중...</p>';
+
     try {
         const years = [2020, 2021, 2022, 2023, 2024];
         const gdpValues = [];
@@ -54,9 +59,10 @@ async function loadGdpCharts(countryId, countryName) {
             gdpValues.push(data?.gdpRaw ?? null);
         }
 
-        if (gdpChartInstance) gdpChartInstance.destroy();
-
+        wrapper.innerHTML = '<canvas id="gdpChart"></canvas>';
         const ctx = document.getElementById("gdpChart").getContext("2d");
+
+        if (gdpChartInstance) gdpChartInstance.destroy();
         gdpChartInstance = new Chart(ctx, {
             type: "line",
             data: {
@@ -71,12 +77,15 @@ async function loadGdpCharts(countryId, countryName) {
         });
     } catch (err) {
         console.error("GDP 차트 로드 실패:", err);
-        document.getElementById("gdpChart").outerHTML = "<p>GDP 수집중입니다</p>";
+        wrapper.innerHTML = "<p class='loading-text'>GDP 데이터 수집중 입니다.</p>";
     }
 }
 
 /** 탄소 배출량 차트 로드 */
 async function loadCarbonChart(countryId, countryName) {
+    const wrapper = document.getElementById("carbonChartWrapper");
+    wrapper.innerHTML = '<div class="spinner"></div><p class="loading-text">로딩중...</p>';
+
     try {
         const years = [2020, 2021, 2022, 2023];
         const carbonValues = [];
@@ -85,27 +94,20 @@ async function loadCarbonChart(countryId, countryName) {
             const res = await fetch("/countries/carbon/" + year + "/" + encodeURIComponent(countryId));
             const data = await res.json();
             console.log("loadCarbonChart data: ", data);
-
-            // 응답이 [{YEAR: 2020, VALUE: -10.3889}] 형태라서 첫 번째 요소에서 VALUE 꺼내오기
             const value = Array.isArray(data) && data.length > 0 ? data[0].VALUE : null;
             carbonValues.push(value);
         }
 
+        wrapper.innerHTML = '<canvas id="carbonChart"></canvas>';
+        const ctx = document.getElementById("carbonChart").getContext("2d");
+
         if (carbonChartInstance) carbonChartInstance.destroy();
-
-        const ctxElem = document.getElementById("carbonChart");
-        if (!ctxElem) {
-            console.error("carbonChart 요소 없음");
-            return;
-        }
-        const ctx = ctxElem.getContext("2d");
-
         carbonChartInstance = new Chart(ctx, {
             type: "line",
             data: {
                 labels: years,
                 datasets: [{
-                    label: "CO₂ Emissions (% change from 1990)",
+                    label: "CO₂ Emissions",
                     data: carbonValues,
                     borderColor: "#e74a3b",
                     fill: false
@@ -114,7 +116,7 @@ async function loadCarbonChart(countryId, countryName) {
         });
     } catch (err) {
         console.error("탄소 배출량 차트 로드 실패:", err);
-        document.getElementById("carbonChart").parentNode.innerHTML = "<p>탄소 데이터 수집중입니다</p>";
+        wrapper.innerHTML = "<p class='loading-text'>탄소 데이터 수집중 입니다</p>";
     }
 }
 
@@ -122,13 +124,13 @@ async function loadCarbonChart(countryId, countryName) {
 function renderCharts(countryData) {
     if (!countryData?.countryId) {
         console.warn("countryId 없음:", countryData);
-        document.getElementById("gdpChart").outerHTML = "<p>GDP 데이터 없음</p>";
-        document.getElementById("carbonChart").outerHTML = "<p>탄소 데이터 없음</p>";
+        document.getElementById("gdpChartWrapper").innerHTML = "<p>GDP 데이터 없음</p>";
+        document.getElementById("carbonChartWrapper").innerHTML = "<p>탄소 데이터 없음</p>";
         return;
     }
 
     loadGdpCharts(countryData.countryId, countryData.countryName);
-    loadCarbonChart(countryData.countryName);
+    loadCarbonChart(countryData.countryId, countryData.countryName);
 }
 
 /** 패널 닫기 */

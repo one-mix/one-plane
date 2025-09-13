@@ -189,11 +189,16 @@
             document.getElementById("country-name").innerText = countryData.countryName;
             document.getElementById("country-continent").innerText = countryData.continent;
 
-            // GDP 데이터 로드
-            loadGdpCharts(countryData.countryName);
-
-             // 탄소 차트 로드
-            loadCarbonChart(countryData.countryName);
+            /**
+            * DOM 반영 보장
+            * 0: 화면이 한번 업데이트 된 후 실행
+            */
+            setTimeout(() => {
+                // GDP 데이터 로드
+                loadGdpCharts(countryData.countryName);
+                 // 탄소 차트 로드
+                loadCarbonChart(countryData.countryName);
+            }, 0);
         }
 
         // 통계 패널 닫기 함수
