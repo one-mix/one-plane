@@ -5,7 +5,7 @@
 <html>
 <head>
     <%-- CSS 연결 --%>
-    <link rel="stylesheet" href="/css/map.css" />
+    <link rel="stylesheet" href="/css/map/map.css" />
 </head>
 <body>
 <div id="country-info-panel" class="country-info-panel hidden">
