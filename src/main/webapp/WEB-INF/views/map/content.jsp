@@ -253,6 +253,9 @@
         async function openInfoPanel(countryData) {
             document.getElementById("country-info-panel").classList.add("show");
 
+            // 현재 선택된 국가 ID 저장
+            currentCountryId = countryData.countryId;
+
             // 패널 정보 채우기
             document.getElementById("country-flag").src = countryData.img || `/images/aimg.png`;
             document.getElementById("country-name").innerText = countryData.countryName;

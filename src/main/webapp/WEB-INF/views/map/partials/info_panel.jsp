@@ -35,6 +35,42 @@
                 <div class="spinner"></div>
             </div>
         </div>
+
+        <!-- 저장하기 버튼 -->
+        <button class="save-country" onclick="saveFavorite()">저장하기</button>
+
+        <script>
+        async function saveFavorite() {
+
+            if (!currentCountryId) {
+                alert("저장할 국가가 선택되지 않았습니다.");
+                return;
+            }
+
+            const countryId = currentCountryId;
+            const userId = 1;
+
+            try {
+                const res = await fetch("/favorites/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({ countryId, userId })
+                });
+
+                const result = await res.text();
+                if (result === "success") {
+                    alert("즐겨찾기 국가로 저장되었습니다.");
+                } else {
+                    alert("저장 실패: " + result);
+                }
+            } catch (err) {
+                console.error("즐겨찾기 국가 저장 실패:", err);
+                alert("저장 중 오류가 발생했습니다.");
+            }
+        }
+        </script>
     </div>
 </div>
 
