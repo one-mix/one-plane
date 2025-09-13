@@ -4,15 +4,15 @@
 
 <mapper namespace="com.oneplane.admin.mapper.AdminUserMapper">
 
-    <!-- ResultMap for User -->
-    <resultMap id="userResultMap" type="com.oneplane.user.domain.User">
+    <!-- ResultMap for AdminUser -->
+    <resultMap id="userResultMap" type="com.oneplane.admin.domain.AdminUser">
         <id property="user_id" column="user_id" />
         <result property="email" column="email" />
         <result property="name" column="name" />
         <result property="nickname" column="nickname" />
         <result property="age" column="age" />
-        <result property="role" column="role" typeHandler="org.apache.ibatis.type.EnumTypeHandler" />
-        <result property="grade" column="grade" typeHandler="org.apache.ibatis.type.EnumTypeHandler" />
+        <result property="role" column="role" />
+        <result property="grade" column="grade" />
         <result property="gender" column="gender" />
         <result property="disease" column="disease" />
         <result property="disability" column="disability" />
@@ -21,8 +21,6 @@
         <result property="createdAt" column="created_at" />
         <result property="updatedAt" column="updated_at" />
         <result property="deletedAt" column="deleted_at" />
-        <result property="totalCount" column="total_count" />
-        <result property="totalDistance" column="total_distance" />
     </resultMap>
 
     <!-- 사용자 목록 조회 (페이징, 검색) -->
@@ -31,12 +29,12 @@
         SELECT
         user_id, email, name, nickname, age, role, grade,
         gender, disease, disability, medication, profile_img,
-        created_at, updated_at, deleted_at, total_count, total_distance,
+        created_at, updated_at, deleted_at,
         ROW_NUMBER() OVER (ORDER BY created_at DESC) as rn
         FROM users
         WHERE deleted_at IS NULL
         <if test="search != null and search != ''">
-            AND (nickname LIKE '%' || #{search} || '%' OR name LIKE '%' || #{search} || '%')
+            AND (nickname LIKE '%' || #{search} || '%' OR name LIKE '%' || #{search} || '%' OR email LIKE '%' || #{search} || '%')
         </if>
         )
         WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
@@ -48,7 +46,34 @@
         FROM users
         WHERE deleted_at IS NULL
         <if test="search != null and search != ''">
-            AND (nickname LIKE '%' || #{search} || '%' OR name LIKE '%' || #{search} || '%')
+            AND (nickname LIKE '%' || #{search} || '%' OR name LIKE '%' || #{search} || '%' OR email LIKE '%' || #{search} || '%')
+        </if>
+    </select>
+
+    <!-- 탈퇴 사용자 목록 조회 (페이징, 검색) -->
+    <select id="findDeletedUserList" resultMap="userResultMap">
+        SELECT * FROM (
+        SELECT
+        user_id, email, name, nickname, age, role, grade,
+        gender, disease, disability, medication, profile_img,
+        created_at, updated_at, deleted_at,
+        ROW_NUMBER() OVER (ORDER BY deleted_at DESC) as rn
+        FROM users
+        WHERE deleted_at IS NOT NULL
+        <if test="search != null and search != ''">
+            AND (nickname LIKE '%' || #{search} || '%' OR name LIKE '%' || #{search} || '%' OR email LIKE '%' || #{search} || '%')
+        </if>
+        )
+        WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+    </select>
+
+    <!-- 전체 탈퇴 사용자 수 조회 -->
+    <select id="getTotalDeletedUserCount" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE deleted_at IS NOT NULL
+        <if test="search != null and search != ''">
+            AND (nickname LIKE '%' || #{search} || '%' OR name LIKE '%' || #{search} || '%' OR email LIKE '%' || #{search} || '%')
         </if>
     </select>
 
@@ -57,7 +82,7 @@
         SELECT
             user_id, email, name, nickname, age, role, grade,
             gender, disease, disability, medication, profile_img,
-            created_at, updated_at, deleted_at, total_count, total_distance
+            created_at, updated_at, deleted_at
         FROM users
         WHERE user_id = #{userId}
     </select>
@@ -82,8 +107,67 @@
     <!-- 사용자 삭제 (논리 삭제) -->
     <update id="deleteUser">
         UPDATE users
-        SET deleted_at = SYSDATE
+        SET deleted_at = SYSDATE,
+            updated_at = SYSDATE
         WHERE user_id = #{userId} AND deleted_at IS NULL
     </update>
+
+    <!-- 닉네임 중복 확인 (특정 사용자 제외) -->
+    <select id="countByNickname" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE nickname = #{nickname}
+        AND deleted_at IS NULL
+        <if test="excludeUserId != null">
+            AND user_id != #{excludeUserId}
+        </if>
+    </select>
+
+    <!-- 오늘 가입한 사용자 수 -->
+    <select id="getTodaySignupCount" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE TRUNC(created_at) = TRUNC(SYSDATE)
+          AND deleted_at IS NULL
+    </select>
+
+    <!-- 이번달 가입한 사용자 수 -->
+    <select id="getMonthlySignupCount" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM SYSDATE)
+          AND EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM SYSDATE)
+          AND deleted_at IS NULL
+    </select>
+
+    <!-- 사용자 역할별 통계 -->
+    <select id="getUserRoleStats" resultType="map">
+        SELECT
+            role,
+            COUNT(*) as count
+        FROM users
+        WHERE deleted_at IS NULL
+        GROUP BY role
+        ORDER BY role
+    </select>
+
+    <!-- 사용자 등급별 통계 -->
+    <select id="getUserGradeStats" resultType="map">
+        SELECT
+            grade,
+            COUNT(*) as count
+        FROM users
+        WHERE deleted_at IS NULL
+        GROUP BY grade
+        ORDER BY
+            CASE grade
+            WHEN 'ECONOMY' THEN 1
+            WHEN 'STANDARD' THEN 2
+            WHEN 'BUSINESS' THEN 3
+            WHEN 'FIRST' THEN 4
+            WHEN 'ELITE' THEN 5
+            ELSE 6
+        END
+    </select>
 
 </mapper>

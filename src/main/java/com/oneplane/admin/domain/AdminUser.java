@@ -27,8 +27,7 @@ public class AdminUser {
     private LocalDateTime createdAt;    // 생성일시
     private LocalDateTime updatedAt;    // 수정일시
     private LocalDateTime deletedAt;    // 삭제일시
-    private Integer totalCount;         // 다녀온 국가 카운트
-    private Integer totalDistance;      // 총 거리
+
 
     // 편의 메서드들
 
@@ -110,7 +109,9 @@ public class AdminUser {
      * 등급을 한국어로 반환
      */
     public String getGradeKorean() {
-        switch (grade != null ? grade : "") {
+        if (grade == null) return "미설정";
+
+        switch (grade) {
             case "ECONOMY": return "이코노미";
             case "STANDARD": return "스탠다드";
             case "BUSINESS": return "비즈니스";
@@ -155,5 +156,12 @@ public class AdminUser {
         if (getMedicationAsBoolean()) summary.append("복용약물유");
 
         return summary.toString().trim();
+    }
+
+    /**
+     * JSP에서 admin 속성 접근을 위한 getter
+     */
+    public boolean getAdmin() {
+        return isAdmin();
     }
 }
