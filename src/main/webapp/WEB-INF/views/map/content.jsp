@@ -257,7 +257,7 @@
             currentCountryId = countryData.countryId;
 
             // 패널 정보 채우기
-            document.getElementById("country-flag").src = countryData.img || `/images/aimg.png`;
+            document.getElementById("country-flag").src = countryData.img || `/images/gallery.png`;
             document.getElementById("country-name").innerText = countryData.countryName;
             document.getElementById("country-continent").innerText = countryData.continent;
 
