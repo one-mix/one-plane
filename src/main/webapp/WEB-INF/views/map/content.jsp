@@ -91,13 +91,36 @@
                                 fillColor: getColor(level),
                                 weight: 1,
                                 color: "white",
-                                fillOpacity: 0.7
+                                fillOpacity: 0.7,
+                                interactive: true
                             };
                         },
                         onEachFeature: (feature, layer) => {
                             const iso = (feature.properties.iso_a3 || "").trim().toUpperCase();
                             const level = alertMap[iso] || "정보 없음";
-                            layer.bindPopup(`${feature.properties.admin} : ${level}`);
+                            const countryName =
+                                feature.properties.admin ||
+                                feature.properties.name ||
+                                feature.properties.sovereignt ||
+                                "국가명 없음";
+
+                            const popupText = countryName + " : " + level;
+
+                            // 클릭 이벤트
+                            layer.on("click", (e) => {
+                                L.popup()
+                                  .setLatLng(e.latlng)
+                                  .setContent(popupText)
+                                  .openOn(map);
+                            });
+
+                            // 마우스 이벤트
+                            layer.on("mouseover", (e) => {
+                                L.popup()
+                                  .setLatLng(e.latlng)
+                                  .setContent(popupText)
+                                  .openOn(map);
+                            });
                         }
                     }).addTo(map);
                 });
