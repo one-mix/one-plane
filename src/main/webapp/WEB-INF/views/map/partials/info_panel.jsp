@@ -73,106 +73,124 @@
         </script>
     </div>
 </div>
-
 <script>
-// 전역 변수
-let gdpChartInstance = null;
-let carbonChartInstance = null;
+    // 전역 변수
+    let gdpChartInstance = null;
+    let carbonChartInstance = null;
 
-/** GDP 차트 로드 */
-async function loadGdpCharts(countryId, countryName) {
-    const wrapper = document.getElementById("gdpChartWrapper");
-    wrapper.innerHTML = '<div class="spinner"></div><p class="loading-text">로딩중...</p>';
+    /** GDP 차트 로드 */
+    async function loadGdpCharts(countryId, countryName) {
+        const wrapper = document.getElementById("gdpChartWrapper");
+        wrapper.innerHTML = '<div class="spinner"></div><p class="loading-text">로딩중...</p>';
 
-    try {
-        const years = [2020, 2021, 2022, 2023, 2024];
-        const gdpValues = [];
+        try {
+            const years = [2020, 2021, 2022, 2023, 2024];
 
-        for (let year of years) {
-            const res = await fetch("/api/countries/gdp/" + year + "/" + encodeURIComponent(countryId));
-            const data = await res.json();
-            console.log("loadGdpCharts data: ", data);
-            gdpValues.push(data?.gdpRaw ?? null);
+            console.time("loadGdpCharts");
+
+            // 모든 fetch 요청을 동시에 병렬 실행
+            const responses = await Promise.all(
+                years.map(year =>
+                    fetch("/api/countries/gdp/" + year + "/" + encodeURIComponent(countryId))
+                )
+            );
+
+            console.timeEnd("loadGdpCharts");
+
+            // 응답 파싱도 병렬 실행
+            const dataArr = await Promise.all(responses.map(res => res.json()));
+
+            // 값만 추출
+            const gdpValues = dataArr.map(data => data?.gdpRaw ?? null);
+
+            wrapper.innerHTML = '<canvas id="gdpChart"></canvas>';
+            const ctx = document.getElementById("gdpChart").getContext("2d");
+
+            if (gdpChartInstance) gdpChartInstance.destroy();
+            gdpChartInstance = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: "GDP",
+                        data: gdpValues,
+                        borderColor: "#4e73df",
+                        fill: false
+                    }]
+                },
+            });
+        } catch (err) {
+            console.error("GDP 차트 로드 실패:", err);
+            wrapper.innerHTML = "<p class='loading-text'>GDP 데이터 수집중 입니다.</p>";
+        }
+    }
+
+    /** 탄소 배출량 차트 로드 */
+    async function loadCarbonChart(countryId, countryName) {
+        const wrapper = document.getElementById("carbonChartWrapper");
+        wrapper.innerHTML = '<div class="spinner"></div><p class="loading-text">로딩중...</p>';
+
+        try {
+            const years = [2020, 2021, 2022, 2023];
+
+            console.time("loadCarbonChart");
+
+            // fetch 요청 병렬 실행
+            const responses = await Promise.all(
+                years.map(year =>
+                    fetch("/countries/carbon/" + year + "/" + encodeURIComponent(countryId))
+                )
+            );
+
+            console.timeEnd("loadCarbonChart");
+
+            // 응답 JSON 병렬 파싱
+            const dataArr = await Promise.all(responses.map(res => res.json()));
+
+            // 값 추출
+            const carbonValues = dataArr.map(data =>
+                Array.isArray(data) && data.length > 0 ? data[0].VALUE : null
+            );
+
+            wrapper.innerHTML = '<canvas id="carbonChart"></canvas>';
+            const ctx = document.getElementById("carbonChart").getContext("2d");
+
+            if (carbonChartInstance) carbonChartInstance.destroy();
+            carbonChartInstance = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: "CO₂ Emissions",
+                        data: carbonValues,
+                        borderColor: "#e74a3b",
+                        fill: false
+                    }]
+                }
+            });
+        } catch (err) {
+            console.error("탄소 배출량 차트 로드 실패:", err);
+            wrapper.innerHTML = "<p class='loading-text'>탄소 데이터가 준비되지 않았습니다.</p>";
+        }
+    }
+
+    /** 통합 차트 렌더링 */
+    function renderCharts(countryData) {
+        if (!countryData?.countryId) {
+            console.warn("countryId 없음:", countryData);
+            document.getElementById("gdpChartWrapper").innerHTML = "<p>GDP 데이터 없음</p>";
+            document.getElementById("carbonChartWrapper").innerHTML = "<p>탄소 데이터 없음</p>";
+            return;
         }
 
-        wrapper.innerHTML = '<canvas id="gdpChart"></canvas>';
-        const ctx = document.getElementById("gdpChart").getContext("2d");
-
-        if (gdpChartInstance) gdpChartInstance.destroy();
-        gdpChartInstance = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: years,
-                datasets: [{
-                    label: "GDP",
-                    data: gdpValues,
-                    borderColor: "#4e73df",
-                    fill: false
-                }]
-            },
-        });
-    } catch (err) {
-        console.error("GDP 차트 로드 실패:", err);
-        wrapper.innerHTML = "<p class='loading-text'>GDP 데이터 수집중 입니다.</p>";
-    }
-}
-
-/** 탄소 배출량 차트 로드 */
-async function loadCarbonChart(countryId, countryName) {
-    const wrapper = document.getElementById("carbonChartWrapper");
-    wrapper.innerHTML = '<div class="spinner"></div><p class="loading-text">로딩중...</p>';
-
-    try {
-        const years = [2020, 2021, 2022, 2023];
-        const carbonValues = [];
-
-        for (let year of years) {
-            const res = await fetch("/countries/carbon/" + year + "/" + encodeURIComponent(countryId));
-            const data = await res.json();
-            console.log("loadCarbonChart data: ", data);
-            const value = Array.isArray(data) && data.length > 0 ? data[0].VALUE : null;
-            carbonValues.push(value);
-        }
-
-        wrapper.innerHTML = '<canvas id="carbonChart"></canvas>';
-        const ctx = document.getElementById("carbonChart").getContext("2d");
-
-        if (carbonChartInstance) carbonChartInstance.destroy();
-        carbonChartInstance = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: years,
-                datasets: [{
-                    label: "CO₂ Emissions",
-                    data: carbonValues,
-                    borderColor: "#e74a3b",
-                    fill: false
-                }]
-            },
-        });
-    } catch (err) {
-        console.error("탄소 배출량 차트 로드 실패:", err);
-        wrapper.innerHTML = "<p class='loading-text'>탄소 데이터 수집중 입니다</p>";
-    }
-}
-
-/** 통합 차트 렌더링 */
-function renderCharts(countryData) {
-    if (!countryData?.countryId) {
-        console.warn("countryId 없음:", countryData);
-        document.getElementById("gdpChartWrapper").innerHTML = "<p>GDP 데이터 없음</p>";
-        document.getElementById("carbonChartWrapper").innerHTML = "<p>탄소 데이터 없음</p>";
-        return;
+        loadGdpCharts(countryData.countryId, countryData.countryName);
+        loadCarbonChart(countryData.countryId, countryData.countryName);
     }
 
-    loadGdpCharts(countryData.countryId, countryData.countryName);
-    loadCarbonChart(countryData.countryId, countryData.countryName);
-}
-
-/** 패널 닫기 */
-function closeInfoPanel() {
-    document.getElementById("country-info-panel").classList.add("hidden");
-}
+    /** 패널 닫기 */
+    function closeInfoPanel() {
+        document.getElementById("country-info-panel").classList.add("hidden");
+    }
 </script>
 </body>
 </html>

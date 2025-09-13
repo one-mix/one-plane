@@ -151,17 +151,6 @@
             });
         }
 
-        /** 국가 데이터 로드 */
-        async function loadCountries() {
-            try {
-                const res = await fetch("/countries/all");
-                const data = await res.json();
-                data.forEach(c => countryMap[c.isoCode.toUpperCase()] = c);
-            } catch (err) {
-                console.error("국가 데이터 불러오기 실패", err);
-            }
-        }
-
         /** 패널 열기 */
         function openInfoPanel(countryData) {
             document.getElementById("country-info-panel").classList.add("show");
@@ -187,7 +176,6 @@
             await loadGeoData();
             initCategoryFilter();
             initSearch();
-            await loadCountries();
         })();
     </script>
 
