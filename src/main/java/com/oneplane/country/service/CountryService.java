@@ -5,6 +5,7 @@ import com.oneplane.country.domain.Country;
 import com.oneplane.country.dto.CountrySummaryDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CountryService {
     Country getCountryById(Long id);
@@ -16,8 +17,9 @@ public interface CountryService {
     // 나라 이름 반환
     Country getCountryByName(String name);
 
-    // 외교부 국가별 기본정보 API -> DB 업데이트
-    void updateCountriesFromApi();
+    String getIsoCodeByName(String countryName);
+
+    Country findByName(String name);
 
     List<CountryAlertDTO> getCountries(String levelValue, String keyword);
     CountryAlertDTO getCountryByIdAdmin(Long countryId);

@@ -5,10 +5,8 @@ fetch("/favorites/api/list/1")
   .then(response => response.json())
   // data 반환
   .then(data => {
-        console.log("API 응답:", data);
     // 즐겨찾기한 국가가 없을 경우
     if (!Array.isArray(data)) {
-      console.error("즐겨찾기 API 응답이 배열이 아님:", data);
       return;
     }
 
