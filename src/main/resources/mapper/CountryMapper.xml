@@ -5,16 +5,17 @@
 
 <mapper namespace="com.oneplane.country.dao.CountryDao">
 
+    <!-- 한글명 OR 영문명으로 조회 가능 -->
     <select id="findByName" parameterType="string" resultType="com.oneplane.country.domain.Country">
-        SELECT country_id   AS countryId,
-        country_name AS countryName,
-        country_en_name AS countryEnName,
+        SELECT
+        country_id   AS countryId,
+        country_name AS countryName,      -- 한글 이름
+        country_en_name AS countryEnName, -- 영어 이름
         iso_code     AS isoCode,
         continent,
         img
         FROM country
-        WHERE country_name = #{name}
-        OR country_en_name = #{name}
+        WHERE country_name = #{name} OR country_en_name = #{name}
     </select>
 
     <select id="findByIsoCode" parameterType="string" resultType="com.oneplane.country.domain.Country">
