@@ -11,14 +11,11 @@
         <i class="bi bi-chevron-right expand-icon"></i>
       </div>
       <div class="nav-submenu">
-        <a href="/admin/users" class="${activeMenu eq 'users' ? 'active' : ''}">
+        <a href="/admin/userList" class="${activeMenu eq 'userList' ? 'active' : ''}">
           전체 사용자
         </a>
-        <a href="/admin/users/del" class="${activeMenu eq 'user-del' ? 'active' : ''}">
+        <a href="/admin/userDeleted" class="${activeMenu eq 'user-del' ? 'active' : ''}">
           탈퇴 사용자
-        </a>
-        <a href="/admin/users/visit" class="${activeMenu eq 'user-visit' ? 'active' : ''}">
-          방문 사용자
         </a>
       </div>
     </div>
