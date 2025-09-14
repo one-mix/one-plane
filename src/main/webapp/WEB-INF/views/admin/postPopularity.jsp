@@ -24,13 +24,13 @@
 <div class="posts-table-container">
   <div class="table-responsive">
     <table class="table table-hover align-middle" id="postsTable">
-      <thead class="table-primary">
+      <thead class="table">
       <tr>
         <th scope="col" style="width: 50px;">순위</th>
+        <th scope="col" style="width: 80px;">카테고리</th>
         <th scope="col" style="width: 200px;">제목</th>
         <th scope="col" style="width: 100px;">작성자</th>
         <th scope="col" style="width: 100px;">국가</th>
-        <th scope="col" style="width: 80px;">카테고리</th>
         <th scope="col" style="width: 80px;">인기점수</th>
         <th scope="col" style="width: 100px;">작성일</th>
         <th scope="col" style="width: 100px;">관리</th>
@@ -64,6 +64,27 @@
                 <c:set var="rank" value="${(currentPage - 1) * 20 + status.index + 1}" />
                 <span class="rank-badge">${rank}</span>
               </td>
+
+              <td class="text-center">
+                <c:choose>
+                  <c:when test="${post.category.name() == 'READY'}">
+                    <span class="btn btn-outline-primary">여행준비</span>
+                  </c:when>
+                  <c:when test="${post.category.name() == 'REVIEW'}">
+                    <span class="btn btn-outline-success">여행후기</span>
+                  </c:when>
+                  <c:when test="${post.category.name() == 'ACCOMPANY'}">
+                    <span class="btn btn-outline-danger">동행구하기</span>
+                  </c:when>
+                  <c:when test="${post.category.name() == 'FREE'}">
+                    <span class="btn btn-outline-warning">자유게시판</span>
+                  </c:when>
+                  <c:otherwise>
+                    <span>${post.category.name()}</span>
+                  </c:otherwise>
+                </c:choose>
+              </td>
+
               <td>
                 <div class="post-name" title="${post.title}">
                   <c:choose>
@@ -108,25 +129,7 @@
                 </div>
               </td>
 
-              <td class="text-center">
-                <c:choose>
-                  <c:when test="${post.category.name() == 'READY'}">
-                    <span class="badge bg-info">여행준비</span>
-                  </c:when>
-                  <c:when test="${post.category.name() == 'REVIEW'}">
-                    <span class="badge bg-success">여행후기</span>
-                  </c:when>
-                  <c:when test="${post.category.name() == 'ACCOMPANY'}">
-                    <span class="badge bg-warning text-dark">동행구하기</span>
-                  </c:when>
-                  <c:when test="${post.category.name() == 'FREE'}">
-                    <span class="badge bg-secondary">자유게시판</span>
-                  </c:when>
-                  <c:otherwise>
-                    <span class="badge bg-light text-dark">${post.category.name()}</span>
-                  </c:otherwise>
-                </c:choose>
-              </td>
+
 
               <!-- 인기점수 (조회수*2 + 좋아요*3 + 댓글*1) -->
               <td class="text-center">
