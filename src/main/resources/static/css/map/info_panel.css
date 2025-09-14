@@ -1,0 +1,130 @@
+/* ===== 통계 ===== */
+.country-info-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    max-width: 90vw;
+    height: 65%;
+    background: white;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    transform: translateX(100%);
+    z-index: 3000;
+}
+
+.panel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.country-info-panel.show {
+    transform: translateX(0);
+}
+
+.country-info-panel .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.country-info-panel .panel-country {
+    gap: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.country-info-panel .flag {
+    width: 32px;
+    height: 24px;
+    object-fit: cover;
+}
+
+.country-info-panel #country-name {
+    font-size: 20px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+    margin-left: 10px;
+}
+
+.country-info-panel #country-continent {
+    font-size: 14px;
+    color: var(--gray-400);
+    font-weight: var(--font-regular);
+}
+
+#country-continent::before {
+    content: "(";
+    margin-right: 2px;
+}
+
+#country-continent::after {
+    content: ")";
+    margin-left: 2px;
+}
+
+.chart-section {
+  margin: 20aWpx 0;
+}
+
+.chart-section-title {
+    font-size: 14px;
+    color: var(--gray-900);
+    font-weight: var(--font-medium);
+}
+
+.panel-footer {
+  margin-top: 24px;
+}
+
+.save-country {
+    width: 100%;
+    color: white;
+    display: flex;
+    padding: 16px 36px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background: var(--gray-900);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+}
+
+/* 로딩 스피너 */
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--main-700);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 28px;
+    font-size: 12px;
+    text-align: center;
+    color: var(--gray-300;);
+}

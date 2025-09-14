@@ -1,0 +1,36 @@
+/* ===== 카테고리 ===== */
+.category-list {
+    gap: 64px;
+    display: flex;
+    padding: 48px 0px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+/* 각 카테고리 */
+.category-container {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-container .category {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.category.active {
+    background-color: var(--main-500);
+}
+
+.category-title {
+    margin-top: 10px;
+    font-size: 16px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+}

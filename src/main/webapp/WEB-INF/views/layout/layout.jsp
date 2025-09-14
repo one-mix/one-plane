@@ -14,7 +14,7 @@
             <link rel="stylesheet" href="/css/recommend/recommend.css" />
         </c:if>
         <c:if test="${showSidebar}">
-            <link rel="stylesheet" href="/css/sidebar.css">
+            <link rel="stylesheet" href="/css/mypage/sidebar.css">
         </c:if>
     </head>
     <body class="${activeMenu}">
