@@ -78,49 +78,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     /**
-     * OAuth2 사용자 처리 (신규 가입 또는 업데이트)
+     * OAuth2 사용자 처리 (신규 가입 또는 기존 사용자 로그인)
      */
     private User processOAuth2User(KakaoUserInfo kakaoInfo) {
         User existingUser = userDao.findByEmail(kakaoInfo.getEmail());
 
         if (existingUser != null) {
-            log.info("기존 회원 정보 업데이트: {}", kakaoInfo.getEmail());
-            return updateExistingUser(existingUser, kakaoInfo);
+            log.info("기존 회원 로그인: {}", kakaoInfo.getEmail());
+            // 기존 사용자는 업데이트 없이 그대로 반환
+            return existingUser;
         } else {
             log.info("신규 회원 등록: {}", kakaoInfo.getEmail());
             return createNewUserFromKakao(kakaoInfo);
         }
-    }
-
-    /**
-     * 기존 사용자 정보 업데이트
-     */
-    private User updateExistingUser(User existingUser, KakaoUserInfo kakaoInfo) {
-
-        boolean needUpdate = false;
-
-        if (kakaoInfo.getProfileImg() != null && !kakaoInfo.getProfileImg().equals(existingUser.getProfileImg())) {
-            existingUser.setProfileImg(kakaoInfo.getProfileImg());
-            needUpdate = true;
-        }
-
-        if (needUpdate) {
-            existingUser.setUpdatedAt(LocalDateTime.now());
-
-            try {
-                int result = userDao.updateUser(existingUser);
-                if (result > 0) {
-                    log.debug("사용자 정보 업데이트 성공: {}", kakaoInfo.getEmail());
-                    return userDao.findByEmail(kakaoInfo.getEmail());
-                } else {
-                    log.warn("사용자 정보 업데이트 실패: {}", kakaoInfo.getEmail());
-                }
-            } catch (Exception e) {
-                log.error("사용자 정보 업데이트 중 오류 발생: {}", kakaoInfo.getEmail(), e);
-            }
-        }
-
-        return existingUser;
     }
 
     /**

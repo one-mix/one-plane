@@ -34,4 +34,12 @@ public interface CommentDao {
 
     // 게시글 삭제 시 모든 댓글 삭제
     int deleteCommentsByPostId(@Param("postId") Integer postId);
+
+    // 관리자용 - 전체 댓글 목록 조회 (검색 포함)
+    List<Comment> findAllComments(@Param("offset") int offset,
+                                  @Param("size") int size,
+                                  @Param("search") String search);
+
+    // 관리자용 - 전체 댓글 수 조회 (검색 포함)
+    int countAllComments(@Param("search") String search);
 }
