@@ -7,7 +7,7 @@
 
                    <!-- 즐겨찾기 -->
                    <div class="tooltip-container">
-                       <button class="blue">
+                       <button class="save">
                            <span>즐겨찾기</span>
                        </button>
                        <div class="tooltip-content scrollable">
@@ -17,9 +17,11 @@
                        </div>
                    </div>
 
+
+
                    <%-- 행동지침 --%>
                    <div class="tooltip-container">
-                       <button class="yellow">
+                       <button class="level-one">
                            <span class="level">1단계</span>
                            <span>여행유의</span>
                        </button>
@@ -37,7 +39,7 @@
                        </div>
                    </div>
                    <div class="tooltip-container">
-                       <button class="orange">
+                       <button class="level-two">
                            <span class="level">2단계</span>
                            <span>여행자제</span>
                        </button>
@@ -55,7 +57,7 @@
                        </div>
                    </div>
                    <div class="tooltip-container">
-                       <button class="red">
+                       <button class="level-three">
                            <span class="level">3단계</span>
                            <span>철수권고</span>
                        </button>
@@ -73,7 +75,7 @@
                        </div>
                    </div>
                    <div class="tooltip-container">
-                       <button class="black">
+                       <button class="level-four">
                            <span class="level">4단계</span>
                            <span>여행금지</span>
                        </button>

@@ -28,7 +28,7 @@
                 <div class="timeline-item" style="left:${pos}%">
                     <!-- 국기 대신 비행기 아이콘 사용 시 아래 img 태그를 교체하세요. -->
                     <div class="icon-wrapper">
-                        <img src="${pageContext.request.contextPath}/images/airplane.png"
+                        <img src="${pageContext.request.contextPath}/images/3d_icon/airplane.png"
                              alt="plane"
                              class="icon-plane"/>
                     </div>
