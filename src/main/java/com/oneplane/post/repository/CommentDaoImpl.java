@@ -64,4 +64,18 @@ public class CommentDaoImpl implements CommentDao {
     public int deleteCommentsByPostId(Integer postId) {
         return sqlSession.update(NAMESPACE + "deleteCommentsByPostId", postId);
     }
+
+    @Override
+    public List<Comment> findAllComments(int offset, int size, String search) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("offset", offset);
+        params.put("size", size);
+        params.put("search", search);
+        return sqlSession.selectList(NAMESPACE + "findAllComments", params);
+    }
+
+    @Override
+    public int countAllComments(String search) {
+        return sqlSession.selectOne(NAMESPACE + "countAllComments", search);
+    }
 }

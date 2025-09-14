@@ -483,6 +483,113 @@
         WHERE user_id = #{userid}
         ORDER BY created_at DESC
     </select>
+    <!-- 인기 게시글 페이징 조회 (관리자용) -->
+    <select id="findPopularPostsWithPaging" parameterType="com.oneplane.post.domain.PostSearchCondition" resultMap="PostResultMap">
+        <![CDATA[
+    SELECT * FROM (
+        SELECT ROWNUM rn, a.* FROM (
+            SELECT
+                p.post_id,
+                p.user_id,
+                p.title,
+                p.content,
+                p.thumbnail_image,
+                p.category,
+                p.country,
+                p.view_count,
+                p.like_count,
+                p.comment_count,
+                p.created_at,
+                p.updated_at,
+                p.deleted_at,
 
+                -- 작성자 정보
+                u.user_id as user_user_id,
+                u.email as user_email,
+                u.name as user_name,
+                u.nickname as user_nickname,
+                u.profile_img as user_profile_img
+
+            FROM posts p
+            LEFT JOIN users u ON p.user_id = u.user_id
+            WHERE p.deleted_at IS NULL
+    ]]>
+
+        <!-- 기간 필터 -->
+        <if test="periodDays != null and periodDays > 0">
+            AND p.created_at >= SYSDATE - #{periodDays}
+        </if>
+
+        <!-- 카테고리 필터 -->
+        <if test="category != null">
+            AND p.category = #{category}
+        </if>
+
+        <!-- 검색 조건 -->
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchType == 'title'">
+                    AND p.title LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchType == 'content'">
+                    AND p.content LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchType == 'author'">
+                    AND (u.name LIKE '%' || #{searchKeyword} || '%' OR u.nickname LIKE '%' || #{searchKeyword} || '%')
+                </when>
+                <otherwise>
+                    AND (p.title LIKE '%' || #{searchKeyword} || '%' OR p.content LIKE '%' || #{searchKeyword} || '%')
+                </otherwise>
+            </choose>
+        </if>
+
+        <!-- 인기도 순으로 정렬 (조회수*2 + 좋아요*3 + 댓글*1) -->
+        <![CDATA[
+            ORDER BY
+                (NVL(p.view_count, 0) * 2 + NVL(p.like_count, 0) * 3 + NVL(p.comment_count, 0) * 1) DESC,
+                p.created_at DESC,
+                p.post_id DESC
+        ) a
+        WHERE ROWNUM <= #{offset} + #{size}
+    )
+    WHERE rn > #{offset}
+    ]]>
+    </select>
+
+    <!-- 인기 게시글 개수 조회 (관리자용) -->
+    <select id="countPopularPosts" parameterType="com.oneplane.post.domain.PostSearchCondition" resultType="int">
+        SELECT COUNT(*)
+        FROM posts p
+        LEFT JOIN users u ON p.user_id = u.user_id
+        WHERE p.deleted_at IS NULL
+
+        <!-- 기간 필터 -->
+        <if test="periodDays != null and periodDays > 0">
+            AND p.created_at >= SYSDATE - #{periodDays}
+        </if>
+
+        <!-- 카테고리 필터 -->
+        <if test="category != null">
+            AND p.category = #{category}
+        </if>
+
+        <!-- 검색 조건 -->
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchType == 'title'">
+                    AND p.title LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchType == 'content'">
+                    AND p.content LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchType == 'author'">
+                    AND (u.name LIKE '%' || #{searchKeyword} || '%' OR u.nickname LIKE '%' || #{searchKeyword} || '%')
+                </when>
+                <otherwise>
+                    AND (p.title LIKE '%' || #{searchKeyword} || '%' OR p.content LIKE '%' || #{searchKeyword} || '%')
+                </otherwise>
+            </choose>
+        </if>
+    </select>
 
 </mapper>

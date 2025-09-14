@@ -1,5 +1,6 @@
 package com.oneplane.post.service;
 
+import com.oneplane.config.SecurityUtil;
 import com.oneplane.post.dao.CommentDao;
 import com.oneplane.post.domain.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,5 +150,60 @@ public class CommentService {
         }
 
         return commentDao.countCommentsByUserId(userId);
+    }
+
+    /**
+     * 관리자용 - 전체 댓글 목록 조회 (페이징)
+     */
+    @Transactional(readOnly = true)
+    public List<Comment> getAllComments(int page, int size, String search) {
+        if (page < 1) {
+            page = 1;
+        }
+
+        if (size < 1) {
+            size = 20;
+        }
+
+        int offset = (page - 1) * size;
+        return commentDao.findAllComments(offset, size, search);
+    }
+
+    /**
+     * 관리자용 - 전체 댓글 수 조회
+     */
+    @Transactional(readOnly = true)
+    public int getAllCommentCount(String search) {
+        return commentDao.countAllComments(search);
+    }
+
+    /**
+     * 관리자용 - 댓글 강제 삭제
+     */
+    public boolean adminDeleteComment(Integer commentId) {
+        if (commentId == null) {
+            throw new IllegalArgumentException("댓글 ID가 필요합니다.");
+        }
+
+        // 관리자 권한 체크
+        if (!SecurityUtil.isCurrentUserAdmin()) {
+            throw new IllegalArgumentException("관리자만 댓글을 삭제할 수 있습니다.");
+        }
+
+        Comment existingComment = commentDao.findCommentById(commentId);
+        if (existingComment == null) {
+            throw new IllegalArgumentException("존재하지 않는 댓글입니다.");
+        }
+
+        if (existingComment.isDeleted()) {
+            throw new IllegalArgumentException("이미 삭제된 댓글입니다.");
+        }
+
+        boolean deleted = commentDao.deleteComment(commentId) > 0;
+        if (deleted) {
+            // 게시글의 댓글 수 업데이트
+            postService.updatePostCommentCount(existingComment.getPostId());
+        }
+        return deleted;
     }
 }

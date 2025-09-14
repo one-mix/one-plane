@@ -39,4 +39,5 @@
             </c:if>
         </div>
     </body>
+    <script src="/js/main/main.js"></script>
 </html>

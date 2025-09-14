@@ -18,6 +18,8 @@ public class PostSearchCondition {
     private Integer page;
     private Integer size;
     private Integer userId;
+    private Integer periodDays;
+    private Integer offset;
 
     // 기본값 설정
     public void setDefaults() {
@@ -88,4 +90,9 @@ public class PostSearchCondition {
 
         return sb.toString();
     }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
 }
