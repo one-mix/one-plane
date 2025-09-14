@@ -6,8 +6,10 @@
     <div class="admin-header-content">
         <!-- 로고 -->
         <div class="admin-logo">
-            <img src="/images/logo.png" alt="OnePlane Logo" class="logo-img" />
-            <span>OnePlane</span>
+            <a href="/admin/dashboard" class="admin-logo-link" aria-label="OnePlane 홈">
+                <img src="/images/logo.png" alt="" class="logo-img" aria-hidden="true" />
+                <span>OnePlane</span>
+            </a>
         </div>
 
             <!-- 관리자 정보 -->
@@ -15,7 +17,6 @@
                 <sec:authorize access="isAuthenticated()">
                     <div class="admin-user-info">
                         <span class="admin-username">
-<%--                            <sec:authentication property="principal.username" />--%>
                         </span>
                         <span class="admin-role">관리자</span>
                     </div>

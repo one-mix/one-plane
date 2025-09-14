@@ -1,0 +1,213 @@
+.page-title {
+    font-size: 1.8rem;
+    font-weight: var(--font-bold);
+    color: black;
+    margin: 0;
+}
+
+.page-subtitle {
+    color: var(--gray-600);
+    margin-top: 4px;
+    font-size: 0.95rem;
+}
+
+.search-filter-section {
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.search-form {
+    max-width: 300px;
+}
+
+.result-summary {
+    font-size: 0.95rem;
+    color: var(--gray-600);
+    font-weight: var(--font-medium);
+}
+
+/* Deleted Users Table */
+.deleted-users-table-container {
+    background: white !important;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    background-color: white !important;
+    margin-bottom: 0;
+}
+
+.table thead th {
+    font-weight: var(--font-semibold);
+    white-space: nowrap;
+    color: white !important;
+    font-size: 0.9rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-danger th {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.table tbody td {
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.table tbody tr {
+    background-color: white !important;
+}
+
+.table tbody tr:hover {
+    background-color: #ffebee !important;
+}
+
+/* Deleted User Specific Styles */
+.deleted-user-row {
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.deleted-user-row:hover {
+    opacity: 1;
+}
+
+.user-id-badge.deleted {
+    background: #ffcdd2;
+    color: #d32f2f;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-weight: var(--font-medium);
+    font-size: 0.8rem;
+}
+
+.deleted-text {
+    color: var(--gray-600);
+    text-decoration: line-through;
+    font-style: italic;
+}
+
+/* Grade Badges for Deleted Users */
+.grade-badge.deleted {
+    opacity: 0.6;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-weight: var(--font-medium);
+}
+
+.grade-badge[data-grade="ECONOMY"] {
+    background: #3b82f6;
+    color: white;
+}
+
+.grade-badge[data-grade="STANDARD"] {
+    background: #10b981;
+    color: white;
+}
+
+.grade-badge[data-grade="BUSINESS"] {
+    background: #f59e0b;
+    color: white;
+}
+
+.grade-badge[data-grade="FIRST"] {
+    background: #ef4444;
+    color: white;
+}
+
+.grade-badge[data-grade="ELITE"] {
+    background: #8b5cf6;
+    color: white;
+}
+
+/* Date Styles */
+.join-date, .deleted-date {
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    font-weight: var(--font-medium);
+}
+
+.join-time, .deleted-time {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+.deleted-date {
+    color: var(--semantic-error) !important;
+}
+
+.deleted-time {
+    color: var(--semantic-error) !important;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.empty-state i {
+    color: var(--gray-300);
+    font-size: 4rem;
+}
+
+.empty-state p {
+    margin-top: 1rem;
+    color: var(--gray-500);
+    font-size: 1rem;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 2rem;
+}
+
+.pagination .page-link {
+    color: var(--semantic-error);
+    border-color: var(--gray-200);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--semantic-error);
+    border-color: var(--semantic-error);
+}
+
+.pagination .page-link:hover {
+    color: var(--semantic-error);
+    background-color: #ffebee;
+    border-color: var(--semantic-error);
+}
+
+.page-info {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+}
+.deleted-users-alert {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    border: 1px solid #ef5350;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: #c62828;
+}
+
+.deleted-users-alert .alert-icon {
+    color: #f44336;
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.deleted-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--semantic-error);
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    animation: pulse 2s infinite;
+}

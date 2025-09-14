@@ -3,7 +3,7 @@
 <main class="input">
     <link rel="stylesheet" href="<c:url value='/css/recommend/input.css'/>">
     <div class="top">
-        <img src="<c:url value='/images/airplane.png'/>" alt="AI 이미지" class="plane-icon">
+        <img src="<c:url value='/images/3d_icon/airplane.png'/>" alt="AI 이미지" class="plane-icon">
         <h2>AI와 대화중</h2>
     </div>
 

@@ -102,6 +102,6 @@
             </script>
 
     <%-- 커설 js 연결 --%>
-    <script src="/js/carousel.js"></script>
+    <script src="/js/map/carousel.js"></script>
 </body>
 </html>
