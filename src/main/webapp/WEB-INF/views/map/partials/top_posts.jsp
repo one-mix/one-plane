@@ -59,53 +59,47 @@
         <%-- 인기글 --%>
         <div class="section posts">
 
-           <%-- 인기글 + 더보기--%>
-           <div class="title-and-more">
-               <span class="title">인기글</span>
+            <%-- 인기글 + 더보기--%>
+            <div class="title-and-more">
+                <span class="title">인기글</span>
                 <a href="/post/list" class="more">더보기 →</a>
-           </div>
+            </div>
 
-           <%-- 인기글 목록 (5개만 표시) --%>
+            <%-- 인기글 목록 (5개만 표시) --%>
             <div class="post-list">
-                <a href="/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
-
-                <a href="/post/list" class="post-item">
-                    <div class="country-and-title">
-                        <span>나라</span>
-                        <span>제목</span>
-                    </div>
-                    <span>YYYY-MM-DD</span>
-                </a>
+                <c:choose>
+                    <c:when test="${empty popularPosts}">
+                        <div class="no-posts">등록된 게시글이 없습니다.</div>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="post" items="${popularPosts}" varStatus="status">
+                            <a href="/post/detail/${post.postId}" class="post-item">
+                                <div class="country-and-title">
+                                    <span class="country">
+                                        <c:choose>
+                                            <c:when test="${post.category == 'READY'}">준비</c:when>
+                                            <c:when test="${post.category == 'REVIEW'}">후기</c:when>
+                                            <c:when test="${post.category == 'ACCOMPANY'}">동행</c:when>
+                                            <c:when test="${post.category == 'FREE'}">자유</c:when>
+                                            <c:otherwise>${post.category}</c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                    <span title="${post.title}">
+                                            <c:choose>
+                                                <c:when test="${fn:length(post.title) > 20}">
+                                                    ${fn:substring(post.title, 0, 20)}...
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${post.title}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                </div>
+                                <span><fmt:formatDate value="${post.createdAt}" pattern="yyyy-MM-dd" /></span>
+                            </a>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>
