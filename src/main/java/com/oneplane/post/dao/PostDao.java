@@ -55,4 +55,11 @@ public interface PostDao {
 
     // 게시글의 모든 카운트 업데이트 (좋아요 수 + 댓글 수)
     int updatePostCounts(@Param("postId") Integer postId);
+
+
+    // 인기 게시글 페이징 조회 (기간, 카테고리, 검색어 등)
+    List<Post> findPopularPostsWithPaging(PostSearchCondition condition);
+
+    // 인기 게시글 총 개수 조회
+    int countPopularPosts(PostSearchCondition condition);
 }

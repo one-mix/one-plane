@@ -25,6 +25,8 @@ public class Comment {
     private String authorName;
     private String profileImg;
 
+    private String postTitle;
+
     // 사용자 객체
     private User user;
 

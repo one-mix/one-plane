@@ -555,5 +555,56 @@ public class PostService {
             throw new RuntimeException("게시글 카운트 업데이트에 실패했습니다.");
         }
     }
+    /**
+     * 인기 게시글 페이징 조회 (관리자용)
+     */
+    @Transactional(readOnly = true)
+    public PostListResponse getPopularPostsWithPaging(PostSearchCondition condition, int period) {
+        log.info("인기 게시글 페이징 조회 - 조건: {}, 기간: {}일", condition, period);
 
+        try {
+            // 기간 설정
+            condition.setPeriodDays(period);
+
+            // 기본값 설정
+            condition.setDefaults();
+
+            // 오프셋 계산
+            int offset = (condition.getPage() - 1) * condition.getSize();
+            condition.setOffset(offset);
+
+            // 인기 게시글 목록 조회
+            List<Post> posts = postDao.findPopularPostsWithPaging(condition);
+
+            // 게시글 데이터 후처리
+            posts.forEach(this::processPostData);
+
+            // 전체 개수 조회
+            int totalElements = postDao.countPopularPosts(condition);
+
+            // 페이징 정보 계산
+            int totalPages = (int) Math.ceil((double) totalElements / condition.getSize());
+            boolean hasNext = condition.getPage() < totalPages;
+            boolean hasPrevious = condition.getPage() > 1;
+
+            PostListResponse response = PostListResponse.builder()
+                    .posts(posts)
+                    .currentPage(condition.getPage())
+                    .totalPages(totalPages)
+                    .totalElements(totalElements)
+                    .size(condition.getSize())
+                    .hasNext(hasNext)
+                    .hasPrevious(hasPrevious)
+                    .build();
+
+            log.info("인기 게시글 페이징 조회 완료 - 총 {}개, 현재 페이지: {}/{}",
+                    totalElements, condition.getPage(), totalPages);
+
+            return response;
+
+        } catch (Exception e) {
+            log.error("인기 게시글 페이징 조회 중 오류 발생", e);
+            throw new RuntimeException("인기 게시글 조회 중 오류가 발생했습니다.", e);
+        }
+    }
 }

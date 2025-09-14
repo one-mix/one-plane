@@ -20,19 +20,18 @@
       </div>
     </div>
 
-    <!-- 게시판 관리 -->
     <div class="nav-section">
       <div class="nav-header">
         <i class="bi bi-file-text"></i>
-        <span>게시판</span>
+        <span>커뮤니티</span>
         <i class="bi bi-chevron-right expand-icon"></i>
       </div>
       <div class="nav-submenu">
         <a href="/admin/posts" class="${activeMenu eq 'posts' ? 'active' : ''}">
-          전체 게시글
+          전체 글
         </a>
         <a href="/admin/posts/popularity" class="${activeMenu eq 'post-popularity' ? 'active' : ''}">
-          인기 게시글
+          인기 글
         </a>
         <a href="/admin/comments" class="${activeMenu eq 'comments' ? 'active' : ''}">
           전체 댓글
