@@ -13,9 +13,9 @@
         <c:if test="${activeMenu eq 'recommend'}">
             <link rel="stylesheet" href="/css/recommend/recommend.css" />
         </c:if>
-        <c:if test="${showSidebar}">
-            <link rel="stylesheet" href="/css/sidebar.css">
-        </c:if>
+<%--        <c:if test="${showSidebar}">--%>
+<%--&lt;%&ndash;            <link rel="stylesheet" href="/css/sidebar.css">&ndash;%&gt;--%>
+<%--        </c:if>--%>
     </head>
     <body class="${activeMenu}">
         <%-- 공통 헤더 --%>
@@ -32,11 +32,11 @@
          <jsp:include page="footer.jsp" />
 
         <!-- hideSidebar가 true가 아닐 때만 사이드바 출력 -->
-        <div class="wrapper">
-            <!-- showSidebar가 true일 때만 사이드바 출력 -->
-            <c:if test="${showSidebar}">
-                <jsp:include page="./sidebar.jsp" />
-            </c:if>
-        </div>
+<%--        <div class="wrapper">--%>
+<%--            <!-- showSidebar가 true일 때만 사이드바 출력 -->--%>
+<%--            <c:if test="${showSidebar}">--%>
+<%--                <jsp:include page="./sidebar.jsp" />--%>
+<%--            </c:if>--%>
+<%--        </div>--%>
     </body>
 </html>

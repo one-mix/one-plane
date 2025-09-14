@@ -3,11 +3,11 @@ package com.oneplane.myPage.service;
 import com.oneplane.myPage.dao.CertificationDao;
 import com.oneplane.myPage.dao.TravelHistoryDao;
 import com.oneplane.myPage.dto.MyPageStatsDto;
+import com.oneplane.myPage.domain.TravelHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MyPageService {
@@ -18,25 +18,21 @@ public class MyPageService {
     @Autowired
     private TravelHistoryDao travelHistoryDao;
 
-    public List<Map<String, Object>> getCertifiedCountries(Long userId) {
+    public List<?> getCertifiedCountries(Long userId) {
         return certificationDao.getUserCertifiedCountries(userId);
     }
 
     public MyPageStatsDto getUserStats(Long userId) {
         try {
             int certificationCount = certificationDao.getCertificationCount(userId);
-            int totalDistance = certificationDao.getTotalCertificationDistance(userId);
+            int totalDistance      = certificationDao.getTotalCertificationDistance(userId);
+            List<TravelHistory> histories = travelHistoryDao.selectByUserId(userId);
+            int travelHistoryCount = histories.size();
 
-
-            System.out.println("Service - certificationCount: " + certificationCount);
-            System.out.println("Service - totalDistance: " + totalDistance);
-
-            return new MyPageStatsDto(certificationCount, totalDistance);
-
+            return new MyPageStatsDto(certificationCount, totalDistance, travelHistoryCount);
         } catch (Exception e) {
-            System.err.println("getUserStats 오류: " + e.getMessage());
             e.printStackTrace();
-            return new MyPageStatsDto(0, 0);
+            return new MyPageStatsDto(0, 0, 0);
         }
     }
 }

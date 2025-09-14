@@ -1,14 +1,142 @@
-/* 전체 레이아웃 */
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+/*─────────────────────────────────────*/
+/* 전역 리셋 & 기본 설정               */
+/*─────────────────────────────────────*/
+* {
     margin: 0;
-    padding: 20px;
-    background-color: #f8f9fa;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.content {
-    max-width: 600px;
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #FCFCF9;
+    color: #13343B;
+}
+
+/*─────────────────────────────────────*/
+/* 1. 최상위 레이아웃                   */
+/*─────────────────────────────────────*/
+.container {
+    width: 720px;
     margin: 0 auto;
+    padding: 0;
+}
+
+.page-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 32px;
+    width: 100%;
+    padding: 0 16px;
+}
+
+/*─────────────────────────────────────*/
+/* 2. 사이드바                        */
+/*─────────────────────────────────────*/
+.sidebar {
+    position: sticky;
+    top: 80px;
+    width: 250px;
+    margin-top: 40px;
+    margin-left: 16px;
+    background: #FFFFFF;
+    border: 1px solid #E6E6E6;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 24px 0;
+    z-index: 10;
+}
+
+.user-profile {
+    text-align: center;
+    padding: 24px 16px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+}
+
+.user-profile img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #13343B;
+    margin-bottom: 4px;
+}
+
+.user-info {
+    font-size: 13px;
+    color: #777;
+    letter-spacing: 0.5px;
+}
+
+.menu-section {
+    margin-bottom: 16px;
+}
+
+.menu-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #13343B;
+    margin-bottom: 7px;
+    padding: 8px 6px;
+    border-bottom: 1px solid #E6E6E6;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 7px 8px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.menu-item::before {
+    content: "•";
+    color: #999;
+    margin: 0 8px 0 5px;
+}
+
+.menu-item:hover {
+    background: #F5F5F5;
+}
+
+.menu-item.active {
+    font-weight: 600;
+    color: #2084A5;
+}
+
+.menu-item.danger {
+    color: #C0152F;
+}
+
+.menu-item.danger:hover {
+    background: #FFF5F5;
+}
+
+/*─────────────────────────────────────*/
+/* 3. 메인 콘텐츠 - 완전히 새로 작성    */
+/*─────────────────────────────────────*/
+.main-content {
+    flex: 1;
+    max-width: 600px;
+    margin: 40px 16px 16px 0;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
 }
 
 /* 페이지 제목 */
@@ -16,99 +144,127 @@ body {
     font-size: 20px;
     font-weight: 600;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     text-align: left;
 }
 
-/* 폼 카드 */
+/*─────────────────────────────────────*/
+/* 4. 폼 스타일 - 첫 번째 이미지와 동일  */
+/*─────────────────────────────────────*/
 .form-card {
-    background: white;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
 }
 
-/* 폼 행 */
-.form-row, .form-group {
-    margin-bottom: 24px;
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.form-row label, .form-group label {
+/* 폼 그룹 기본 설정 */
+.form-group {
+    margin-bottom: 28px;
+}
+
+.form-group label {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     color: #333;
     margin-bottom: 8px;
 }
 
-/* 입력 필드 */
+/* 기존 .form-group → .form-row 로 변경 */
 .form-row input[type="text"],
 .form-row input[type="date"] {
     width: 100%;
     padding: 12px 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    background: #F5F5F5;
     font-size: 14px;
-    background: #fafafa;
+    color: #666;
+    transition: all .2s ease;
     box-sizing: border-box;
-    transition: border-color 0.2s ease;
 }
 
 .form-row input[type="text"]:focus,
 .form-row input[type="date"]:focus {
     outline: none;
     border-color: #007AFF;
-    background: white;
+    background: #FFF;
+    color: #333;
 }
 
 .form-row input[type="text"]::placeholder {
     color: #999;
+    font-size: 14px;
 }
 
-/* 별점 평가 */
+.form-row input[type="date"] {
+    color: #999;
+}
+
+.form-row input[type="date"]:focus,
+.form-row input[type="date"]:valid {
+    color: #333;
+}
+
 .rating {
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
+    flex-direction: row-reverse;   /* 별 순서를 뒤집음 */
+    justify-content: flex-end;     /* 뒤집힌 축의 끝(왼쪽)에 붙임 */
     gap: 4px;
+    margin-top: 8px;
 }
 
-.rating input[type="radio"] {
+.rating input {
     display: none;
 }
 
 .rating label {
     font-size: 24px;
-    color: #ddd;
+    color: #E0E0E0;
     cursor: pointer;
-    transition: color 0.2s ease;
-    margin: 0;
+    transition: color .2s ease;
 }
 
-.rating input[type="radio"]:checked ~ label,
-.rating input[type="radio"]:checked ~ label ~ label {
-    color: #ffd700;
-}
-
+.rating input:checked ~ label,
 .rating label:hover,
 .rating label:hover ~ label {
-    color: #ffd700;
+    color: #FFD700;
 }
 
-/* 옵션 그리드 (테마, 동행) */
+/* 테마 옵션 그리드 */
+.theme-section {
+    margin-bottom: 28px;
+}
+
+.theme-section label {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 12px;
+}
+
 .option-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 8px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
 .option-item {
     position: relative;
 }
 
-.option-item input[type="radio"] {
+.option-item input {
     display: none;
 }
 
@@ -116,84 +272,122 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #fafafa;
+    padding: 12px 8px;
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    background: #F5F5F5;
     cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    user-select: none;
+    transition: all .2s ease;
+    font-size: 13px;
+    color: #666;
     text-align: center;
-    min-height: 20px;
+    min-height: 44px;
 }
 
 .option-item label:hover {
-    border-color: #999;
-    background: #f0f0f0;
+    border-color: #007AFF;
+    background: #F0F8FF;
 }
 
-.option-item input[type="radio"]:checked + label {
+.option-item input:checked + label {
     background: #007AFF;
     border-color: #007AFF;
-    color: white;
+    color: #FFF;
 }
 
-/* 텍스트 영역 */
+/* 동행 섹션 */
+.companion-section {
+    margin-bottom: 28px;
+}
+
+.companion-section label {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.companion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.companion-grid .option-item label {
+    min-height: 44px;
+}
+
+/* 텍스트 영역 스타일 */
 .form-row textarea {
     width: 100%;
-    min-height: 120px;
-    padding: 12px 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
-    background: #fafafa;
+    min-height: 140px;         /* 높이 더 크게 */
+    padding: 20px 24px;        /* 패딩 증가 */
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;        /* 모서리 더 둥글게 */
+    background: #F8F9FA;       /* 배경색 더 밝게 */
     box-sizing: border-box;
     resize: vertical;
-    transition: border-color 0.2s ease;
+    font-size: 16px;           /* 폰트 크기 증가 */
+    color: #666;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    line-height: 1.5;          /* 줄 간격 추가 */
 }
 
-.form-row textarea:focus {
+.form-group textarea:focus {
     outline: none;
     border-color: #007AFF;
-    background: white;
+    background: #FFF;
+    color: #333;
 }
 
-.form-row textarea::placeholder {
+.form-group textarea::placeholder {
     color: #999;
+    font-size: 16px;           /* 플레이스홀더 크기 증가 */
 }
 
 /* 파일 업로드 */
+.file-upload-section {
+    margin-bottom: 32px;
+}
+
+.file-upload-section label {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 12px;
+}
+
 .file-upload {
-    border: 2px dashed #ddd;
-    border-radius: 8px;
-    padding: 40px 20px;
+    border: 2px dashed #D0D0D0;
+    border-radius: 6px;
+    padding: 32px 20px;
     text-align: center;
+    background: #FAFAFA;
     cursor: pointer;
-    background: #fafafa;
-    transition: border-color 0.2s ease;
+    transition: all .2s ease;
 }
 
 .file-upload:hover {
     border-color: #999;
-    background: #f0f0f0;
+    background: #F0F0F0;
 }
 
 .file-upload p {
-    margin: 0 0 8px 0;
     font-size: 14px;
-    color: #333;
-    font-weight: 500;
+    color: #666;
+    margin-bottom: 4px;
 }
 
 .file-upload small {
-    color: #666;
     font-size: 12px;
-    line-height: 1.4;
+    color: #999;
 }
 
-.file-upload input[type="file"] {
+.file-upload input {
     display: none;
 }
 
@@ -201,40 +395,58 @@ body {
 .btn-submit {
     width: 100%;
     padding: 16px;
-    background: #007AFF;
-    color: white;
+    background: #D0D0D0;
+    color: #999;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: background-color 0.2s ease;
+    font-weight: 500;
+    cursor: not-allowed;
+    transition: all .2s ease;
+    margin-top: 20px;
 }
 
-.btn-submit:hover {
+.btn-submit:enabled {
+    background: #007AFF;
+    color: #FFF;
+    cursor: pointer;
+}
+
+.btn-submit:enabled:hover {
     background: #0056CC;
 }
 
-.btn-submit:active {
+.btn-submit:enabled:active {
     transform: translateY(1px);
 }
 
-/* 반응형 디자인 */
+/*─────────────────────────────────────*/
+/* 5. 반응형                          */
+/*─────────────────────────────────────*/
+@media (max-width: 768px) {
+    .page-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        margin: 20px 0 0 0;
+    }
+
+    .content {
+        margin: 0;
+        max-width: 100%;
+    }
+
+    .form-group .option-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 480px) {
-    body {
-        padding: 16px;
-    }
-
-    .form-card {
-        padding: 20px;
-    }
-
-    .option-grid {
+    .form-group .option-grid {
         grid-template-columns: 1fr;
-    }
-
-    .page-title {
-        font-size: 18px;
     }
 }

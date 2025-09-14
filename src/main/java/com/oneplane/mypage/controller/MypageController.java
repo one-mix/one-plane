@@ -3,6 +3,7 @@ package com.oneplane.myPage.controller;
 import com.oneplane.myPage.dto.CertificationTimelineDto;
 import com.oneplane.myPage.service.CertificationService;
 import com.oneplane.myPage.service.TravelHistoryService;
+import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.repository.RecommendRepository;
 import com.oneplane.recommend.service.RecommendService;
 import jakarta.servlet.http.HttpSession;
@@ -18,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/mypage/dashboard")
-public class MyPageController extends BaseController{
+public class MyPageController extends BaseController {
 
     @Autowired
     private CertificationService certificationService;
@@ -38,54 +40,47 @@ public class MyPageController extends BaseController{
     @GetMapping
     public String mypage(Model model, HttpSession session) {
         Long userId = getUserIdFromSession(session);
-
         if (userId == null) {
             return "redirect:/login";
         }
 
+        // --- 기존 마이페이지 통계 및 타임라인 ---
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
-                .orElse("ROLE_USER"); // 기본값
-
+                .orElse("ROLE_USER");
         model.addAttribute("userRole", role);
 
-        // 통계 데이터 조회
-        int countryCount   = certificationService.getVisitedCountryCount(userId);
-        int totalDistance  = certificationService.getVisitedTotalDistance(userId);
-        int photoCount     = travelHistoryService.getUploadedPhotoCount(userId);
+        int countryCount = certificationService.getVisitedCountryCount(userId);
+        int totalDistance = certificationService.getVisitedTotalDistance(userId);
+        int photoCount = travelHistoryService.getUploadedPhotoCount(userId);
 
-        // DTO 리스트 조회
         List<CertificationTimelineDto> timeline = certificationService.getTimelineData(userId);
-
-        // 로그로 DTO 내용 출력
-        System.out.println("=== Timeline Data Start ===");
-        for (CertificationTimelineDto dto : timeline) {
-            System.out.printf(
-                    "Date: %s, FlagUrl: %s, Distance: %d, Cumulative: %d%n",
-                    dto.getCertificationDate(),
-                    dto.getCountryFlagUrl(),
-                    dto.getDistance(),
-                    dto.getCumulativeDistance()
-            );
-        }
-
-        System.out.println("=== Timeline Data End ===");
-
-        // 모델에 데이터 추가
-//        List<CertificationTimelineDto> timeline = certificationService.getTimelineData(userId);
         model.addAttribute("timeline", timeline);
         model.addAttribute("maxDistance", 30000);
-        model.addAttribute("countryCount",  countryCount);
+        model.addAttribute("countryCount", countryCount);
         model.addAttribute("totalDistance", totalDistance);
-        model.addAttribute("photoCount",    photoCount);
-        model.addAttribute("contentPage",   "mypage/content.jsp");
-        model.addAttribute("activeMenu", "dashboard");  // 수정 dashboard 대신 travelHistory
-        model.addAttribute("showSidebar", true);  // 추가
-        model.addAttribute("pageTitle", "마이페이지");  // 추가
+        model.addAttribute("photoCount", photoCount);
+        // --- 통계 및 타임라인 END ---
 
+        // --- 새로 추가: 추천 여행지 가져와 뷰용 DTO로 변환 ---
+        List<RecommendResultDTO> recs = recommendService.getRecommendHistory(userId.intValue(), 1);
+        List<PlaceView> recommendedPlaces = recs.stream()
+                .map(dto -> new PlaceView(
+                        dto.getCountryImg(),        // 썸네일 URL
+                        dto.getCountryNameKo(),     // 국가명
+                        dto.getCity(),              // 도시명
+                        "여행 경보: " + dto.getAlertLevel()  // 간단 설명
+                ))
+                .collect(Collectors.toList());
+        model.addAttribute("recommendedPlaces", recommendedPlaces);
+        // --- 추천 여행지 END ---
 
+        model.addAttribute("contentPage", "mypage/content.jsp");
+        model.addAttribute("activeMenu", "dashboard");
+        model.addAttribute("showSidebar", true);
+        model.addAttribute("pageTitle", "마이페이지");
         return "layout/layout";
     }
 
@@ -100,22 +95,50 @@ public class MyPageController extends BaseController{
         return null;
     }
 
-    // 추천 여행지 페이지
-    @GetMapping("/recommend")
-    public String getRecommendationHistory(@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session, Model model) {
-        Integer userId = (Integer) session.getAttribute("userId");
+    // 뷰 전용 간단 DTO
+    public static class PlaceView {
+        private final String thumbUrl;
+        private final String country;
+        private final String name;
+        private final String description;
 
-        // 페이지네이션 정보를 포함한 추천 이력 조회
+        public PlaceView(String thumbUrl, String country, String name, String description) {
+            this.thumbUrl = thumbUrl;
+            this.country = country;
+            this.name = name;
+            this.description = description;
+        }
+
+        public String getThumbUrl() {
+            return thumbUrl;
+        }
+        public String getCountry() {
+            return country;
+        }
+        public String getName() {
+            return name;
+        }
+        public String getDescription() {
+            return description;
+        }
+    }
+
+    // 기존 추천 이력 페이지 매핑 (변경 없음)
+    @GetMapping("/recommend")
+    public String getRecommendationHistory(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            HttpSession session,
+            Model model) {
+
+        Integer userId = (Integer) session.getAttribute("userId");
         Map<String, Object> result = recommendService.getRecommendHistoryWithPagination(userId, page);
 
-        // 모델에 데이터 추가
         model.addAttribute("recommendHistory", result.get("recommendHistory"));
         model.addAttribute("currentPage", result.get("currentPage"));
         model.addAttribute("totalPages", result.get("totalPages"));
         model.addAttribute("totalCount", result.get("totalCount"));
         model.addAttribute("hasNext", result.get("hasNext"));
         model.addAttribute("hasPrevious", result.get("hasPrevious"));
-
         return "mypage/recommend";
     }
 }

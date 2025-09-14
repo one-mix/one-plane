@@ -102,6 +102,8 @@ public class RecommendController {
         String city = request.get("city");
 
         // ISO3 코드로 countryId 조회 후 저장
+        // 디버깅
+        System.out.printf("saveCountry 호출: iso3=%s, city=%s%n", countryIso3, city);
         Integer recommendId = recommendService.saveSelectedCountry(userId, countryIso3, city);
 
         return ResponseEntity.ok(Map.of("recommendId", recommendId, "message", "국가/도시 저장 완료"));

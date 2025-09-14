@@ -14,7 +14,7 @@ public class TravelHistoryDto {
     private MultipartFile travelImg;
 
 
-    //파일명 저장용 필드
+//    //파일명 저장용 필드
     private String imagePath;
 
     // 생성자

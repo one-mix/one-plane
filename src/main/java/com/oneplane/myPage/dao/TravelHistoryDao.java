@@ -16,7 +16,7 @@ public class TravelHistoryDao implements ITravelHistoryDao {
     @Autowired
     private JdbcTemplate jdbc;
 
-    private final RowMapper<TravelHistory> rowMapper = new RowMapper<TravelHistory>() {
+    private final RowMapper<TravelHistory> rowMapper = new RowMapper<>() {
         @Override
         public TravelHistory mapRow(ResultSet rs, int rowNum) throws SQLException {
             TravelHistory th = new TravelHistory();
@@ -27,7 +27,6 @@ public class TravelHistoryDao implements ITravelHistoryDao {
             th.setContent(rs.getString("content"));
             th.setTravelAt(rs.getDate("travel_at"));
             th.setTravelImg(rs.getBytes("travel_img"));
-            th.setImagePath(rs.getString("image_path"));
             th.setCity(rs.getString("city"));
             th.setTravelPurpose(rs.getString("travel_purpose"));
             th.setCompanion(rs.getString("companion"));
@@ -39,14 +38,13 @@ public class TravelHistoryDao implements ITravelHistoryDao {
     @Override
     public int insert(TravelHistory travel) {
         String sql = """
-    INSERT INTO travel_history (
-    travel_history_id, user_id, country_id, title, content, travel_at,
-    travel_img, image_path, city, travel_purpose, companion, rating, deleted_at
-) VALUES (
-    travel_history_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL
-)
-""";
-
+            INSERT INTO travel_history (
+                travel_history_id, user_id, country_id, title, content, travel_at,
+                travel_img, city, travel_purpose, companion, rating, deleted_at
+            ) VALUES (
+                travel_history_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL
+            )
+        """;
         return jdbc.update(sql,
                 travel.getUserId(),
                 travel.getCountryId(),
@@ -54,30 +52,23 @@ public class TravelHistoryDao implements ITravelHistoryDao {
                 travel.getContent(),
                 travel.getTravelAt(),
                 travel.getTravelImg(),
-                travel.getImagePath(),    // 추가된 파일명 파라미터
                 travel.getCity(),
                 travel.getTravelPurpose(),
                 travel.getCompanion(),
                 travel.getRating()
         );
-
     }
 
     @Override
     public List<TravelHistory> selectByUserId(Long userId) {
         String sql = "SELECT * FROM travel_history WHERE user_id = ? AND deleted_at IS NULL ORDER BY travel_at DESC";
-
-        // 디버깅 로그 추가
         System.out.println("=== DAO 조회 ===");
         System.out.println("SQL: " + sql);
         System.out.println("User ID 파라미터: " + userId);
-
         List<TravelHistory> result = jdbc.query(sql, rowMapper, userId);
         System.out.println("조회된 레코드 수: " + result.size());
-
         return result;
     }
-
 
     @Override
     public TravelHistory selectById(Long id) {
@@ -98,21 +89,18 @@ public class TravelHistoryDao implements ITravelHistoryDao {
     @Override
     public int update(TravelHistory th) {
         String sql = """
-    UPDATE travel_history SET
-        country_id = ?, title = ?, content = ?, travel_at = ?,
-        travel_img = ?, image_path = ?, city = ?,
-        travel_purpose = ?, companion = ?, rating = ?
-    WHERE travel_history_id = ? AND user_id = ?
-    """;
-
-
+            UPDATE travel_history SET
+                country_id = ?, title = ?, content = ?, travel_at = ?,
+                travel_img = ?, city = ?,
+                travel_purpose = ?, companion = ?, rating = ?
+            WHERE travel_history_id = ? AND user_id = ?
+        """;
         return jdbc.update(sql,
                 th.getCountryId(),
                 th.getTitle(),
                 th.getContent(),
                 th.getTravelAt(),
                 th.getTravelImg(),
-                th.getImagePath(),    // 6번째 파라미터: image_path
                 th.getCity(),
                 th.getTravelPurpose(),
                 th.getCompanion(),
@@ -138,4 +126,5 @@ public class TravelHistoryDao implements ITravelHistoryDao {
         }
     }
 }
+
 
