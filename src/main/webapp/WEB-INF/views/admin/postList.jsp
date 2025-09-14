@@ -125,7 +125,7 @@
                 </td>
                 <%-- 조회수 --%>
                 <td class="text-center">
-                  <span class="text-primary fw-bold">${post.viewCount != null ? post.viewCount : 0}</span>
+                  <span>${post.viewCount != null ? post.viewCount : 0}</span>
                 </td>
                 <%-- 조회수 --%>
                 <%-- 생성일 --%>

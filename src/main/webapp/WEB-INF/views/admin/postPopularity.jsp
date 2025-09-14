@@ -134,7 +134,7 @@
                        value="${(post.viewCount != null ? post.viewCount : 0) * 2 +
                                (post.likeCount != null ? post.likeCount : 0) * 3 +
                                (post.commentCount != null ? post.commentCount : 0) * 1}" />
-                <span class="badge bg-warning text-dark fw-bold">${popularityScore}</span>
+                <span>${popularityScore}</span>
               </td>
 
               <!-- 작성일 -->
