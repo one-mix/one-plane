@@ -4,6 +4,7 @@ import com.oneplane.config.SecurityUtil;
 import com.oneplane.post.domain.Post;
 import com.oneplane.post.domain.PostListResponse;
 import com.oneplane.post.domain.PostSearchCondition;
+import com.oneplane.post.service.CommentService;
 import com.oneplane.post.service.PostLikeService;
 import com.oneplane.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -145,6 +146,77 @@ public class AdminPostController {
         log.info("사용자 삭제 - userId: {}", postId);
         postService.deletePost(postId, userId);
         return "redirect:/admin/posts";
+    }
+
+    /**
+     * 인기 게시글 목록 (조회수, 좋아요수, 댓글수 기준)
+     */
+    @GetMapping("/posts/popularity")
+    public String adminPopularPosts(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "period", defaultValue = "30") int period, // 기간 필터 (일)
+            Model model) {
+
+        log.info("관리자 인기 게시글 목록 조회 - page: {}, size: {}, period: {}일", page, size, period);
+
+        // 검색 조건 설정 (인기순 정렬)
+        PostSearchCondition condition = PostSearchCondition.builder()
+                .searchType("all")
+                .searchKeyword(search)
+                .sortBy("popularity") // 인기순 정렬
+                .page(page)
+                .size(size)
+                .build();
+
+        if (category != null && !category.isEmpty()) {
+            try {
+                condition.setCategory(com.oneplane.post.domain.Category.valueOf(category));
+            } catch (IllegalArgumentException e) {
+                log.warn("잘못된 카테고리: {}", category);
+            }
+        }
+
+        condition.setDefaults();
+
+        // 인기 게시글 목록 조회
+        PostListResponse response = postService.getPopularPostsWithPaging(condition, period);
+
+        // 검색 파라미터 생성
+        StringBuilder searchParams = new StringBuilder();
+        if (search != null && !search.trim().isEmpty()) {
+            searchParams.append("&search=").append(search);
+        }
+        if (category != null && !category.trim().isEmpty()) {
+            searchParams.append("&category=").append(category);
+        }
+        searchParams.append("&period=").append(period);
+
+        model.addAttribute("posts", response.getPosts());
+        model.addAttribute("currentPage", response.getCurrentPage());
+        model.addAttribute("totalPages", response.getTotalPages());
+        model.addAttribute("totalCount", response.getTotalElements());
+        model.addAttribute("hasNext", response.isHasNext());
+        model.addAttribute("hasPrevious", response.isHasPrevious());
+        model.addAttribute("search", search);
+        model.addAttribute("category", category);
+        model.addAttribute("period", period);
+        model.addAttribute("searchParams", searchParams.toString());
+
+        // 페이지 범위 계산
+        int startRow = (page - 1) * size + 1;
+        int endRow = Math.min(startRow + size - 1, (int) response.getTotalElements());
+        model.addAttribute("startRow", startRow);
+        model.addAttribute("endRow", endRow);
+
+        model.addAttribute("activeMenu", "post-popularity");
+        model.addAttribute("contentPage", "postPopularity.jsp");
+
+        log.info("관리자 인기 게시글 목록 조회 완료 - 총 {}개", response.getTotalElements());
+
+        return "admin/layout/adminLayout";
     }
 
 }

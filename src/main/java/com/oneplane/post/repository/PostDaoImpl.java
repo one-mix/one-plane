@@ -117,4 +117,16 @@ public class PostDaoImpl implements PostDao {
         log.debug("게시글 모든 카운트 업데이트 - postId: {}", postId);
         return sqlSession.update(namespace + "updatePostCounts", postId);
     }
+
+    @Override
+    public List<Post> findPopularPostsWithPaging(PostSearchCondition condition) {
+        log.debug("인기 게시글 페이징 조회 - condition: {}", condition);
+        return sqlSession.selectList(namespace + "findPopularPostsWithPaging", condition);
+    }
+
+    @Override
+    public int countPopularPosts(PostSearchCondition condition) {
+        log.debug("인기 게시글 총 개수 조회 - condition: {}", condition);
+        return sqlSession.selectOne(namespace + "countPopularPosts", condition);
+    }
 }

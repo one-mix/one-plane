@@ -31,8 +31,8 @@
           <th scope="col" style="width: 100px;">작성자</th>
           <th scope="col" style="width: 100px;">국가</th>
           <th scope="col" style="width: 80px;">카테고리</th>
-          <th scope="col" style="width: 100px;">작성일</th>
           <th scope="col" style="width: 60px;">조회수</th>
+          <th scope="col" style="width: 100px;">작성일</th>
           <th scope="col" style="width: 100px;">관리</th>
         </tr>
         </thead>
@@ -64,10 +64,17 @@
                   <span class="post-id-badge">${post.postId}</span>
                 </td>
                 <td>
-                  <div class="post-name">
+                  <div class="post-name" title="${post.title}">
                     <c:choose>
                       <c:when test="${not empty post.title}">
-                        ${post.title}
+                        <c:choose>
+                          <c:when test="${post.title.length() > 10}">
+                            ${post.title.substring(0, 10)}...
+                          </c:when>
+                          <c:otherwise>
+                            ${post.title}
+                          </c:otherwise>
+                        </c:choose>
                       </c:when>
                       <c:otherwise>
                         <span class="text-muted">제목 미설정</span>
@@ -116,6 +123,11 @@
                     </c:otherwise>
                   </c:choose>
                 </td>
+                <%-- 조회수 --%>
+                <td class="text-center">
+                  <span class="text-primary fw-bold">${post.viewCount != null ? post.viewCount : 0}</span>
+                </td>
+                <%-- 조회수 --%>
                 <%-- 생성일 --%>
                 <td class="text-center">
                   <c:choose>
@@ -127,11 +139,6 @@
                   </c:choose>
                 </td>
                 <%-- 생성일 --%>
-                <%-- 조회수 --%>
-                <td class="text-center">
-                  <span class="text-primary fw-bold">${post.viewCount != null ? post.viewCount : 0}</span>
-                </td>
-                <%-- 조회수 --%>
                 <td class="text-center">
                   <div class="action-buttons">
                     <button type="button"
