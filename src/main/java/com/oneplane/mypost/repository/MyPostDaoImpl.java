@@ -40,7 +40,20 @@ public class MyPostDaoImpl implements MyPostDao {
         return sqlSession.selectList(namespace + "selectPostsByAuthorAndCategory", params);
     }
 
+    @Override
+    public List<Post> selectPostsByFollowers(Integer userId) {
+        log.debug("팔로워가 작성한 게시글 전체 조회 - userId: {}", userId);
+        return sqlSession.selectList(namespace + "selectPostsByFollowers", userId);
+    }
 
+    @Override
+    public List<Post> selectPostsByFollowersAndCategory(Integer userId, String category) {
+        log.debug("팔로워가 작성한 게시글 카테고리별 조회 - userId: {}, category: {}", userId, category);
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("category", category);
+        return sqlSession.selectList(namespace + "selectPostsByFollowersAndCategory", params);
+    }
 
 
 }

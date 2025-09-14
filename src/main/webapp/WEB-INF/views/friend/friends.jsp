@@ -20,16 +20,122 @@
         <meta name="user-nickname" content="${userDetails.nickname}">
     </sec:authorize>
 
-    <link href="/css/layout.css" rel="stylesheet">
     <link href="/css/friends.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/mypage/mypageContent.css" />
 </head>
 <body>
 
-<div class="friends-container">
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="profile-avatar" id="profileAvatar" title="클릭하여 이미지 변경">
+            <!-- 항상 하나의 <img>만 렌더링 -->
+            <img id="avatarImg"
+                 src="${not empty userProfile.profileImagePath ? userProfile.profileImagePath : '/images/default-avatar.png'}"
+                 alt="프로필 아바타"
+                 style="width:80px; height:80px; border-radius:50%; object-fit:cover;"/>
+
+            <!-- 숨겨진 파일 입력 -->
+            <input type="file"
+                   id="avatarInput"
+                   name="profileImage"
+                   accept="image/*"
+                   style="display:none;"
+                   onchange="uploadAvatar()"/>
+
+            <%--            <div class="upload-overlay">📷</div>--%>
+        </div>
+
+        <div class="profile-info">
+            <h4>${userProfile.nickname != null ? userProfile.nickname : '사용자'}</h4>
+
+            <p class="sub-info">
+                <c:if test="${not empty userProfile.gender}">
+                    <c:choose>
+                        <c:when test="${userProfile.gender eq 'male'}">남</c:when>
+                        <c:when test="${userProfile.gender eq 'female'}">여</c:when>
+                        <c:otherwise>${userProfile.gender}</c:otherwise>
+                    </c:choose>
+                </c:if>
+                <c:if test="${not empty userProfile.age}">
+                    · ${userProfile.age}
+                </c:if>
+            </p>
+
+
+            <div class="grade-badge">
+                <c:choose>
+                    <c:when test="${userProfile.grade == 'ECONOMY'}">
+                        <span class="grade-text">이코노미</span>
+                        <img src="/images/grade/economy.png" alt="이코노미" class="grade-icon" />
+                    </c:when>
+                    <c:when test="${userProfile.grade == 'STANDARD'}">
+                        <span class="grade-text">스탠다드</span>
+                        <img src="/images/grade/standard.png" alt="스탠다드" class="grade-icon" />
+                    </c:when>
+                    <c:when test="${userProfile.grade == 'BUSINESS'}">
+                        <span class="grade-text">비즈니스</span>
+                        <img src="/images/grade/business.png" alt="비즈니스" class="grade-icon" />
+                    </c:when>
+                    <c:when test="${userProfile.grade == 'FIRST'}">
+                        <span class="grade-text">퍼스트</span>
+                        <img src="/images/grade/first.png" alt="퍼스트" class="grade-icon" />
+                    </c:when>
+                    <c:when test="${userProfile.grade == 'ELITE'}">
+                        <span class="grade-text">엘리트</span>
+                        <img src="/images/grade/elite.png" alt="엘리트" class="grade-icon" />
+                    </c:when>
+                </c:choose>
+            </div>
+        </div>
+
+        <!-- 메뉴 섹션 -->
+        <div class="menu-section">
+            <h4>여행지</h4>
+            <ul class="menu-list">
+                <li><a href="/mypage/travelHistory" class="${activeMenu == 'travelHistory' ? 'active' : ''}">방문한</a>
+                </li>
+                <li><a href="/section/recommend" class="${activeMenu == 'recommend' ? 'active' : ''}">추천받은</a></li>
+            </ul>
+        </div>
+
+        <div class="menu-section">
+            <h4>게시글</h4>
+            <ul class="menu-list">
+                <li><a href="/myPost/myPost" class="${activeMenu == 'write' ? 'active' : ''}">내가 작성한</a></li>
+                <li><a href="/myPost/followerPost" class="${activeMenu == 'follower' ? 'active' : ''}">팔로워가 작성한</a></li>
+            </ul>
+        </div>
+
+        <div class="menu-section">
+            <h4>팔로우</h4>
+            <ul class="menu-list">
+                <li><a href="/friends" class="${activeMenu == 'following' ? 'active' : ''}">팔로우</a></li>
+            </ul>
+        </div>
+
+        <div class="menu-section">
+            <h4>회원정보</h4>
+            <ul class="menu-list">
+                <li><a href="/mypage/profile/edit" class="${activeMenu == 'profile' ? 'active' : ''}">프로필 편집</a></li>
+                <c:choose>
+                    <c:when test="${userRole eq 'ROLE_ADMIN'}">
+                        <li class="danger"><a href="/admin/dashboard">관리자 페이지</a></li>
+                    </c:when>
+
+                    <c:otherwise>
+                        <li class="danger"><a href="/mypage/profile/out">회원탈퇴</a></li>
+                    </c:otherwise>
+                </c:choose>
+
+            </ul>
+        </div>
+    </div>
+
+
 
     <!-- 메인 컨텐츠 -->
-    <main class="main-content">
+    <div class="main">
         <!-- 탭 메뉴 -->
         <div class="tab-menu">
             <button class="tab-btn ${tab == 'following' || empty tab ? 'active' : ''}"
@@ -188,8 +294,10 @@
                 </c:if>
             </div>
         </c:if>
-    </main>
+    </div>
 </div>
+
+
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

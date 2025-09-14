@@ -18,6 +18,8 @@
 
 <%--<p>Debug - timeline count: ${fn:length(timeline)}</p>--%>
 <%--<p>Debug - maxDistance: ${maxDistance}</p>--%>
+
+
 <div class="page-wrapper">
     <div class="sidebar">
         <div class="profile-avatar" id="profileAvatar" title="클릭하여 이미지 변경">
@@ -94,8 +96,8 @@
         <div class="menu-section">
             <h4>게시글</h4>
             <ul class="menu-list">
-                <li><a href="/board/myboard" class="${activeMenu == 'write' ? 'active' : ''}">내가 작성한</a></li>
-                <li><a href="/section/follower" class="${activeMenu == 'follower' ? 'active' : ''}">팔로워가 작성한</a></li>
+                <li><a href="/myPost/myPost" class="${activeMenu == 'write' ? 'active' : ''}">내가 작성한</a></li>
+                <li><a href="/myPost/followerPost" class="${activeMenu == 'follower' ? 'active' : ''}">팔로워가 작성한</a></li>
             </ul>
         </div>
 
@@ -188,7 +190,7 @@
                 <%-- 추천 있음 --%>
                 <c:otherwise>
                     <div class="recommend-container">
-                        <c:forEach items="${recommendedPlaces}" var="place">
+                        <c:forEach items="${recommendedPlaces}" var="place" begin="0" end="3">
                             <div class="recommend-card">
                                 <div class="card-thumb"
                                      style="background-image:url(${place.thumbUrl});">

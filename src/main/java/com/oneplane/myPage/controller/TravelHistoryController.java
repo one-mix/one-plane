@@ -1,14 +1,19 @@
 package com.oneplane.myPage.controller;
 
+import com.oneplane.country.domain.Country;
 import com.oneplane.myPage.dto.TravelHistoryDto;
 import com.oneplane.myPage.domain.TravelHistory;
 import com.oneplane.myPage.service.TravelHistoryService;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -34,6 +39,32 @@ public class TravelHistoryController extends BaseController {
         return "layout/layout";
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteTravel(
+            @PathVariable Long id,
+            HttpSession session,
+            RedirectAttributes rttr) {
+
+        Long userId = getUserIdFromSession(session);
+        if (userId == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            boolean success = travelHistoryService.deleteTravel(id, userId);
+            if (success) {
+                rttr.addFlashAttribute("successMessage", "여행 기록이 삭제되었습니다.");
+            } else {
+                rttr.addFlashAttribute("errorMessage", "여행 기록 삭제에 실패했습니다.");
+            }
+        } catch (Exception e) {
+            rttr.addFlashAttribute("errorMessage", "삭제 중 오류 발생: " + e.getMessage());
+        }
+
+        return "redirect:/mypage/travelHistory";
+    }
+
+
     @GetMapping("/add")
     public String showAddForm(HttpSession session, Model model) {
         Long userId = getUserIdFromSession(session);
@@ -53,16 +84,6 @@ public class TravelHistoryController extends BaseController {
     public String save(@ModelAttribute("dto") TravelHistoryDto dto,
                        HttpSession session,
                        RedirectAttributes rttr) {
-
-        System.out.println("=== 여행 기록 저장 시작 ===");
-        System.out.println("DTO countryId: " + dto.getCountryId());
-        System.out.println("DTO title: " + dto.getTitle());
-        System.out.println("DTO content: " + dto.getContent());
-        System.out.println("DTO travelDate: " + dto.getTravelDate());
-        System.out.println("DTO city: " + dto.getCity());
-        System.out.println("DTO rating: " + dto.getRating());
-        System.out.println("DTO 이미지: " + (dto.getTravelImg() != null && !dto.getTravelImg().isEmpty() ? dto.getTravelImg().getOriginalFilename() : "없음"));
-
         Long userId = getUserIdFromSession(session);
         if (userId == null) {
             return "redirect:/login";
@@ -70,48 +91,25 @@ public class TravelHistoryController extends BaseController {
 
         try {
             boolean success = travelHistoryService.save(dto, userId);
-
             if (success) {
                 rttr.addFlashAttribute("successMessage", "여행 기록이 저장되었습니다.");
-                System.out.println("저장 성공!");
             } else {
-                rttr.addFlashAttribute("errorMessage", "저장에 실패했습니다.");
-                System.out.println("저장 실패!");
+                rttr.addFlashAttribute("errorMessage", "여행 기록 저장에 실패했습니다.");
             }
-
         } catch (Exception e) {
-            System.err.println("저장 중 예외 발생: " + e.getMessage());
-            e.printStackTrace();
-            rttr.addFlashAttribute("errorMessage", "저장 중 오류가 발생했습니다: " + e.getMessage());
-        }
-
-        return "redirect:/mypage/travelHistory";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String deleteTravel(@PathVariable Long id,
-                               HttpSession session,
-                               RedirectAttributes rttr) {
-        Long userId = getUserIdFromSession(session);
-        if (userId == null) {
-            return "redirect:/login";
-        }
-
-        boolean success = travelHistoryService.deleteTravel(id, userId);
-        if (success) {
-            rttr.addFlashAttribute("successMessage", "삭제되었습니다.");
-        } else {
-            rttr.addFlashAttribute("errorMessage", "삭제에 실패했습니다.");
+            rttr.addFlashAttribute("errorMessage", "저장 중 오류 발생: " + e.getMessage());
         }
 
         return "redirect:/mypage/travelHistory";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id,
-                               HttpSession session,
-                               Model model,
-                               RedirectAttributes rttr) {
+    public String showEditForm(
+            @PathVariable Long id,
+            HttpSession session,
+            Model model,
+            RedirectAttributes rttr) {
+
         Long userId = getUserIdFromSession(session);
         if (userId == null) {
             return "redirect:/login";
@@ -124,14 +122,18 @@ public class TravelHistoryController extends BaseController {
         }
 
         TravelHistoryDto dto = new TravelHistoryDto();
-        dto.setCountryId(existing.getCountryId());
-        dto.setTitle(existing.getTitle());
-        dto.setContent(existing.getContent());
-        dto.setTravelDate(existing.getTravelAt().toString());
+        // countryId → countryCode 조회
+        String countryName = travelHistoryService.findCountryNameById(existing.getCountryId());
+        dto.setCountryCode(countryName);
+
         dto.setCity(existing.getCity());
+        dto.setTravelDate(existing.getTravelAt().toString());
+        dto.setTitle(existing.getTitle());
+        dto.setRating(existing.getRating());
         dto.setTravelPurpose(existing.getTravelPurpose());
         dto.setCompanion(existing.getCompanion());
-        dto.setRating(existing.getRating());
+        dto.setContent(existing.getContent());
+        // imagePath 세팅 제거
 
         model.addAttribute("dto", dto);
         model.addAttribute("travelId", id);
@@ -144,16 +146,11 @@ public class TravelHistoryController extends BaseController {
     }
 
     @PostMapping("/edit/{id}")
-    public String updateTravel(@PathVariable Long id,
-                               @ModelAttribute("dto") TravelHistoryDto dto,
-                               HttpSession session,
-                               RedirectAttributes rttr) {
-
-        System.out.println("=== 여행 기록 수정 시작 ===");
-        System.out.println("수정할 ID: " + id);
-        System.out.println("DTO title: " + dto.getTitle());
-        System.out.println("새 이미지: " + (dto.getTravelImg() != null && !dto.getTravelImg().isEmpty() ? dto.getTravelImg().getOriginalFilename() : "없음"));
-
+    public String updateTravel(
+            @PathVariable Long id,
+            @ModelAttribute("dto") TravelHistoryDto dto,
+            HttpSession session,
+            RedirectAttributes rttr) {
         Long userId = getUserIdFromSession(session);
         if (userId == null) {
             return "redirect:/login";
@@ -161,22 +158,37 @@ public class TravelHistoryController extends BaseController {
 
         try {
             boolean success = travelHistoryService.updateTravel(id, dto, userId);
-
             if (success) {
                 rttr.addFlashAttribute("successMessage", "여행 기록이 수정되었습니다.");
-                System.out.println("수정 성공!");
             } else {
-                rttr.addFlashAttribute("errorMessage", "수정에 실패했습니다.");
-                System.out.println("수정 실패!");
+                rttr.addFlashAttribute("errorMessage", "여행 기록 수정에 실패했습니다.");
             }
-
         } catch (Exception e) {
-            System.err.println("수정 중 예외 발생: " + e.getMessage());
-            e.printStackTrace();
-            rttr.addFlashAttribute("errorMessage", "수정 중 오류가 발생했습니다: " + e.getMessage());
+            rttr.addFlashAttribute("errorMessage", "수정 중 오류 발생: " + e.getMessage());
         }
-
         return "redirect:/mypage/travelHistory";
+    }
+
+    @GetMapping("/image/{id}")
+    public void serveImage(@PathVariable Long id, HttpServletResponse response) {
+        TravelHistory travel = travelHistoryService.getTravelHistoryById(id);
+        byte[] imageBytes = travel != null ? travel.getTravelImg() : null;
+
+        if (imageBytes != null && imageBytes.length > 0) {
+            try {
+                // 클라이언트가 이미지임을 알릴 Content-Type 설정 (JPEG, PNG 등 실제 포맷에 맞춰 변경)
+                response.setContentType("image/jpeg");
+                // 스트림에 이미지 바이트 쓰기
+                ServletOutputStream os = response.getOutputStream();
+                os.write(imageBytes);
+                os.flush();
+            } catch (IOException e) {
+                throw new RuntimeException("이미지 전송 실패", e);
+            }
+        } else {
+            // 이미지가 없을 때 기본 플레이스홀더를 제공하거나 404 처리
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     public Long getUserIdFromSession(HttpSession session) {

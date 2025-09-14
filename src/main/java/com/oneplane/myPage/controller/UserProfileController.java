@@ -11,11 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
-
 @Controller
-@RequestMapping("/mypage/profile")
-public class UserProfileController extends BaseController{
+//@RequestMapping("/mypage/profile")
+public class UserProfileController extends BaseController {
 
     @Autowired
     private UserProfileService userProfileService;

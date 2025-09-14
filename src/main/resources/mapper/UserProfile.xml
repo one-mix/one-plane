@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.userprofile.dao.UsersProfileDao">
+
+    <!-- 회원 프로필 조회 -->
+    <select id="selectUserProfile"
+            parameterType="java.lang.Long"
+            resultType="com.oneplane.userprofile.domain.UsersProfile">
+        SELECT
+            user_id        AS userId,
+            name           AS name,
+            nickname       AS nickname,
+            age            AS age,
+            grade          AS grade,
+            gender         AS gender,
+            email          AS email,
+            disease        AS disease,
+            disability     AS disability,
+            medication     AS medication,
+            total_count    AS totalCount,
+            total_distance AS totalDistance,
+            created_at     AS createdAt,
+            updated_at     AS updatedAt
+        FROM users
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </select>
+
+    <update id="updateUserProfile"
+            parameterType="com.oneplane.userprofile.domain.UsersProfile">
+        UPDATE users
+        SET email      = #{email},
+            nickname   = #{nickname},
+            updated_at = SYSDATE
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </update>
+
+    <update id="softDeleteUser" parameterType="map">
+        UPDATE users
+        SET deleted_at = #{deletedAt}
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </update>
+
+
+</mapper>

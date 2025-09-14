@@ -2,6 +2,7 @@ package com.oneplane.myPage.dao;
 
 import com.oneplane.myPage.domain.TravelHistory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -78,6 +79,7 @@ public class TravelHistoryDao implements ITravelHistoryDao {
         } catch (Exception e) {
             return null;
         }
+
     }
 
     @Override
@@ -123,6 +125,37 @@ public class TravelHistoryDao implements ITravelHistoryDao {
             return jdbc.queryForObject(sql, Integer.class, userId);
         } catch (Exception e) {
             return 0;
+        }
+    }
+
+
+    public String findCountryCodeById(Long countryId) {
+        String sql = "SELECT country_code FROM country WHERE country_id = ?";
+        try {
+            return jdbc.queryForObject(sql, String.class, countryId);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    // 국가명 → country_id 조회 (등록·수정용)
+    public Long findCountryIdByName(String countryName) {
+        String sql = "SELECT country_id FROM country WHERE country_name = ?";
+        try {
+            return jdbc.queryForObject(sql, Long.class, countryName);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+
+
+    public String findCountryNameById(Long countryId) {
+        String sql = "SELECT country_name FROM country WHERE country_id = ?";
+        try {
+            return jdbc.queryForObject(sql, String.class, countryId);
+        } catch (EmptyResultDataAccessException e) {
+            return null; // 또는 적절한 예외 처리
         }
     }
 }

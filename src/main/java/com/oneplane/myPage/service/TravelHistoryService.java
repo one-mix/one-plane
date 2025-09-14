@@ -4,8 +4,11 @@ import com.oneplane.myPage.dao.TravelHistoryDao;
 import com.oneplane.myPage.dto.TravelHistoryDto;
 import com.oneplane.myPage.domain.TravelHistory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +20,9 @@ public class TravelHistoryService {
 
     @Autowired
     private TravelHistoryDao travelHistoryDao;
+    private JdbcTemplate jdbc;
+
+
 
     public boolean save(TravelHistoryDto dto, Long userId) {
         System.out.println("=== Service 저장 시작 ===");
@@ -33,6 +39,17 @@ public class TravelHistoryService {
             System.err.println("여행 이력 저장 실패: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("여행 이력 저장 실패", e);
+        }
+    }
+
+    /** country_id로 countryName 조회 */
+    public String findCountryCodeById(Long countryId) {
+        // country 테이블에 실제 컬럼명이 country_name이라면 이처럼 작성
+        String sql = "SELECT country_name FROM country WHERE country_id = ?";
+        try {
+            return jdbc.queryForObject(sql, String.class, countryId);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
     }
 
@@ -98,7 +115,14 @@ public class TravelHistoryService {
 
         TravelHistory entity = new TravelHistory();
         entity.setUserId(userId);
-        entity.setCountryId(dto.getCountryId());
+
+        // DTO의 countryCode(String) → DAO로 country_id(Long) 변환
+        Long countryId = travelHistoryDao.findCountryIdByName(dto.getCountryCode());
+        if (countryId == null) {
+            throw new RuntimeException("알 수 없는 국가명: " + dto.getCountryCode());
+        }
+        entity.setCountryId(countryId);
+
         entity.setTitle(dto.getTitle());
         entity.setContent(dto.getContent());
 
@@ -139,5 +163,10 @@ public class TravelHistoryService {
     @Transactional(readOnly = true)
     public int getUploadedPhotoCount(Long userId) {
         return travelHistoryDao.getTravelPhotoCount(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public String findCountryNameById(Long countryId) {
+        return travelHistoryDao.findCountryNameById(countryId);
     }
 }

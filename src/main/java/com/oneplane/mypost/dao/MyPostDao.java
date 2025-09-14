@@ -13,5 +13,12 @@ public interface MyPostDao {
     List<Post> selectPostsByAuthorAndCategory(@Param("userId") Integer userId,
                                               @Param("category") String category);
 
+    // 팔로워가 작성한 게시글 전체 조회
+    List<Post> selectPostsByFollowers(@Param("userId") Integer userId);
 
+    // 팔로워가 작성한 게시글 카테고리별 조회
+    List<Post> selectPostsByFollowersAndCategory(
+            @Param("userId") Integer userId,
+            @Param("category") String category
+    );
 }
