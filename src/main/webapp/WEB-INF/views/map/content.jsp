@@ -9,9 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <jsp:include page="./partials/search.jsp" />
 
     <div id="map" class="map">
+        <jsp:include page="./partials/search.jsp" />
         <jsp:include page="./partials/guideline.jsp" />
         <jsp:include page="./partials/info_panel.jsp" />
     </div>
