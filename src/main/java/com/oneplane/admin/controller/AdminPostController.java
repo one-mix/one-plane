@@ -1,6 +1,7 @@
 package com.oneplane.admin.controller;
 
 import com.oneplane.config.SecurityUtil;
+import com.oneplane.post.domain.Comment;
 import com.oneplane.post.domain.Post;
 import com.oneplane.post.domain.PostListResponse;
 import com.oneplane.post.domain.PostSearchCondition;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,6 +27,7 @@ public class AdminPostController {
 
     private final PostService postService;
     private final PostLikeService postLikeService;
+    private final CommentService commentService;
 
     /**
      * 전체 게시글 목록
@@ -219,4 +223,56 @@ public class AdminPostController {
         return "admin/layout/adminLayout";
     }
 
+    /**
+     * 전체 댓글 목록 페이지
+     */
+    @GetMapping("/comments")
+    public String adminCommentList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "search", required = false) String search,
+            Model model) {
+
+        log.info("관리자 댓글 목록 조회 - page: {}, size: {}, search: {}", page, size, search);
+
+        try {
+            // 댓글 목록 조회
+            List<Comment> comments = commentService.getAllComments(page, size, search);
+            int totalCount = commentService.getAllCommentCount(search);
+            int totalPages = (int) Math.ceil((double) totalCount / size);
+
+            // 검색 파라미터 생성
+            StringBuilder searchParams = new StringBuilder();
+            if (search != null && !search.trim().isEmpty()) {
+                searchParams.append("&search=").append(search);
+            }
+
+            model.addAttribute("comments", comments);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("totalCount", totalCount);
+            model.addAttribute("hasNext", page < totalPages);
+            model.addAttribute("hasPrevious", page > 1);
+            model.addAttribute("search", search);
+            model.addAttribute("searchParams", searchParams.toString());
+
+            // 페이지 범위 계산
+            int startRow = (page - 1) * size + 1;
+            int endRow = Math.min(startRow + size - 1, totalCount);
+            model.addAttribute("startRow", startRow);
+            model.addAttribute("endRow", endRow);
+
+            model.addAttribute("activeMenu", "comments");
+            model.addAttribute("contentPage", "commentList.jsp");
+
+            log.info("관리자 댓글 목록 조회 완료 - 총 {}개", totalCount);
+
+            return "admin/layout/adminLayout";
+
+        } catch (Exception e) {
+            log.error("관리자 댓글 목록 조회 중 오류 발생", e);
+            model.addAttribute("errorMessage", "댓글 목록을 불러오는데 실패했습니다.");
+            return "admin/layout/adminLayout";
+        }
+    }
 }
