@@ -14,7 +14,7 @@
       <div class="input-group" style="width: 300px;">
         <span class="input-group-text"><i class="bi bi-search"></i></span>
         <input type="text" class="form-control" name="search"
-               placeholder="이름, 닉네임, 이메일 검색" value="${search}">
+               placeholder="" value="${search}">
       </div>
     </form>
   </div>

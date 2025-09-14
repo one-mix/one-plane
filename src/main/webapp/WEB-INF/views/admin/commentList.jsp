@@ -60,7 +60,6 @@
             <tr class="comment-row" data-comment-id="${comment.commentId}">
               <td>
                 <span class="comment-id-badge">${(currentPage - 1) * 20 + status.index + 1}</span>
-                <small class="text-muted d-block">ID: ${comment.commentId}</small>
               </td>
               <td>
                 <div class="post-title" title="${comment.postTitle}">
