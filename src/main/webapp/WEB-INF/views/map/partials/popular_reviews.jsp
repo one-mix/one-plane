@@ -32,7 +32,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <div class="info">
-                                    <span class="country">${review.country}</span>
+                                    <span class="country">${review.countryName}</span>
                                     <span class="review-card-title" title="${review.title}">
                                         <c:choose>
                                             <c:when test="${fn:length(review.title) > 25}">

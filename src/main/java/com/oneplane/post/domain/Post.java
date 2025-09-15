@@ -20,7 +20,8 @@ public class Post {
     private String content;              // Summernote HTML 콘텐츠
     private String thumbnailImage;       // 썸네일 이미지 URL
     private Category category;
-    private String country;
+    private Long countryId;           // 국가 ID (외래키)
+    private String countryName;
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;
@@ -64,5 +65,10 @@ public class Post {
     public void decreaseLikeCount() {
         this.likeCount = (this.likeCount == null ? 0 : this.likeCount) - 1;
         if (this.likeCount < 0) this.likeCount = 0;
+    }
+
+    // 국가명 반환 (countryName이 있으면 그것을, 없으면 기본값)
+    public String getDisplayCountryName() {
+        return countryName != null ? countryName : "미분류";
     }
 }

@@ -24,8 +24,8 @@
         </c:when>
       </c:choose>
 
-      <c:if test="${not empty post.country}">
-        <span class="country-tag">${post.country}</span>
+      <c:if test="${not empty post.countryName}">
+        <span class="country-tag">${post.countryName}</span>
       </c:if>
     </div>
     <div class="post-title-bar">
