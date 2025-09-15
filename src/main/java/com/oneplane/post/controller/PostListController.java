@@ -1,6 +1,8 @@
 package com.oneplane.post.controller;
 
 import com.oneplane.config.SecurityUtil;
+import com.oneplane.country.domain.Country;
+import com.oneplane.country.service.CountryService;
 import com.oneplane.post.domain.Category;
 import com.oneplane.post.domain.Post;
 import com.oneplane.post.domain.PostListResponse;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -25,6 +28,7 @@ import java.util.Map;
 public class PostListController {
 
     private final PostService postService;
+    private final CountryService countryService;
 
     @GetMapping("/list")
     public String postList(@RequestParam(value = "category", required = false) String category,
@@ -53,10 +57,14 @@ public class PostListController {
             // 페이징된 게시글 목록 조회
             PostListResponse response = postService.getPostsWithPaging(condition);
 
+            // 국가 목록 조회 (드롭다운용)
+            List<Country> countries = countryService.getAllCountries();
+
             // Model에 데이터 추가
             model.addAttribute("postResponse", response);
             model.addAttribute("posts", response.getPosts());
             model.addAttribute("categories", Category.values());
+            model.addAttribute("countries", countries); // 국가 목록 추가
             model.addAttribute("selectedCategory", category);
             model.addAttribute("selectedCountry", country);
             model.addAttribute("currentPage", response.getCurrentPage());
@@ -169,9 +177,13 @@ public class PostListController {
     public String postWrite(Model model) {
         log.info("게시글 작성 페이지 요청");
 
+        // 국가 목록 조회
+        List<Country> countries = countryService.getAllCountries();
+
         model.addAttribute("contentPage", "post/postWrite.jsp");
         model.addAttribute("activeMenu", "post");
         model.addAttribute("categories", Category.values());
+        model.addAttribute("countries", countries);
 
         return "layout/layout";
     }
@@ -181,7 +193,7 @@ public class PostListController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> postWriteProcess(
             @RequestParam String category,
-            @RequestParam String country,
+            @RequestParam Long countryId,
             @RequestParam String title,
             @RequestParam String content) {
 
@@ -228,7 +240,7 @@ public class PostListController {
                     .title(title.trim())
                     .content(content)
                     .category(Category.valueOf(category))
-                    .country(country)
+                    .countryId(countryId)
                     .viewCount(0)
                     .likeCount(0)
                     .commentCount(0)
@@ -379,9 +391,12 @@ public class PostListController {
                 return "error/403";
             }
 
+            List<Country> countries = countryService.getAllCountries();
+
             // 카테고리 목록도 함께 전달
             model.addAttribute("post", post);
             model.addAttribute("categories", Category.values());
+            model.addAttribute("countries", countries);
             model.addAttribute("contentPage", "post/postEdit.jsp");
             model.addAttribute("activeMenu", "post");
 
@@ -404,7 +419,7 @@ public class PostListController {
     public ResponseEntity<Map<String, Object>> updatePost(
             @PathVariable Integer postId,
             @RequestParam String category,
-            @RequestParam String country,
+            @RequestParam Long countryId,
             @RequestParam String title,
             @RequestParam String content) {
 
@@ -467,7 +482,7 @@ public class PostListController {
                     .title(title.trim())
                     .content(content)
                     .category(Category.valueOf(category))
-                    .country(country)
+                    .countryId(countryId)
                     .build();
 
             // 게시글 수정

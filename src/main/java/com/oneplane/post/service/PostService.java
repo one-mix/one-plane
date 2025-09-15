@@ -1,5 +1,6 @@
 package com.oneplane.post.service;
 
+import com.oneplane.country.service.CountryService;
 import com.oneplane.post.dao.PostDao;
 import com.oneplane.post.domain.Post;
 import com.oneplane.post.domain.PostListResponse;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PostService {
 
     private final PostDao postDao;
+    private final CountryService countryService;
 
     /**
      * 게시글 전체 목록 조회
@@ -426,7 +428,7 @@ public class PostService {
             existingPost.setTitle(updatePost.getTitle());
             existingPost.setContent(updatePost.getContent());
             existingPost.setCategory(updatePost.getCategory());
-            existingPost.setCountry(updatePost.getCountry());
+            existingPost.setCountryId(updatePost.getCountryId());
             existingPost.setUpdatedAt(new Date());
 
             // 썸네일 이미지 재추출
@@ -605,6 +607,21 @@ public class PostService {
         } catch (Exception e) {
             log.error("인기 게시글 페이징 조회 중 오류 발생", e);
             throw new RuntimeException("인기 게시글 조회 중 오류가 발생했습니다.", e);
+        }
+    }
+
+    private Long convertCountryNameToId(String countryName) {
+        if (countryName == null || countryName.trim().isEmpty()) {
+            return null;
+        }
+
+        // 기존 하드코딩된 매핑을 DB 조회로 변경
+        try {
+            var country = countryService.getCountryByName(countryName);
+            return country != null ? country.getCountryId() : null;
+        } catch (Exception e) {
+            log.warn("국가명 변환 중 오류 발생: {}", countryName, e);
+            return null;
         }
     }
 }

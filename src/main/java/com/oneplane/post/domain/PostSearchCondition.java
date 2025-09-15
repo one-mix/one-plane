@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PostSearchCondition {
     private Category category;
+    private Long countryId;
     private String country;
     private String searchType;
     private String searchKeyword;
