@@ -5,6 +5,7 @@ import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.service.RecommendService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -119,5 +120,15 @@ public class RecommendController {
         recommendService.updateFeedback(recommendId, rating, content);
 
         return ResponseEntity.ok("피드백 저장 완료");
+    }
+
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<String> softDeleteRecommend(@PathVariable("id") Long id) {
+        boolean success = recommendService.softDeleteRecommend(id);
+        if (success) {
+            return ResponseEntity.ok("삭제 완료");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제 실패: 대상 없음");
+        }
     }
 }

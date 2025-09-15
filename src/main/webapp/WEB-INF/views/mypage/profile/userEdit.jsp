@@ -111,6 +111,7 @@
 
                             <c:otherwise>
                                 <li class="danger"><a href="/mypage/profile/out">회원탈퇴</a></li>
+                                <!-- 기존 메뉴 항목 수정: “추가하기” 버튼이 CertificationController의 add 매핑을 호출하도록 변경 -->
                             </c:otherwise>
                         </c:choose>
 
@@ -133,7 +134,7 @@
                         <div class="alert alert-danger">${errorMessage}</div>
                     </c:if>
 
-                    <form action="<c:url value='/mypage/profile/edit'/>" method="post">
+                    <form action="<c:url value='/mypage/profile/edit'/>" method="post" enctype="multipart/form-data">
                         <!-- 이름 (읽기 전용) -->
                         <div class="form-group">
                             <label for="name">이름</label>
@@ -273,7 +274,7 @@
 
                         <div class="btn-group">
                             <button type="submit" class="btn btn-primary">저장하기</button>
-                            <a href="<c:url value='/mypage'/>" class="btn btn-secondary">취소</a>
+                            <a href="<c:url value='/mypage/profile/edit'/>" class="btn btn-secondary">취소</a>
                         </div>
                     </form>
                 </div>
@@ -281,47 +282,25 @@
         </div>
 
         <script>
-            // 폼 유효성 검사
             document.querySelector('form').addEventListener('submit', function(e) {
                 const email = document.getElementById('email').value.trim();
                 const nickname = document.getElementById('nickname').value.trim();
-
-                if (!email) {
-                    e.preventDefault();
-                    alert('이메일을 입력해주세요.');
-                    return;
-                }
-
-                if (!nickname) {
-                    e.preventDefault();
-                    alert('닉네임을 입력해주세요.');
-                    return;
-                }
-
-                // 이메일 형식 검사
+                if (!email) { e.preventDefault(); alert('이메일을 입력해주세요.'); return; }
+                if (!nickname) { e.preventDefault(); alert('닉네임을 입력해주세요.'); return; }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    e.preventDefault();
-                    alert('올바른 이메일 형식을 입력해주세요.');
-                    return;
-                }
+                if (!emailRegex.test(email)) { e.preventDefault(); alert('올바른 이메일 형식을 입력해주세요.'); return; }
             });
 
-            // 라디오 버튼 스타일 개선
-            document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+            document.querySelectorAll('.radio-group input[type="radio"]').forEach(function(radio) {
                 radio.addEventListener('change', function() {
-                    document.querySelectorAll('input[name="' + this.name + '"]').forEach(function(r) {
-                        r.closest('.radio-option').classList.remove('active');
-                    });
+                    this.closest('.radio-group').querySelectorAll('.radio-option')
+                        .forEach(el => el.classList.remove('active'));
                     this.closest('.radio-option').classList.add('active');
                 });
             });
-
-            // 페이지 로드 시 선택된 라디오 버튼에 active 클래스 추가
             document.addEventListener('DOMContentLoaded', function() {
-                document.querySelectorAll('input[type="radio"]:checked').forEach(function(radio) {
-                    radio.closest('.radio-option').classList.add('active');
-                });
+                document.querySelectorAll('.radio-group input[type="radio"]:checked')
+                    .forEach(r => r.closest('.radio-option').classList.add('active'));
             });
         </script>
     </body>

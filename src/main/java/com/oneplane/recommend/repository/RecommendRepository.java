@@ -22,4 +22,5 @@ public interface RecommendRepository {
     );
     int getTotalRecommendHistoryCount(@Param("userId") Integer userId);
     List<TopCountryStatsDTO> getTopRecommendCountries();
+    int softDeleteRecommend(@Param("recommendId") Long recommendId);
 }

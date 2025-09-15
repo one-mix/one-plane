@@ -165,4 +165,9 @@ public class RecommendServiceImpl implements RecommendService {
 
         return result;
     }
+
+    @Override
+    public boolean softDeleteRecommend(Long recommendId) {
+        return recommendRepository.softDeleteRecommend(recommendId) > 0;
+    }
 }

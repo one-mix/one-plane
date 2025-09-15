@@ -265,58 +265,6 @@ public class AdminUserService {
     }
 
     /**
-     * 사용자 통계 정보 조회
-     * @return 사용자 관련 통계 데이터
-     */
-    @Transactional(readOnly = true)
-    public Map<String, Object> getUserStats() {
-        log.debug("사용자 통계 정보 조회 시작");
-
-        try {
-            Map<String, Object> stats = new HashMap<>();
-
-            // 전체 사용자 수 (삭제되지 않은)
-            int totalUsers = adminUserDao.getTotalUserCount(null);
-
-            // 탈퇴 사용자 수
-            int deletedUsers = adminUserDao.getTotalDeletedUserCount(null);
-
-            // 활성 사용자 수 계산
-            int activeUsers = Math.max(0, totalUsers);
-
-            // 오늘 가입한 사용자 수
-            int todaySignups = adminUserDao.getTodaySignupCount();
-
-            // 이번달 가입한 사용자 수
-            int monthlySignups = adminUserDao.getMonthlySignupCount();
-
-            // 역할별 통계
-            List<Map<String, Object>> roleStats = adminUserDao.getUserRoleStats();
-
-            // 등급별 통계
-            List<Map<String, Object>> gradeStats = adminUserDao.getUserGradeStats();
-
-            // 결과 설정
-            stats.put("totalUsers", totalUsers);
-            stats.put("deletedUsers", deletedUsers);
-            stats.put("activeUsers", activeUsers);
-            stats.put("todaySignups", todaySignups);
-            stats.put("monthlySignups", monthlySignups);
-            stats.put("roleStats", roleStats);
-            stats.put("gradeStats", gradeStats);
-
-            log.debug("사용자 통계 조회 완료 - 전체: {}, 활성: {}, 탈퇴: {}, 오늘가입: {}, 월간가입: {}",
-                    totalUsers, activeUsers, deletedUsers, todaySignups, monthlySignups);
-
-            return stats;
-
-        } catch (Exception e) {
-            log.error("사용자 통계 조회 중 오류 발생", e);
-            throw new RuntimeException("통계 정보를 불러오는데 실패했습니다.", e);
-        }
-    }
-
-    /**
      * 사용자 검색 (닉네임 또는 이름으로)
      */
     @Transactional(readOnly = true)
@@ -341,4 +289,91 @@ public class AdminUserService {
 
         return users;
     }
+    /**
+     * 사용자 통계 대시보드 데이터 조회 (통합 버전)
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Object> getUserStats() {
+        log.info("사용자 통계 데이터 조회 시작");
+
+        Map<String, Object> stats = new HashMap<>();
+
+        try {
+            // 기본 통계 수치
+            int totalUsers = adminUserDao.getActiveUserCount();
+            int deletedUsers = adminUserDao.getTotalDeletedUserCount(null);
+            int todaySignups = adminUserDao.getTodaySignupCount();
+            int monthlySignups = adminUserDao.getMonthlySignupCount();
+            int travelCautionUsers = adminUserDao.getTravelCautionUserCount();
+
+            stats.put("totalUsers", totalUsers);
+            stats.put("deletedUsers", deletedUsers);
+            stats.put("todaySignups", todaySignups);
+            stats.put("monthlySignups", monthlySignups);
+            stats.put("travelCautionUsers", travelCautionUsers);
+            stats.put("activeUsers", totalUsers); // 활성 사용자는 총 사용자와 동일
+
+            // 활성 사용자 비율 계산
+            int allUsers = totalUsers + deletedUsers;
+            double activeRate = allUsers > 0 ? ((double) totalUsers / allUsers) * 100 : 0;
+            stats.put("activeRate", Math.round(activeRate * 10.0) / 10.0);
+
+            log.info("사용자 통계 데이터 조회 완료 - 전체: {}, 활성: {}, 탈퇴: {}",
+                    allUsers, totalUsers, deletedUsers);
+
+        } catch (Exception e) {
+            log.error("사용자 통계 데이터 조회 중 오류 발생", e);
+            // 기본값으로 초기화
+            stats.put("totalUsers", 0);
+            stats.put("deletedUsers", 0);
+            stats.put("todaySignups", 0);
+            stats.put("monthlySignups", 0);
+            stats.put("travelCautionUsers", 0);
+            stats.put("activeUsers", 0);
+            stats.put("activeRate", 0.0);
+        }
+
+        return stats;
+    }
+
+    /**
+     * 성별 통계 조회
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getGenderStats() {
+        return adminUserDao.getUserGenderStats();
+    }
+
+    /**
+     * 연령대별 통계 조회
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getAgeStats() {
+        return adminUserDao.getUserAgeStats();
+    }
+
+    /**
+     * 등급별 통계 조회
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getGradeStats() {
+        return adminUserDao.getUserGradeStats();
+    }
+
+    /**
+     * 건강 정보별 통계 조회
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getHealthStats() {
+        return adminUserDao.getUserHealthStats();
+    }
+
+    /**
+     * 월별 가입 추이 조회
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getMonthlySignupTrend() {
+        return adminUserDao.getMonthlySignupTrend();
+    }
+
 }
