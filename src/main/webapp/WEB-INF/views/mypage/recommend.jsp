@@ -77,7 +77,7 @@
 
         .recommendation-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .card-image {
@@ -100,7 +100,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: #fff;
             padding: 5px 10px;
             border-radius: 15px;
@@ -111,9 +111,11 @@
         /* 오버레이 */
         .card-content {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
             color: #fff;
             opacity: 0;
             transition: opacity 0.2s;
@@ -158,7 +160,7 @@
         }
 
         .overlay-stars::before {
-            content: "★★★★★";         /* 전체 별 5개 */
+            content: "★★★★★"; /* 전체 별 5개 */
             letter-spacing: 2px;
             background: linear-gradient(90deg, #f5c518 calc(var(--rating) * 20%), #888 calc(var(--rating) * 20%));
             -webkit-background-clip: text;
@@ -166,7 +168,7 @@
         }
 
         .overlay-rating {
-            --rating: attr(data-rating number);  /* ✅ JSP의 rating 값 가져옴 */
+            --rating: attr(data-rating number); /* ✅ JSP의 rating 값 가져옴 */
         }
 
         .empty-state {
@@ -225,13 +227,33 @@
 
         .overlay-tag {
             display: inline-block;
-            background: rgba(255,255,255,0.2);  /* 반투명 배경 */
+            background: rgba(255, 255, 255, 0.2); /* 반투명 배경 */
             padding: 4px 8px;
             border-radius: 4px;
             margin-right: 5px;
             font-size: 0.75em;
             color: #fff;
             white-space: nowrap;
+        }
+
+        .delete-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #dc3545; /* 빨간색 */
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            font-size: 0.9em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .recommendation-card:hover .delete-button {
+            opacity: 1;
         }
     </style>
 </head>
@@ -242,19 +264,19 @@
         <a href="/recommend" class="recommend-button">추천받기</a>
     </div>
 
-    <c:set var="itemCount" value="${fn:length(recommendHistory)}" />
+    <c:set var="itemCount" value="${fn:length(recommendHistory)}"/>
     <c:choose>
         <c:when test="${itemCount == 1}">
-            <c:set var="gridClass" value="single-item" />
+            <c:set var="gridClass" value="single-item"/>
         </c:when>
         <c:when test="${itemCount == 2}">
-            <c:set var="gridClass" value="two-items" />
+            <c:set var="gridClass" value="two-items"/>
         </c:when>
         <c:when test="${itemCount == 3}">
-            <c:set var="gridClass" value="three-items" />
+            <c:set var="gridClass" value="three-items"/>
         </c:when>
         <c:otherwise>
-            <c:set var="gridClass" value="" />
+            <c:set var="gridClass" value=""/>
         </c:otherwise>
     </c:choose>
 
@@ -271,7 +293,7 @@
                 <div class="card-image ${empty recommend.countryImg ? 'no-image' : ''}">
                     <c:choose>
                         <c:when test="${not empty recommend.countryImg}">
-                            <img src="${recommend.countryImg}" alt="${recommend.countryNameKo}" />
+                            <img src="${recommend.countryImg}" alt="${recommend.countryNameKo}"/>
                         </c:when>
                         <c:otherwise><span>🌍</span></c:otherwise>
                     </c:choose>
@@ -316,6 +338,7 @@
                         </div>
                     </div>
                 </div>
+                <button class="delete-button" onclick="deleteRecommend(${recommend.recommendId})">삭제</button>
             </div>
         </c:forEach>
     </div>
@@ -360,4 +383,16 @@
     </c:if>
 </div>
 </body>
+<script>
+    function deleteRecommend(id) {
+        if (confirm("정말 삭제하시겠습니까?")) {
+            fetch("/api/recommend/delete/" + id, {method: "POST"})
+                .then(res => res.text())
+                .then(msg => {
+                    alert(msg);
+                    location.reload(); // 삭제 후 새로고침
+                });
+        }
+    }
+</script>
 </html>
