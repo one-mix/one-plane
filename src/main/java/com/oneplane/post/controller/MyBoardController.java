@@ -1,28 +1,3 @@
-//package com.oneplane.myBoard.controller;
-//
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//
-//import java.util.List;
-//
-//@Controller
-//@RequestMapping("/board")
-//public class MyBoardController {
-//
-//
-//    @GetMapping("/myboard")
-//    public String myBoard(Model model) {
-//        model.addAttribute("contentPage", "myBoard/myBoard.jsp");
-//
-//        return "layout/layout";
-//    }
-//}
-//
-//
-
-
 package com.oneplane.post.controller;
 
 import org.springframework.stereotype.Controller;

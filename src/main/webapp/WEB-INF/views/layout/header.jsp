@@ -7,8 +7,10 @@
 
     <%-- 로고 --%>
     <div class="logo">
-        <img src="/images/logo.png" alt="OnePlane Logo" class="logo-img" />
-        <span>OnePlane</span>
+        <a href="/">
+            <img src="/images/logo.png" alt="OnePlane Logo" class="logo-img" />
+            <span>OnePlane</span>
+        </a>
     </div>
 
     <%-- 네비게이션 메뉴 --%>

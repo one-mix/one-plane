@@ -1,8 +1,9 @@
 .main-container {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    /*padding: 0 20px;*/
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+          
 }
 
 .top-tabs-wrapper {
@@ -18,7 +19,6 @@
     display: flex;
     gap: var(--spacing-sm);
     align-items: center;
-    /*background: var(--main-0);*/
     padding: var(--spacing-sm);
     border-radius: 50px;
     flex-shrink: 0;

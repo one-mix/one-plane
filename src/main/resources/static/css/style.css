@@ -26,6 +26,14 @@ html, body {
     color: var(--main-700);
 }
 
+/* 헤더 로고 링크 스타일 */
+.header .logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit;        /* 부모 색상 상속 */
+}
+
 /* 헤더 로고 이미지 */
 .logo-img {
     width: 75px;

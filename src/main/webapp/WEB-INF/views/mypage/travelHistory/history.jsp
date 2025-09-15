@@ -8,7 +8,6 @@
 <head>
     <meta charset="UTF-8">
     <title>방문한 여행지</title>
-    <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/mypage/mypage.css" />
     <link rel="stylesheet" href="/css/mypage/history.css" />
 </head>
