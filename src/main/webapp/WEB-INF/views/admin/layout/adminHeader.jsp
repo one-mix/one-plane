@@ -6,7 +6,7 @@
     <div class="admin-header-content">
         <!-- 로고 -->
         <div class="admin-logo">
-            <a href="/admin/dashboard" class="admin-logo-link" aria-label="OnePlane 홈">
+            <a href="/admin/userList" class="admin-logo-link" aria-label="OnePlane 홈">
                 <img src="/images/logo.png" alt="" class="logo-img" aria-hidden="true" />
                 <span>OnePlane</span>
             </a>
