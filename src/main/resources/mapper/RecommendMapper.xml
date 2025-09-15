@@ -104,10 +104,19 @@
             FETCH FIRST 10 ROWS ONLY
     </select>
 
-    <update id="softDeleteRecommend" parameterType="java.lang.Long">
+    <!-- softDelete -->
+    <update id="softDeleteRecommend" parameterType="map">
+        UPDATE recommend
+        SET deleted_at = SYSDATE
+        WHERE recommend_id = #{recommendId}
+        AND user_id = #{userId}
+    </update>
+
+    <update id="softDeleteRecommendMyPage" parameterType="java.lang.Long">
         UPDATE RECOMMEND
         SET DELETED_AT = SYSDATE
         WHERE RECOMMEND_ID = #{recommendId}
-          AND deleted_at IS NULL
+        AND deleted_at IS NULL
     </update>
+
 </mapper>

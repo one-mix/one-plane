@@ -37,7 +37,6 @@
       padding: 40px;
       position: relative;
     }
-
     .profile-header {
       text-align: center;
       margin-bottom: 30px;
@@ -54,10 +53,28 @@
       align-items: center;
       justify-content: center;
     }
+
     .logo img{
       width: 75px;
       height: 65px;
     }
+
+    .logo a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .logo a,
+    .logo a:link,
+    .logo a:visited,
+    .logo a:hover,
+    .logo a:active {
+        text-decoration: none;
+        color: inherit;
+    }
+
 
     .welcome-text {
       color: #6c757d;

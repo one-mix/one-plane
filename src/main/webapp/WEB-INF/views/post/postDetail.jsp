@@ -20,7 +20,7 @@
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
 
-<link href="/css/postDetail.css" rel="stylesheet">
+<link href="/css/post/postDetail.css" rel="stylesheet">
 
 <main class="post-detail-container">
   <!-- 상단 네비게이션 -->

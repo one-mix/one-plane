@@ -73,7 +73,7 @@
                         <label for="theme2">🌇 관광</label>
                     </div>
                     <div class="option-item">
-                        <input type="radio" id="theme3" name="travelPurpose" value="문화" ${dto.travelPurpose == '문화 체험' ? 'checked' : ''}>
+                        <input type="radio" id="theme3" name="travelPurpose" value="문화" ${dto.travelPurpose == '문화' ? 'checked' : ''}>
                         <label for="theme3">🏛 문화 체험</label>
                     </div>
                     <div class="option-item">

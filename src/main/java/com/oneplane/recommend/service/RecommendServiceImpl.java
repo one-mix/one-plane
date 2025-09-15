@@ -167,7 +167,16 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     @Override
-    public boolean softDeleteRecommend(Long recommendId) {
-        return recommendRepository.softDeleteRecommend(recommendId) > 0;
+    public void softDeleteRecommend(Integer recommendId, Integer userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("recommendId", recommendId);
+        params.put("userId", userId);
+
+        recommendRepository.softDeleteRecommend(params);
+    }
+
+    @Override
+    public boolean softDeleteRecommendMyPage(Long recommendId) {
+        return recommendRepository.softDeleteRecommendMyPage(recommendId) > 0;
     }
 }

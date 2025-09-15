@@ -28,18 +28,33 @@ fetch("/favorites/api/list/1")
       removeBtn.textContent = "X";
       removeBtn.className = "remove-btn";
 
-      removeBtn.onclick = () => {
-        fetch("/favorites/remove", {
-            method: "POST",
-             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-             body: `favoritesCountryId=${item.favoritesCountryId}&userId=${item.userId}`
-        })
-        .then(() => {
-            li.remove();
-            alert(`즐겨찾기 국가에서 삭제되었습니다.`)
-        })
-        .catch(err => console.error("삭제 실패", err));
-      };
+        removeBtn.onclick = () => {
+          if (item.favoritesCountryId) {
+            // 즐겨찾기 삭제
+            fetch("/favorites/remove", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: `favoritesCountryId=${item.favoritesCountryId}&userId=${item.userId}`
+            })
+            .then(() => {
+              li.remove();
+              alert("즐겨찾기에서 삭제되었습니다.");
+            });
+          } else {
+            // 추천 삭제 (soft delete)
+            fetch("/api/recommend/remove", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              body: `recommendId=${item.recommendId}&userId=${item.userId}`
+            })
+            .then(() => {
+              li.remove();
+              alert("추천 국가에서 삭제되었습니다.");
+            });
+          }
+        };
 
       // 자식 요소로 추가
       li.appendChild(span);

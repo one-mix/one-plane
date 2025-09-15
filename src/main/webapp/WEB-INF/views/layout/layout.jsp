@@ -10,6 +10,7 @@
         <%-- CSS 연결 --%>
         <link rel="stylesheet" href="/css/variables.css" />
         <link rel="stylesheet" href="/css/style.css" />
+        <link rel="preload" href="/css/style.css" as="style">
         <c:if test="${activeMenu eq 'recommend'}">
             <link rel="stylesheet" href="/css/recommend/recommend.css" />
         </c:if>

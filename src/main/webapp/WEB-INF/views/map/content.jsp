@@ -5,13 +5,19 @@
 <html>
 <head>
     <link rel="stylesheet" href="/css/map/map.css" />
+    <link rel="stylesheet" href="/css/map/info_panel.css" />
+    <link rel="stylesheet" href="/css/map/search.css" />
+    <link rel="stylesheet" href="/css/map/category.css" />
+    <link rel="stylesheet" href="/css/map/guideline.css" />
+    <link rel="stylesheet" href="/css/map/top_posts.css" />
+    <link rel="stylesheet" href="/css/map/popular_reviews.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <jsp:include page="./partials/search.jsp" />
 
     <div id="map" class="map">
+        <jsp:include page="./partials/search.jsp" />
         <jsp:include page="./partials/guideline.jsp" />
         <jsp:include page="./partials/info_panel.jsp" />
     </div>

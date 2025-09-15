@@ -19,7 +19,6 @@
     </div>
 
     <div class="panel-body">
-
         <!-- GDP 차트 -->
         <div class="chart-section">
             <span class="chart-section-title">국내 총생산</span>
@@ -35,9 +34,13 @@
                 <div class="spinner"></div>
             </div>
         </div>
+    </div>
 
-        <!-- 저장하기 버튼 -->
-        <button class="save-country" onclick="saveFavorite()">저장하기</button>
+    <!-- 저장하기 버튼 -->
+    <div class="panel-footer">
+       <button class="save-country" onclick="saveFavorite()">저장하기</button>
+    </div>
+ </div>
 
         <script>
         async function saveFavorite() {
