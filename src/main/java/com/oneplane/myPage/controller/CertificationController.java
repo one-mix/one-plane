@@ -57,7 +57,7 @@ public class CertificationController extends BaseController {
         } else {
             rttr.addFlashAttribute("errorMessage", "등록에 실패했습니다. 모든 필드를 확인해주세요.");
         }
-        return "redirect:/mypage";
+        return "redirect:/mypage/dashboard";
     }
 
     @GetMapping

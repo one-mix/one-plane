@@ -21,7 +21,7 @@ public class MyPostService {
     public List<Post> getMyPosts(Integer userId) {
         log.info("내 게시글 전체 목록 조회 요청 - userId: {}", userId);
         try {
-            List<Post> posts = myPostDao.selectPostsByAuthor(userId);
+            List<Post> posts = myPostDao.selPostsByAuthor(userId);
             log.info("내 게시글 전체 조회 완료 - 조회 건수: {}", posts.size());
             return posts;
         } catch (Exception e) {

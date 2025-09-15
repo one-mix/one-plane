@@ -1,11 +1,13 @@
 package com.oneplane.myPage.controller;
 
 import com.oneplane.myPage.dto.CertificationTimelineDto;
+import com.oneplane.myPage.dto.UserProfileDto;
 import com.oneplane.myPage.service.CertificationService;
 import com.oneplane.myPage.service.TravelHistoryService;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.repository.RecommendRepository;
 import com.oneplane.recommend.service.RecommendService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -57,8 +59,36 @@ public class MyPageController extends BaseController {
         int photoCount = travelHistoryService.getUploadedPhotoCount(userId);
 
         List<CertificationTimelineDto> timeline = certificationService.getTimelineData(userId);
+
+        // **새로 추가: 최신 사이클만 표시하는 로직**
+        int maxDistance = 30000;
+
+        if (!timeline.isEmpty()) {
+            // 1. 각 항목의 사이클 번호 계산
+            int maxCycle = 0;
+            for (CertificationTimelineDto item : timeline) {
+                int cycle = item.getCumulativeDistance() / maxDistance;
+                maxCycle = Math.max(maxCycle, cycle);
+            }
+
+            // 2. 최신 사이클에 속하는 항목들만 필터링
+            final int currentCycle = maxCycle;
+            timeline = timeline.stream()
+                    .filter(item -> item.getCumulativeDistance() / maxDistance == currentCycle)
+                    .collect(Collectors.toList());
+
+            // 3. 남은 항목들에 wrap-around 적용
+            for (CertificationTimelineDto item : timeline) {
+                int wrappedDistance = item.getCumulativeDistance() % maxDistance;
+                item.setCumulativeDistance(wrappedDistance);
+            }
+
+            // 4. 현재 사이클 정보를 뷰에 전달 (선택사항)
+            model.addAttribute("currentCycle", currentCycle);
+        }
+
         model.addAttribute("timeline", timeline);
-        model.addAttribute("maxDistance", 30000);
+        model.addAttribute("maxDistance", maxDistance);
         model.addAttribute("countryCount", countryCount);
         model.addAttribute("totalDistance", totalDistance);
         model.addAttribute("photoCount", photoCount);
@@ -83,6 +113,7 @@ public class MyPageController extends BaseController {
         model.addAttribute("pageTitle", "마이페이지");
         return "layout/layout";
     }
+
 
     public Long getUserIdFromSession(HttpSession session) {
         Object obj = session.getAttribute("userId");

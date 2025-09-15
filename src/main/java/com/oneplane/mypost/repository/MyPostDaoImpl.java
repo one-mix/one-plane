@@ -23,7 +23,7 @@ public class MyPostDaoImpl implements MyPostDao {
     private final String namespace = "com.oneplane.post.mapper.PostMapper.";
 
     @Override
-    public List<Post> selectPostsByAuthor(Integer userId) {
+    public List<Post> selPostsByAuthor(Integer userId) {
         log.debug("내 게시글 전체 조회 - userId: {}", userId);
         return sqlSession.selectList(namespace + "selectPostsByAuthor", userId);
     }

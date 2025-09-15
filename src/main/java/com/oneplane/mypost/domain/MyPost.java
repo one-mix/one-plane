@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +23,8 @@ public class MyPost {
     private Integer page;            // 현재 페이지
     private Integer size;            // 페이지 크기
     private Integer offset;          // 오프셋
+
+
 
     // 페이지 그룹 크기 (한번에 보여질 페이지 번호 개수)
     private static final int PAGE_GROUP_SIZE = 5;

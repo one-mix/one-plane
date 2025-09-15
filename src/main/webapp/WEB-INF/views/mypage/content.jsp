@@ -119,6 +119,7 @@
 
                     <c:otherwise>
                         <li class="danger"><a href="/mypage/profile/out">회원탈퇴</a></li>
+                        <!-- 기존 메뉴 항목 수정: “추가하기” 버튼이 CertificationController의 add 매핑을 호출하도록 변경 -->
                     </c:otherwise>
                 </c:choose>
 
@@ -155,7 +156,17 @@
                 </div>
             </div>
         </c:if>
-        <div class="content-title">방문한 여행지</div>
+
+
+        <div class="content-title">
+            <span class="title-text">방문한 여행지</span>
+            <div class="actions">
+                <a href="${pageContext.request.contextPath}/mypage/certification/add" class="btn-add">추가하기</a>
+            </div>
+        </div>
+
+
+
 
         <!-- 통계 영역 -->
         <div class="stats-container">
