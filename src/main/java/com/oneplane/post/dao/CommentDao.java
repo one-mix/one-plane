@@ -4,6 +4,7 @@ import com.oneplane.post.domain.Comment;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommentDao {
 
@@ -42,4 +43,12 @@ public interface CommentDao {
 
     // 관리자용 - 전체 댓글 수 조회 (검색 포함)
     int countAllComments(@Param("search") String search);
+
+    int countAllComments();
+
+    // 오늘 작성된 댓글 수
+    int countTodayComments();
+
+    // 최근 7일간 일별 댓글 수
+    List<Map<String, Object>> getDailyCommentStats();
 }

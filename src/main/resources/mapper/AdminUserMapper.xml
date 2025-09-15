@@ -123,6 +123,13 @@
         </if>
     </select>
 
+    <!-- 전체 활성 사용자 수 -->
+    <select id="getActiveUserCount" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE deleted_at IS NULL
+    </select>
+
     <!-- 오늘 가입한 사용자 수 -->
     <select id="getTodaySignupCount" resultType="int">
         SELECT COUNT(*)
@@ -168,6 +175,125 @@
             WHEN 'ELITE' THEN 5
             ELSE 6
         END
+    </select>
+
+    <!-- 성별별 통계 -->
+    <select id="getUserGenderStats" resultType="map">
+        WITH gender_groups AS (
+            SELECT
+                CASE
+                    WHEN gender = 'male' THEN '남성'
+                    WHEN gender = 'female' THEN '여성'
+                    ELSE '미설정'
+                    END as gender,
+                CASE
+                    WHEN gender = 'male' THEN 1
+                    WHEN gender = 'female' THEN 2
+                    ELSE 3
+                    END as sort_order
+            FROM users
+            WHERE deleted_at IS NULL
+        )
+        SELECT
+            gender,
+            COUNT(*) as count
+        FROM gender_groups
+        GROUP BY gender, sort_order
+        ORDER BY sort_order
+    </select>
+
+    <!-- 연령대별 통계 -->
+    <!-- 연령대별 통계 (단순화 버전) -->
+    <select id="getUserAgeStats" resultType="map">
+        WITH age_groups AS (
+            SELECT
+                CASE
+                    WHEN age IS NULL THEN '미설정'
+                    WHEN age BETWEEN 10 AND 19 THEN '10대'
+                    WHEN age BETWEEN 20 AND 29 THEN '20대'
+                    WHEN age BETWEEN 30 AND 39 THEN '30대'
+                    WHEN age BETWEEN 40 AND 49 THEN '40대'
+                    WHEN age BETWEEN 50 AND 59 THEN '50대'
+                    WHEN age >= 60 THEN '60대 이상'
+                    ELSE '기타'
+                    END as ageGroup,
+                CASE
+                    WHEN age IS NULL THEN 8
+                    WHEN age BETWEEN 10 AND 19 THEN 1
+                    WHEN age BETWEEN 20 AND 29 THEN 2
+                    WHEN age BETWEEN 30 AND 39 THEN 3
+                    WHEN age BETWEEN 40 AND 49 THEN 4
+                    WHEN age BETWEEN 50 AND 59 THEN 5
+                    WHEN age >= 60 THEN 6
+                    ELSE 7
+                    END as sort_order
+            FROM users
+            WHERE deleted_at IS NULL
+        )
+        SELECT
+            ageGroup,
+            COUNT(*) as count
+        FROM age_groups
+        GROUP BY ageGroup, sort_order
+        ORDER BY sort_order
+    </select>
+
+    <!-- 건강 정보별 통계 -->
+    <select id="getUserHealthStats" resultType="map">
+        SELECT
+            '질병 보유' as category,
+            COUNT(*) as count
+        FROM users
+        WHERE deleted_at IS NULL
+          AND disease = 'true'
+        UNION ALL
+        SELECT
+            '장애 보유' as category,
+            COUNT(*) as count
+        FROM users
+        WHERE deleted_at IS NULL
+          AND disability = 'true'
+        UNION ALL
+        SELECT
+            '복용약물 보유' as category,
+            COUNT(*) as count
+        FROM users
+        WHERE deleted_at IS NULL
+          AND medication = 'true'
+        UNION ALL
+        SELECT
+            '건강 정보 없음' as category,
+            COUNT(*) as count
+        FROM users
+        WHERE deleted_at IS NULL
+          AND (disease = 'false' OR disease IS NULL)
+          AND (disability = 'false' OR disability IS NULL)
+          AND (medication = 'false' OR medication IS NULL)
+    </select>
+
+    <!-- 여행 주의 대상자 수 -->
+    <select id="getTravelCautionUserCount" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE deleted_at IS NULL
+          AND (
+            age >= 65
+                OR disease = 'true'
+                OR disability = 'true'
+                OR medication = 'true'
+            )
+    </select>
+
+    <!-- 월별 가입 추이 (Oracle 11g 호환 버전) -->
+    <select id="getMonthlySignupTrend" resultType="map">
+        SELECT
+            TO_CHAR(TRUNC(created_at, 'MM'), 'YYYY-MM') as month,
+            COUNT(*) as count
+        FROM users
+        WHERE created_at >= ADD_MONTHS(TRUNC(SYSDATE, 'MM'), -11)
+          AND deleted_at IS NULL
+        GROUP BY TRUNC(created_at, 'MM')
+        ORDER BY TRUNC(created_at, 'MM')
     </select>
 
 </mapper>

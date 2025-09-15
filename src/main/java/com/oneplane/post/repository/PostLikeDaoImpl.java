@@ -74,5 +74,15 @@ public class PostLikeDaoImpl implements PostLikeDao {
         log.debug("사용자 좋아요 수 조회 - userId: {}", userId);
         return sqlSession.selectOne(namespace + "countPostLikesByUserId", userId);
     }
+    @Override
+    public int countAllPostLikes() {
+        log.debug("전체 좋아요 수 조회");
+        return sqlSession.selectOne(namespace + "countAllPostLikes");
+    }
 
+    @Override
+    public int countTodayPostLikes() {
+        log.debug("오늘 작성된 좋아요 수 조회");
+        return sqlSession.selectOne(namespace + "countTodayPostLikes");
+    }
 }

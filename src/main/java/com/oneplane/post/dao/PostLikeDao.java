@@ -29,4 +29,10 @@ public interface PostLikeDao {
 
     // 특정 사용자가 좋아요한 게시글 수 조회
     int countPostLikesByUserId(@Param("userId") Integer userId);
+
+    // 전체 좋아요 수 조회
+    int countAllPostLikes();
+
+    // 오늘 작성된 좋아요 수
+    int countTodayPostLikes();
 }

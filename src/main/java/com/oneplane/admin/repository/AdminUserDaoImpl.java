@@ -116,4 +116,40 @@ public class AdminUserDaoImpl implements AdminUserDao {
         log.debug("사용자 등급별 통계 조회");
         return sqlSession.selectList(namespace + "getUserGradeStats");
     }
+
+    @Override
+    public int getActiveUserCount() {
+        log.debug("전체 활성 사용자 수 조회");
+        return sqlSession.selectOne(namespace + "getActiveUserCount");
+    }
+
+    @Override
+    public List<Map<String, Object>> getUserGenderStats() {
+        log.debug("성별별 사용자 통계 조회");
+        return sqlSession.selectList(namespace + "getUserGenderStats");
+    }
+
+    @Override
+    public List<Map<String, Object>> getUserAgeStats() {
+        log.debug("연령대별 사용자 통계 조회");
+        return sqlSession.selectList(namespace + "getUserAgeStats");
+    }
+
+    @Override
+    public List<Map<String, Object>> getUserHealthStats() {
+        log.debug("건강 정보별 사용자 통계 조회");
+        return sqlSession.selectList(namespace + "getUserHealthStats");
+    }
+
+    @Override
+    public int getTravelCautionUserCount() {
+        log.debug("여행 주의 대상자 수 조회");
+        return sqlSession.selectOne(namespace + "getTravelCautionUserCount");
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthlySignupTrend() {
+        log.debug("월별 가입 추이 조회");
+        return sqlSession.selectList(namespace + "getMonthlySignupTrend");
+    }
 }

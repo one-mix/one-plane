@@ -129,4 +129,47 @@ public class PostDaoImpl implements PostDao {
         log.debug("인기 게시글 총 개수 조회 - condition: {}", condition);
         return sqlSession.selectOne(namespace + "countPopularPosts", condition);
     }
+
+    @Override
+    public int countAllPosts() {
+        log.debug("전체 게시글 수 조회");
+        return sqlSession.selectOne(namespace + "countAllPosts");
+    }
+
+    @Override
+    public int countTodayPosts() {
+        log.debug("오늘 작성된 게시글 수 조회");
+        return sqlSession.selectOne(namespace + "countTodayPosts");
+    }
+
+    @Override
+    public int countTotalLikes() {
+        log.debug("전체 좋아요 수 합계 조회");
+        Integer result = sqlSession.selectOne(namespace + "countTotalLikes");
+        return result != null ? result : 0;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCategoryStats() {
+        log.debug("카테고리별 게시글 수 통계 조회");
+        return sqlSession.selectList(namespace + "getCategoryStats");
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthlyPostTrend() {
+        log.debug("월별 게시글 작성 추이 조회 (최근 6개월)");
+        return sqlSession.selectList(namespace + "getMonthlyPostTrend");
+    }
+
+    @Override
+    public List<Post> getTop10PopularPosts() {
+        log.debug("인기 게시글 TOP 10 조회");
+        return sqlSession.selectList(namespace + "getTop10PopularPosts");
+    }
+
+    @Override
+    public List<Map<String, Object>> getDailyPostStats() {
+        log.debug("최근 7일간 일별 게시글 수 조회");
+        return sqlSession.selectList(namespace + "getDailyPostStats");
+    }
 }
