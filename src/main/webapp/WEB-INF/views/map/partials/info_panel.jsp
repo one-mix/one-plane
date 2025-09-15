@@ -59,7 +59,7 @@
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: new URLSearchParams({ countryId, userId })
+                    body: new URLSearchParams({ countryId })
                 });
 
                 const result = await res.text();

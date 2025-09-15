@@ -1,13 +1,17 @@
 package com.oneplane.favorites.controller;
 
+import com.oneplane.config.SecurityUtil;
 import com.oneplane.favorites.domain.FavoritesCountry;
 import com.oneplane.favorites.service.FavoritesCountryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+@Slf4j
 @Controller
 @RequestMapping("/favorites")
 public class FavoritesCountryController {
@@ -20,8 +24,16 @@ public class FavoritesCountryController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String addFavorite(@RequestParam Long countryId, @RequestParam Long userId) {
-        favoritesCountryService.addFavorite(countryId, userId);
+    public String addFavorite(@RequestParam Long countryId) {
+        // 로그인한 사용자 ID 가져오기
+        Long userId = SecurityUtil.getCurrentUserId().longValue();
+
+        // 현재 세션 유저 ID 로깅
+        log.info("현재 로그인한 사용자 ID: {}", userId);
+        log.info("즐겨찾기 추가 요청 - userId: {}, countryId: {}", userId, countryId);
+
+
+        favoritesCountryService.addFavorite(userId, countryId);
         return "success";
     }
 
