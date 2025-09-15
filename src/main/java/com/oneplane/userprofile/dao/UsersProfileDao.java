@@ -25,4 +25,8 @@ public interface UsersProfileDao {
 
     // Soft delete: deleted_at 업데이트
     int softDeleteUser(@Param("userId") Long userId, @Param("deletedAt") Date deletedAt);
+
+
+    int countByNickname(@Param("nickname") String nickname,
+                        @Param("userId") Long userId);
 }

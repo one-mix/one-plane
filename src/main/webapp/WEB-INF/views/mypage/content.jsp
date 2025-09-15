@@ -42,7 +42,6 @@
 
         <div class="profile-info">
             <h4>${userProfile.nickname != null ? userProfile.nickname : '사용자'}</h4>
-
             <p class="sub-info">
                 <c:if test="${not empty userProfile.gender}">
                     <c:choose>

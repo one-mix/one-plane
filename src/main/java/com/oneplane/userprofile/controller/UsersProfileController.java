@@ -40,18 +40,39 @@ public class UsersProfileController {
     public String updateProfile(
             @RequestParam("email") String email,
             @RequestParam("nickname") String nickname,
+            @RequestParam(value = "disease", required = false) String disease,
+            @RequestParam(value = "disability", required = false) String disability,
+            @RequestParam(value = "medication", required = false) String medication,
             Model model) {
 
         Long userId = Long.valueOf(SecurityUtil.getCurrentUserId());
-        boolean success = userProfileService.updateUserProfile(userId, email, nickname);
-        if (success) {
+        UsersProfile dto = UsersProfile.builder()
+                .userId(userId)
+                .email(email)
+                .nickname(nickname)
+                .disease(disease)
+                .disability(disability)
+                .medication(medication)
+                .build();
+
+        try {
+            userProfileService.updateUserProfile(dto);
             model.addAttribute("successMessage", "프로필이 업데이트되었습니다.");
-        } else {
+        } catch (IllegalArgumentException ex) {
+            log.warn("닉네임 중복 오류 - {}", ex.getMessage());
+            model.addAttribute("errorMessage", ex.getMessage());
+        } catch (IllegalStateException ex) {
+            log.error("프로필 업데이트 실패 - {}", ex.getMessage());
             model.addAttribute("errorMessage", "프로필 업데이트에 실패했습니다.");
         }
+
         return "redirect:/mypage/profile/edit";
     }
 
+    /**
+     * 회원 탈퇴 폼 조회
+     * URL: /mypage/profile/out
+     */
     @GetMapping("/out")
     public String showWithdrawForm(Model model) {
         Long userId = Long.valueOf(SecurityUtil.getCurrentUserId());
@@ -69,13 +90,12 @@ public class UsersProfileController {
     @PostMapping("/out")
     public String withdrawUser(Model model) {
         Long userId = Long.valueOf(SecurityUtil.getCurrentUserId());
-        boolean success = userProfileService.withdrawUser(userId);
-
-        if (success) {
-            // 세션 무효화 등 추가 처리 필요 시 여기에 삽입
-            model.addAttribute("successMessage", "정상적으로 탈퇴 처리되었습니다.");
+        try {
+            userProfileService.withdrawUser(userId);
+            // 세션 무효화가 필요하면 추가로 수행
             return "redirect:/login";
-        } else {
+        } catch (IllegalStateException ex) {
+            log.error("탈퇴 처리 실패 - {}", ex.getMessage());
             model.addAttribute("errorMessage", "탈퇴 처리에 실패했습니다.");
             return "redirect:/mypage/profile/out";
         }

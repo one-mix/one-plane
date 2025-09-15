@@ -16,7 +16,7 @@ public class UserDao {
     // 전체 사용자 프로필 정보 조회
     public UserProfileDto getUserFullProfile(Long userId) {
         String sql = """
-            SELECT nickname, name, age, gender, profile_img 
+            SELECT nickname, name, age, gender, profile_img, grade
             FROM users 
             WHERE user_id = ?
         """;
@@ -34,6 +34,7 @@ public class UserDao {
                 profileImg += "?t=" + System.currentTimeMillis();
             }
             dto.setProfileImagePath(profileImg);
+            dto.setGrade(rs.getString("grade"));  // 추가
             return dto;
         };
 

@@ -11,9 +11,10 @@ public class UserProfileDto {
     // 생성자
     public UserProfileDto() {}
 
-    public UserProfileDto(String nickname, String profileImagePath) {
+    public UserProfileDto(String nickname, String profileImagePath, String grade) {
         this.nickname = nickname;
         this.profileImagePath = profileImagePath;
+        this.grade = grade;
     }
 
     // Getter & Setter
