@@ -13,28 +13,11 @@ html {
     color: #13343B;
 }
 
-/* 부모 컨테이너 */
-.container {
-    width: 1200px;
-    margin: 0 auto;
-    padding: 0;
-}
-
-/* 2. 자식 .page-wrapper */
-.page-wrapper {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    align-items: flex-start;  /* 높이를 강제로 맞추지 않고 위쪽 기준 정렬 */
-    display: flex;
-    gap: 50px;  /* <-- 여기서 간격 제어 */
-}
-
 .main-content {
     margin: 20px 16px 16px 16px;
     padding: 32px;
     width: 75%;  /* 퍼센트로 설정 */
-    min-width: 1200px;  /* 최소 너비 보장 */
+    min-width: 900px;  /* 최소 너비 보장 */
     background: #FCFCF9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.04);

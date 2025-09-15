@@ -1,87 +1,64 @@
+/* 콘텐츠 래퍼 - 사이드바 옆에 위치 */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* 세로 방향으로 배치 */
+    padding: 20px;
+    width: 100%;
+    max-width: 100%; /* 최대 너비 활용 */
+}
 
-/*!* 콘텐츠 래퍼 - 사이드바 옆에 위치 *!*/
-/*.content-wrapper {*/
-/*    flex: 1;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center; !* 세로 중앙 정렬 추가 *!*/
-/*    padding: 20px;*/
-/*    width: 100%;*/
-/*}*/
-
-
-/* 헤더 */
+/* 헤더 스타일 */
 .content-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    width: 100%; /* 전체 너비 사용 */
 }
 
 .content-title {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 1.5em;
+    font-weight: bold;
     color: #333;
+    margin: 0;
 }
 
 .btn-add {
-    background: #333;
-    color: #fff;
-    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
     border: none;
+    padding: 10px 20px;
     border-radius: 6px;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.2s;
+    transition: background-color 0.2s;
 }
 
 .btn-add:hover {
-    background: #555;
+    background-color: #0056b3;
 }
 
-/* 빈 상태 */
-.empty-state {
-    background: #fff;
-    padding: 60px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    text-align: center;
-    color: #666;
-}
-
-.empty-state h3 {
-    font-size: 18px;
-    margin-bottom: 8px;
-    color: #333;
-}
-
-.empty-state p {
-    font-size: 14px;
-    color: #666;
-}
-
-
-/* 그리드 - myvisit 크기 유지 */
+/* 그리드 - 가로 너비 확장 */
 .travel-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* minmax 값 증가 */
+    gap: 20px; /* 간격 증가 */
     padding: 0;
+    width: 100%; /* 전체 너비 사용 */
+    max-width: 100%;
 }
 
-/* 카드 - recommend 스타일 기반 */
+/* 카드 크기 조정 */
 .travel-card {
     position: relative;
     background: #fff;
     border-radius: 8px;
-    height: 200px;
+    height: 250px; /* 높이 증가 */
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden; /* recommend 스타일 적용 */
+    overflow: hidden;
+    width: 100%; /* 카드가 그리드 셀을 가득 채우도록 */
 }
 
 .travel-card:hover {
@@ -120,7 +97,7 @@
     font-weight: 500;
 }
 
-/* 오버레이 - recommend 스타일 기반 */
+/* 오버레이 */
 .content-overlay {
     position: absolute;
     top: 0;
@@ -235,7 +212,7 @@
     opacity: 0.9;
 }
 
-/* 액션 버튼들 - recommend의 delete-button 스타일 기반 */
+/* 액션 버튼들 */
 .overlay-actions {
     position: absolute;
     bottom: 10px;
@@ -282,13 +259,14 @@
     background-color: #cc3333;
 }
 
-/* 빈 상태 메시지 - recommend 스타일 */
+/* 빈 상태 메시지 */
 .empty-message {
     text-align: center;
     padding: 60px 20px;
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .empty-message h3 {
@@ -299,34 +277,4 @@
 .empty-message p {
     color: #666;
     font-size: 0.9em;
-}
-
-/* 헤더 스타일 */
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.content-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-}
-
-.btn-add {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn-add:hover {
-    background-color: #0056b3;
 }
