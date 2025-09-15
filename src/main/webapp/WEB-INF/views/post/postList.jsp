@@ -5,7 +5,6 @@
 
 <link href="/css/post/postList.css" rel="stylesheet">
 
-
 <main class="main-container">
     <div class="top-tabs-wrapper">
         <div class="top-tabs">
@@ -17,7 +16,7 @@
         </div>
 
         <div class="search-area">
-            <form method="get" action="/post/list" style="display: flex; gap: 12px; align-items: center;">
+            <form method="get" action="/post/list">
                 <input type="hidden" name="category" value="${selectedCategory}">
                 <select name="searchType" class="country-dropdown">
                     <option value="title" ${searchType eq 'title' ? 'selected' : ''}>제목</option>
@@ -36,7 +35,6 @@
                 <c:forEach var="post" items="${posts}">
                     <div class="result-card" onclick="location.href='/post/detail/${post.postId}'">
                         <div class="result-info">
-                            <div style="margin-bottom: 8px;">
                                 <span class="country-badge">
                                     <c:choose>
                                         <c:when test="${not empty post.country}">
@@ -61,7 +59,7 @@
                                         <c:otherwise>미분류</c:otherwise>
                                     </c:choose>
                                 </span>
-                            </div>
+
 
                             <h3>${post.title}</h3>
 

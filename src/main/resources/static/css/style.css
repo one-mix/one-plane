@@ -2,7 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: var(--font-main);
+
     background-color: var(--semantic-background);
     display: flex;
     flex-direction: column;
@@ -85,7 +85,7 @@ html, body {
     background: none;
     border: none;
     cursor: pointer;
-    font-family: var(--font-main);
+
 }
 
 .logout-btn:hover {
@@ -114,6 +114,8 @@ html, body {
     display: flex;
     flex-direction: column;
     background-color: var(--semantic-background);
+    justify-content: center;
+    align-items: center;
 }
 
 /* 푸터 */
