@@ -8,6 +8,7 @@ public class FavoritesCountry {
     private Long favoritesCountryId;
     private Long countryId;
     private Long userId;
+    private Integer recommendId;
 
     private Country country;
 }

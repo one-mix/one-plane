@@ -165,4 +165,13 @@ public class RecommendServiceImpl implements RecommendService {
 
         return result;
     }
+
+    @Override
+    public void softDeleteRecommend(Integer recommendId, Integer userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("recommendId", recommendId);
+        params.put("userId", userId);
+
+        recommendRepository.softDeleteRecommend(params);
+    }
 }

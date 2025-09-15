@@ -9,6 +9,7 @@
         <id property="favoritesCountryId" column="favorites_country_id"/>
         <result property="countryId" column="country_id"/>
         <result property="userId" column="user_id"/>
+        <result property="recommendId" column="recommend_id"/>
 
         <!-- Country 객체 매핑 -->
         <association property="country" javaType="com.oneplane.country.domain.Country">
@@ -37,45 +38,46 @@
     <!-- 즐겨찾기(favorites_country) 목록 + country 정보 + 최신 recommend 국가 목록 -->
     <select id="selectFavoritesByUser" parameterType="long" resultMap="FavoritesCountryMap">
         SELECT
-            f.favorites_country_id,
-            f.country_id,
-            f.user_id,
-            c.country_id     AS c_country_id,
-            c.country_name,
-            c.country_en_name,
-            c.iso_code,
-            c.continent,
-            c.img,
-            c.latitude,
-            c.longitude,
-            c.currency,
-            c.distance
-            FROM favorites_country f
-            JOIN country c
-            ON f.country_id = c.country_id
-            WHERE f.user_id = #{userId}
+        f.favorites_country_id,
+        f.country_id,
+        f.user_id,
+        NULL AS recommend_id,
+        c.country_id     AS c_country_id,
+        c.country_name,
+        c.country_en_name,
+        c.iso_code,
+        c.continent,
+        c.img,
+        c.latitude,
+        c.longitude,
+        c.currency,
+        c.distance
+        FROM favorites_country f
+        JOIN country c ON f.country_id = c.country_id
+        WHERE f.user_id = #{userId}
+
         UNION ALL
-            SELECT
-            NULL                AS favorites_country_id,
-            r.country_id,
-            r.user_id,
-            c.country_id        AS c_country_id,
-            c.country_name,
-            c.country_en_name,
-            c.iso_code,
-            c.continent,
-            c.img,
-            c.latitude,
-            c.longitude,
-            c.currency,
-            c.distance
+
+        SELECT
+        NULL                AS favorites_country_id,
+        r.country_id,
+        r.user_id,
+        r.recommend_id      AS recommend_id,  <!-- ✅ 여기 수정 -->
+        c.country_id        AS c_country_id,
+        c.country_name,
+        c.country_en_name,
+        c.iso_code,
+        c.continent,
+        c.img,
+        c.latitude,
+        c.longitude,
+        c.currency,
+        c.distance
         FROM recommend r
-            JOIN country c
-            ON r.country_id = c.country_id
+        JOIN country c ON r.country_id = c.country_id
         WHERE r.user_id = #{userId}
+        AND r.deleted_at IS NULL
     </select>
-
-
 
     <select id="getTopFavoriteCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
         SELECT c.country_name AS countryName,

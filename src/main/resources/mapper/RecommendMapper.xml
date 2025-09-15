@@ -100,4 +100,12 @@
         ORDER BY count DESC
             FETCH FIRST 10 ROWS ONLY
     </select>
+
+    <!-- softDelete -->
+    <update id="softDeleteRecommend" parameterType="map">
+        UPDATE recommend
+        SET deleted_at = SYSDATE
+        WHERE recommend_id = #{recommendId}
+        AND user_id = #{userId}
+    </update>
 </mapper>
