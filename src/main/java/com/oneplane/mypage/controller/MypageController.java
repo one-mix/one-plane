@@ -1,13 +1,11 @@
 package com.oneplane.myPage.controller;
 
 import com.oneplane.myPage.dto.CertificationTimelineDto;
-import com.oneplane.myPage.dto.UserProfileDto;
 import com.oneplane.myPage.service.CertificationService;
 import com.oneplane.myPage.service.TravelHistoryService;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.repository.RecommendRepository;
 import com.oneplane.recommend.service.RecommendService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
