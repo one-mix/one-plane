@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class RecommendResultDTO {
+    private Long recommendId;
     private String countryNameKo;
     private String countryIso3;
     private String city;
@@ -17,7 +18,7 @@ public class RecommendResultDTO {
 
     private String travelPurpose;
     private String companion;
-    private String recommendRating;
+    private Integer recommendRating;
     private String ratingContent;
     private Date createdAt;
 }
