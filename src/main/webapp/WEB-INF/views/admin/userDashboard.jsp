@@ -4,78 +4,40 @@
 
 <link rel="stylesheet" href="/css/admin/dashboard.css"/>
 
-<!-- 통계 카드 섹션 -->
-<div class="stats-cards mb-4">
-    <div class="row">
-
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <div class="stat-card-icon active">
-                        <i class="bi bi-people-fill"></i>
-                    </div>
-                    <h6 class="stat-card-title">전체 회원</h6>
-                </div>
-                <div class="stat-card-body">
-                    <div class="stat-card-value">
-                        <fmt:formatNumber value="${stats.totalUsers != null ? stats.totalUsers : 0}" />
-                    </div>
-                </div>
+<div class="row mb-4">
+    <!-- 전체 -->
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
+            <div class="d-flex align-items-center">
+                <div class="stat-line bg-primary me-2"></div>
+                <h6 class="mb-0 text-muted">전체 회원</h6>
             </div>
+            <h2 id="totalCountries" class="fw-bold my-2"><fmt:formatNumber value="${stats.totalUsers != null ? stats.totalUsers : 0}" /></h2>
         </div>
-
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <div class="stat-card-icon monthly">
-                        <i class="bi bi-calendar3"></i>
-                    </div>
-                    <h6 class="stat-card-title">월간 신규 가입</h6>
-                </div>
-                <div class="stat-card-body">
-                    <div class="stat-card-value">
-                        <fmt:formatNumber value="${stats.monthlySignups != null ? stats.monthlySignups : 0}" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <div class="stat-card-icon today">
-                        <i class="bi bi-person-plus-fill"></i>
-                    </div>
-                    <h6 class="stat-card-title">오늘 가입</h6>
-                </div>
-                <div class="stat-card-body">
-                    <div class="stat-card-value">
-                        <fmt:formatNumber value="${stats.todaySignups != null ? stats.todaySignups : 0}" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <div class="stat-card-icon users">
-                        <i class="bi bi-shield-exclamation"></i>
-                    </div>
-                    <h6 class="stat-card-title">여행 주의 대상</h6>
-                </div>
-                <div class="stat-card-body">
-                    <div class="stat-card-value">
-                        <fmt:formatNumber value="${stats.travelCautionUsers != null ? stats.travelCautionUsers : 0}" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
     </div>
+
+    <!-- 안전 -->
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
+            <div class="d-flex align-items-center">
+                <div class="stat-line bg-success me-2"></div>
+                <h6 class="mb-0 text-muted">월간 신규 가입</h6>
+            </div>
+            <h2 id="safeCountries" class="fw-bold my-2"><fmt:formatNumber value="${stats.monthlySignups != null ? stats.monthlySignups : 0}" /></h2>
+        </div>
+    </div>
+
+    <!-- 여행 주의 대상 -->
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
+            <div class="d-flex align-items-center">
+                <div class="stat-line bg-danger me-2"></div>
+                <h6 class="mb-0 text-muted">여행 주의 대상</h6>
+            </div>
+            <h2 id="bannedCountries" class="fw-bold my-2"><fmt:formatNumber value="${stats.travelCautionUsers != null ? stats.travelCautionUsers : 0}" /></h2>
+        </div>
+    </div>
+
 </div>
 
 <!-- 세부 통계 차트 섹션 -->
@@ -133,7 +95,7 @@
             primary: ['#8CB6E9', '#5A90D2', '#30609D', '#0A2E5D', '#001530'],
             gender: ['#5A90D2', '#FF6B9D', '#C4C4C4'],
             age: ['#8CB6E9', '#5A90D2', '#30609D', '#0A2E5D', '#001530', '#F4B73F', '#FF7979'],
-            grade: ['#001530', '#0A2E5D', '#30609D', '#5A90D2', '#8CB6E9'],
+            grade: ['#84A9FF','#81EE80', '#85E4F6', '#FFF681', '#FFAB87'],
             health: ['#FF4D4F', '#FAAD14', '#52C41A', '#C4C4C4']
         };
 
