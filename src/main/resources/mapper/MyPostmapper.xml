@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.mypost.dao.MyPostDao">
+
+    <!-- 내가 작성한 게시글 전체 조회 -->
+    <select id="selPostsByAuthor"
+            parameterType="int"
+            resultType="com.oneplane.post.domain.Post">
+        SELECT
+            post_id      AS postId,
+            user_id      AS userId,
+            category     AS category,
+            title        AS title,
+            content      AS content,
+            created_at   AS createdAt,
+            deleted_at   AS deletedAt
+        FROM posts
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 내가 작성한 게시글 카테고리별 조회 -->
+    <select id="selectPostsByAuthorAndCategory"
+            parameterType="map"
+            resultType="com.oneplane.post.domain.Post">
+        SELECT
+            post_id      AS postId,
+            user_id      AS userId,
+            category     AS category,
+            title        AS title,
+            content      AS content,
+            created_at   AS createdAt,
+            deleted_at   AS deletedAt
+        FROM posts
+        WHERE user_id = #{userId}
+          AND category = #{category}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 팔로워가 작성한 게시글 전체 조회 -->
+    <select id="selectPostsByFollowers"
+            parameterType="int"
+            resultType="com.oneplane.post.domain.Post">
+        SELECT
+            p.post_id      AS postId,
+            p.user_id      AS userId,
+            p.category     AS category,
+            p.title        AS title,
+            p.content      AS content,
+            p.created_at   AS createdAt,
+            p.deleted_at   AS deletedAt
+        FROM posts p
+                 JOIN friends f
+                      ON p.user_id = f.following_id
+        WHERE f.follower_id = #{userId}
+          AND p.deleted_at IS NULL
+        ORDER BY p.created_at DESC
+    </select>
+
+    <!-- 팔로워가 작성한 게시글 카테고리별 조회 -->
+    <select id="selectPostsByFollowersAndCategory"
+            parameterType="map"
+            resultType="com.oneplane.post.domain.Post">
+        SELECT
+            p.post_id      AS postId,
+            p.user_id      AS userId,
+            p.category     AS category,
+            p.title        AS title,
+            p.content      AS content,
+            p.created_at   AS createdAt,
+            p.deleted_at   AS deletedAt
+        FROM posts p
+                 JOIN friends f
+                      ON p.user_id = f.following_id
+        WHERE f.follower_id = #{userId}
+          AND p.category = #{category}
+          AND p.deleted_at IS NULL
+        ORDER BY p.created_at DESC
+    </select>
+
+</mapper>

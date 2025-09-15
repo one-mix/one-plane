@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oneplane.userprofile.dao.UsersProfileDao">
+
+    <!-- 회원 프로필 조회 -->
+    <select id="selectUserProfile"
+            parameterType="java.lang.Long"
+            resultType="com.oneplane.userprofile.domain.UsersProfile">
+        SELECT
+            user_id        AS userId,
+            name           AS name,
+            nickname       AS nickname,
+            age            AS age,
+            grade          AS grade,
+            gender         AS gender,
+            email          AS email,
+            disease        AS disease,
+            disability     AS disability,
+            medication     AS medication,
+            total_count    AS totalCount,
+            total_distance AS totalDistance,
+            created_at     AS createdAt,
+            updated_at     AS updatedAt
+        FROM users
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </select>
+
+    <!-- 이메일·닉네임·질병·장애·복용약 수정 -->
+    <update id="updateUserProfile"
+            parameterType="com.oneplane.userprofile.domain.UsersProfile">
+        UPDATE users
+        SET
+            nickname   = #{nickname},
+            email      = #{email},
+            disease    = #{disease},
+            disability = #{disability},
+            medication = #{medication}
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </update>
+
+    <!-- 소프트 삭제 -->
+    <update id="softDeleteUser" parameterType="map">
+        UPDATE users
+        SET deleted_at = #{deletedAt}
+        WHERE user_id = #{userId}
+          AND deleted_at IS NULL
+    </update>
+
+    <!-- 닉네임 중복 체크 (자기 자신 제외) -->
+    <select id="countByNickname"
+            parameterType="map"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE nickname = #{nickname}
+          AND user_id &lt;&gt; #{userId}
+          AND deleted_at IS NULL
+    </select>
+
+</mapper>

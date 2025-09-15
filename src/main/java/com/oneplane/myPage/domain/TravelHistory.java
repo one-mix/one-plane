@@ -18,7 +18,7 @@ public class TravelHistory {
     private LocalDate deletedAt;
 
     //새로 추가
-    private String imagePath;
+//    private String imagePath;
 
     // 생성자
     public TravelHistory() {}
@@ -60,11 +60,11 @@ public class TravelHistory {
     public LocalDate getDeletedAt() { return deletedAt; }
     public void setDeletedAt(LocalDate deletedAt) { this.deletedAt = deletedAt; }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
+//    public String getImagePath() {
+//        return imagePath;
+//    }
+//
+//    public void setImagePath(String imagePath) {
+//        this.imagePath = imagePath;
+//    }
 }

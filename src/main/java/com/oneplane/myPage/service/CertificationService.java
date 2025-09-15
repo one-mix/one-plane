@@ -36,13 +36,11 @@ public class CertificationService {
 
     public boolean registerCountryCertification(CertificationDto dto, Long userId) {
         try {
-            // 1) countryName → countryId 조회
             Long countryId = mypageCountryDao.findCountryIdByName(dto.getCountryName());
             if (countryId == null) {
                 throw new IllegalArgumentException("등록되지 않은 국가명: " + dto.getCountryName());
             }
 
-            // 2) 인증 사진 파일 저장
             String imgPath = null;
             if (dto.getCertificationImg() != null && !dto.getCertificationImg().isEmpty()) {
                 imgPath = saveCertificationImage(userId, dto.getCertificationImg());
@@ -51,24 +49,8 @@ public class CertificationService {
                 }
             }
 
-            // 3) 인증 데이터 저장
             int inserted = certificationDao.insertCertification(userId, countryId, imgPath, dto.getCertificationDate());
-            if (inserted <= 0) {
-                return false;
-            }
-
-//            // 4) 사용자 통계 업데이트
-//            Map<String, Object> countryInfo = countryDao.getCountryInfo(countryId);
-//            if (countryInfo != null) {
-//                Number distanceNum = (Number) countryInfo.get("DISTANCE");
-//                int distance = distanceNum != null ? distanceNum.intValue() : 0;
-//                if (distance > 0) {
-//                    userDao.updateUserStats(userId, distance);
-//                }
-//            }
-
-            return true;
-
+            return inserted > 0;
         } catch (Exception e) {
             System.err.println("국가 인증 등록 실패: " + e.getMessage());
             e.printStackTrace();
@@ -76,7 +58,7 @@ public class CertificationService {
         }
     }
 
-    public List<Map<String, Object>> getUserCertifications(Long userId) {
+    public List<?> getUserCertifications(Long userId) {
         return certificationDao.getUserCertifiedCountries(userId);
     }
 
@@ -97,7 +79,6 @@ public class CertificationService {
             }
 
             return "/uploads/certification/" + newFilename;
-
         } catch (IOException e) {
             System.err.println("인증 이미지 저장 실패: " + e.getMessage());
             e.printStackTrace();
@@ -105,37 +86,34 @@ public class CertificationService {
         }
     }
 
-    /** 다녀온 국가 수 반환 */
     public int getVisitedCountryCount(Long userId) {
         return certificationDao.getCertificationCount(userId);
     }
 
-    /** 총 이동 거리 합계 반환 */
     public int getVisitedTotalDistance(Long userId) {
         return certificationDao.getTotalCertificationDistance(userId);
     }
 
-    /* */
+    // ★ 수정된 부분 ★
     public List<CertificationTimelineDto> getTimelineData(Long userId) {
-        List<Map<String,Object>> rows = certificationDao.fetchCertifications(userId);
+        List<Map<String, Object>> rows = certificationDao.fetchCertifications(userId);
         int cumulative = 0;
         List<CertificationTimelineDto> list = new ArrayList<>();
-        for (Map<String,Object> row : rows) {
+
+        for (Map<String, Object> row : rows) {
             CertificationTimelineDto dto = new CertificationTimelineDto();
-            // 별칭 정확히 일치시킵니다.
-            dto.setCertificationDate((String) row.get("certificationAt"));
-            dto.setCountryFlagUrl     ((String) row.get("img"));
-            Number distNum = (Number) row.get("distance");
+            // Spring JDBC는 컬럼명을 대문자로 변환하므로 키를 대문자로 사용
+            dto.setCertificationDate((String) row.get("CERTIFICATIONAT"));  // 수정!
+            dto.setCountryFlagUrl((String) row.get("IMG"));                 // 수정!
+            Number distNum = (Number) row.get("DISTANCE");
             int dist = distNum != null ? distNum.intValue() : 0;
             dto.setDistance(dist);
-
             cumulative += dist;
             dto.setCumulativeDistance(cumulative);
             list.add(dto);
         }
         return list;
     }
-
 
     public int getTotalCertificationDistance(Long userId) {
         return certificationDao.getTotalCertificationDistance(userId);

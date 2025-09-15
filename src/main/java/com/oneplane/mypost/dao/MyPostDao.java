@@ -1,0 +1,26 @@
+package com.oneplane.mypost.dao;
+
+import com.oneplane.post.domain.Post;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
+
+@Mapper
+public interface MyPostDao {
+
+    // 내 게시글 목록 조회 - 기존 SQL ID 사용
+    List<Post> selPostsByAuthor(@Param("userId") Integer userId);
+
+
+    List<Post> selectPostsByAuthorAndCategory(@Param("userId") Integer userId,
+                                              @Param("category") String category);
+
+    // 팔로워가 작성한 게시글 전체 조회
+    List<Post> selectPostsByFollowers(@Param("userId") Integer userId);
+
+    // 팔로워가 작성한 게시글 카테고리별 조회
+    List<Post> selectPostsByFollowersAndCategory(
+            @Param("userId") Integer userId,
+            @Param("category") String category
+    );
+}

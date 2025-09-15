@@ -1,0 +1,94 @@
+.withdraw-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.withdraw-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.withdraw-warning {
+    background: #ffecec;
+    color: #b30000;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.withdraw-notice p {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.withdraw-notice ol {
+    padding-left: 20px;
+    margin-bottom: 24px;
+}
+
+.withdraw-notice li {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.withdraw-form .form-group {
+    margin-bottom: 16px;
+}
+
+.withdraw-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 8px;
+    margin-top: 4px;
+}
+
+.checkbox-group label {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.btn-withdraw {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: #b30000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-withdraw:disabled {
+    background: #ddd;
+    cursor: not-allowed;
+}
+
+.btn-withdraw:not(:disabled):hover {
+    background: #800000;
+}

@@ -27,7 +27,6 @@ public class UserDao {
             dto.setName(rs.getString("name"));
             dto.setAge(rs.getInt("age"));
             dto.setGender(rs.getString("gender"));
-            dto.setGrade(rs.getString("grade"));
 
             String profileImg = rs.getString("profile_img");
             if (profileImg != null && !profileImg.isEmpty()) {
@@ -35,6 +34,7 @@ public class UserDao {
                 profileImg += "?t=" + System.currentTimeMillis();
             }
             dto.setProfileImagePath(profileImg);
+            dto.setGrade(rs.getString("grade"));  // 추가
             return dto;
         };
 

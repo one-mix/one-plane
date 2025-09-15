@@ -5,7 +5,7 @@
 
 <div class="sidebar">
     <!-- 프로필 섹션 -->
-    <div class="profile-section">
+    <div class="sidebar">
         <div class="profile-avatar" id="profileAvatar" title="클릭하여 이미지 변경">
             <!-- 항상 하나의 <img>만 렌더링 -->
             <img id="avatarImg"
