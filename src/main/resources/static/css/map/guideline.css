@@ -1,0 +1,187 @@
+/* ===== 행동지침 버튼 ===== */
+.guideline-buttons {
+   position: absolute;
+   bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    z-index: 1000;
+}
+
+.guideline-buttons button {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 14px 24px;
+    font-weight: var(--font-medium);
+}
+
+/* 반응형  */
+@media (max-width: 1024px) {
+  .map {
+    height: 55vh;
+  }
+  .country-info-panel {
+    width: 50vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .map {
+    height: 50vh;
+  }
+  .search-container {
+    top: 2vh;
+    left: 70%;
+    transform: translateX(-50%);
+  }
+  .country-info-panel {
+    width: 100%;
+  }
+  .guideline-buttons {
+    bottom: 1vh;
+    flex-direction: column;
+    align-items: center;
+  }
+  .guideline-buttons button {
+    width: 90%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .country-search-input {
+    width: 90vw;
+    font-size: 12px;
+    padding: 0.5rem 0.75rem;
+  }
+  .chart-section {
+    margin: 24px 0;
+  }
+  .chart-section-title {
+    font-size: 12px;
+  }
+}
+
+.level {
+    padding: 4px 12px;
+    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    color: var(--gray-0);
+    background-color: var(--gray-300);
+}
+
+.save {
+    color: var(--gray-0);
+    background-color: var(--main-700);
+}
+.level-one {
+    color: var(--gray-0);
+    background-color: var(--semantic-success);
+}
+.level-two {
+    color: var(--gray-700);
+    background-color: var(--semantic-caution);
+}
+.level-three {
+    color: var(--gray-0);
+    background-color: var(--semantic-error);
+}
+.level-four {
+    font-size: 12px;
+    color: var(--gray-0);
+    font-weight: var(--font-medium);
+    background-color: var(--gray-900);
+}
+
+/* ===== 행동지침 툴팁 ===== */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* 툴팁 */
+.tooltip-content {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: black;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+  z-index: 2000;
+}
+
+/* 버튼 + 툴팁 둘 중 하나에 마우스 올려도 유지 */
+.tooltip-container:hover .tooltip-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 꼬리 */
+.tooltip-content::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: white;
+}
+
+.tooltip-title {
+    font-size: 18px;
+    color: var(--gray-900);
+    font-weight: var(--font-semibold);
+}
+
+.tooltip-description {
+    font-size: 14px;
+    color: var(--gray-400);
+    font-weight: var(--font-medium);
+}
+
+.tooltip-country {
+  display: flex;
+  justify-content: space-between; /* 좌우 배치 */
+  align-items: center;
+  padding: 4px 8px;
+}
+
+.tooltip-country span {
+  width: 100%;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: var(--gray-300);
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  color: var(--semantic-error);
+}
+
+/* 스크롤 */
+.scrollable {
+  max-height: 180px;
+  overflow-y: auto;
+}
+.scrollable ul {
+  margin: 0;
+  padding-left: 1px;
+}

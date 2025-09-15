@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<link href="/css/postList.css" rel="stylesheet">
+<link href="/css/post/postList.css" rel="stylesheet">
 
 <main class="main-container">
     <div class="top-tabs-wrapper">
@@ -16,19 +16,8 @@
         </div>
 
         <div class="search-area">
-            <form method="get" action="/post/list" style="display: flex; gap: 12px; align-items: center;">
+            <form method="get" action="/post/list">
                 <input type="hidden" name="category" value="${selectedCategory}">
-
-                <!-- 국가 필터 드롭다운 추가 -->
-                <select name="country" class="country-dropdown">
-                    <option value="">전체 국가</option>
-                    <c:forEach var="country" items="${countries}">
-                        <option value="${country.countryName}" ${selectedCountry eq country.countryName ? 'selected' : ''}>
-                                ${country.countryName}
-                        </option>
-                    </c:forEach>
-                </select>
-
                 <select name="searchType" class="country-dropdown">
                     <option value="title" ${searchType eq 'title' ? 'selected' : ''}>제목</option>
                     <option value="content" ${searchType eq 'content' ? 'selected' : ''}>내용</option>
@@ -46,7 +35,6 @@
                 <c:forEach var="post" items="${posts}">
                     <div class="result-card" onclick="location.href='/post/detail/${post.postId}'">
                         <div class="result-info">
-                            <div style="margin-bottom: 8px;">
                                 <span class="country-badge">
                                     <!-- countryName 직접 사용 -->
                                     <c:choose>
@@ -56,7 +44,7 @@
                                         <c:otherwise>미분류</c:otherwise>
                                     </c:choose>
                                 </span>
-                            </div>
+
 
                             <h3>${post.title}</h3>
 

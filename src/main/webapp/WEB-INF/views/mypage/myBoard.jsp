@@ -6,7 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<link href="/css/postList.css" rel="stylesheet">
+<link href="/css/post/postList.css" rel="stylesheet">
 
 
 <main class="main-container">

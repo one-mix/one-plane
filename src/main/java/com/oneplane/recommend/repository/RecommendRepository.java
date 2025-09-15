@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface RecommendRepository {
@@ -22,5 +23,8 @@ public interface RecommendRepository {
     );
     int getTotalRecommendHistoryCount(@Param("userId") Integer userId);
     List<TopCountryStatsDTO> getTopRecommendCountries();
-    int softDeleteRecommend(@Param("recommendId") Long recommendId);
+
+    void softDeleteRecommend(Map<String, Object> params);
+
+    int softDeleteRecommendMyPage(@Param("recommendId") Long recommendId);
 }

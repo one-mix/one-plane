@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<link rel="stylesheet" href="/css/sidebar.css"/>
+<link rel="stylesheet" href="/css/mypage/sidebar.css"/>
 
 <div class="sidebar">
     <!-- 프로필 섹션 -->

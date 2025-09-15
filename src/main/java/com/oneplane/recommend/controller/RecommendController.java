@@ -119,10 +119,17 @@ public class RecommendController {
 
         return ResponseEntity.ok("피드백 저장 완료");
     }
+    /** 추천 삭제 (soft delete: deleted_at 갱신) */
+    @PostMapping("/remove")
+    public ResponseEntity<?> removeRecommend(@RequestParam Integer recommendId) {
+        Integer userId = SecurityUtil.getCurrentUserId();
+        recommendService.softDeleteRecommend(recommendId, userId);
+        return ResponseEntity.ok(Map.of("message", "추천 삭제 완료"));
+    }
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<String> softDeleteRecommend(@PathVariable("id") Long id) {
-        boolean success = recommendService.softDeleteRecommend(id);
+        boolean success = recommendService.softDeleteRecommendMyPage(id);
         if (success) {
             return ResponseEntity.ok("삭제 완료");
         } else {

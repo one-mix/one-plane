@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>방문한 여행지 추가</title>
-    <link rel="stylesheet" href="/css/review.css" />
+    <link rel="stylesheet" href="/css/mypage/review.css" />
     <style>
         .option-grid {
             display: grid;

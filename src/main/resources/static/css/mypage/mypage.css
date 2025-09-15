@@ -5,10 +5,10 @@
 }
 
 .page-wrapper {
-    transform: scale(0.8);        /* 70% 크기로 축소 */
-    transform-origin: top left;    /* 좌상단 기준 축소 */
-    width: 142.857%;               /* 축소 보정: 100 ÷ 0.7 ≒ 142.857% */
-    margin: 0;                     /* 필요 시 중앙 정렬 조정 */
+    transform: scale(0.8);
+    transform-origin: top left;
+    width: 80%;
+    margin: 0;
 }
 
 
