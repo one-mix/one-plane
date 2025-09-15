@@ -14,6 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class Post {
+    private String country;
     private Integer postId;
     private Integer userId;
     private String title;
