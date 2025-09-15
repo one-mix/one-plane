@@ -221,7 +221,7 @@
                                     <label for="disease_false">없음</label>
                                 </div>
                             </div>
-                            <div class="form-text">운동 계획 수립에 참고됩니다.</div>
+                            <div class="form-text">여행 안전을 위해 건강 상태를 체크하고 정보를 제공합니다.</div>
                         </div>
 
                         <!-- 장애 여부 -->
@@ -245,7 +245,7 @@
                                     <label for="disability_false">없음</label>
                                 </div>
                             </div>
-                            <div class="form-text">맞춤형 운동 프로그램 제공을 위해 필요합니다.</div>
+                            <div class="form-text">여행 안전과 맞춤형 지원을 위해 장애 정보를 공유해 주세요.</div>
                         </div>
 
                         <!-- 복용약 여부 -->
@@ -269,7 +269,7 @@
                                     <label for="medication_false">복용하지 않음</label>
                                 </div>
                             </div>
-                            <div class="form-text">안전한 운동을 위해 중요한 정보입니다.</div>
+                            <div class="form-text">여행 안전 확보를 위해 필요한 정보입니다.</div>
                         </div>
 
                         <div class="btn-group">
