@@ -106,4 +106,30 @@
                 (SELECT COUNT(*) FROM alert_level WHERE level_value = '여행금지') AS bannedCountries
         FROM dual
     </select>
+
+    <!-- 모든 국가 조회 -->
+    <select id="selectAllCountries" resultType="com.oneplane.country.domain.Country">
+        SELECT
+            country_id   AS countryId,
+            country_name AS countryName,
+            country_en_name AS countryEnName,
+            iso_code     AS isoCode,
+            continent,
+            img
+        FROM country
+        ORDER BY country_name
+    </select>
+
+    <!-- ID로 국가 조회 -->
+    <select id="selectCountryById" parameterType="long" resultType="com.oneplane.country.domain.Country">
+        SELECT
+            country_id   AS countryId,
+            country_name AS countryName,
+            country_en_name AS countryEnName,
+            iso_code     AS isoCode,
+            continent,
+            img
+        FROM country
+        WHERE country_id = #{id}
+    </select>
 </mapper>

@@ -489,7 +489,7 @@
 
     .chart-box canvas {
         height: 100% !important;
-        width: 80% !important;
+        /*width: 80% !important;*/
     }
 
     /* 일별 활동 차트 높이 */

@@ -188,8 +188,7 @@
               <div class="alert alert-warning mt-3">
                 <i class="bi bi-exclamation-triangle-fill"></i>
                 <strong>여행 주의 대상</strong><br>
-                <small>건강 정보 또는 연령으로 인해 여행 시 주의가 필요한<br>
-                  사용자입니다.</small>
+                <small>건강 정보 또는 연령으로 인해 여행 시 주의가 필요한 사용자입니다.</small>
               </div>
             </c:if>
           </div>

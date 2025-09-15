@@ -6,11 +6,9 @@
 <!-- Summernote CSS -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
-
 <div class="post-write-container">
     <form id="postWriteForm" action="/post/write" method="post">
         <sec:csrfInput />
-
 
         <!-- 유형 및 국가 -->
         <div class="form-row">
@@ -24,22 +22,11 @@
             </select>
 
             <label class="form-label">국가</label>
-            <select name="country" class="form-select">
+            <select name="countryId" class="form-select" required>
                 <option value="" disabled selected>국가를 선택하세요.</option>
-                <option value="japan">일본</option>
-                <option value="korea">한국</option>
-                <option value="china">중국</option>
-                <option value="usa">미국</option>
-                <option value="thailand">태국</option>
-                <option value="vietnam">베트남</option>
-                <option value="singapore">싱가포르</option>
-                <option value="malaysia">말레이시아</option>
-                <option value="philippines">필리핀</option>
-                <option value="france">프랑스</option>
-                <option value="italy">이탈리아</option>
-                <option value="spain">스페인</option>
-                <option value="germany">독일</option>
-                <option value="uk">영국</option>
+                <c:forEach var="country" items="${countries}">
+                    <option value="${country.countryId}">${country.countryName}</option>
+                </c:forEach>
             </select>
         </div>
 
@@ -77,7 +64,6 @@
             height: 400,
             width: 1000,
             lang: 'ko-KR',
-            // placeholder: '내용을 입력하세요...',
             toolbar: [
                 ['style', ['bold', 'italic', 'underline', 'strikethrough']],
                 ['font', ['fontsize', 'color']],
@@ -116,7 +102,6 @@
                 processData: false,
                 contentType: false,
                 beforeSend: function(xhr) {
-                    // CSRF 토큰 설정
                     const token = $('input[name="_csrf"]').val();
                     if (token) {
                         xhr.setRequestHeader('X-CSRF-TOKEN', token);
@@ -124,7 +109,6 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        // Summernote에 이미지 삽입
                         $('#content').summernote('insertImage', response.imageUrl);
                         console.log('이미지 업로드 성공:', response.imageUrl);
                     } else {
@@ -154,7 +138,7 @@
             const title = $('input[name="title"]').val().trim();
             const content = $('#content').summernote('code').trim();
             const category = $('select[name="category"]').val();
-            const country = $('select[name="country"]').val();
+            const countryId = $('select[name="countryId"]').val(); // countryId로 변경
 
             if (!title) {
                 alert('제목을 입력해주세요.');
@@ -174,9 +158,9 @@
                 return;
             }
 
-            if (!country) {
-                alert('나라를 선택해주세요.');
-                $('select[name="country"]').focus();
+            if (!countryId) { // countryId로 변경
+                alert('국가를 선택해주세요.');
+                $('select[name="countryId"]').focus();
                 return;
             }
 
