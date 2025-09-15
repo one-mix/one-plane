@@ -25,22 +25,14 @@
             </select>
 
             <label class="form-label">국가</label>
-            <select name="country" class="form-select" required>
+            <select name="countryId" class="form-select" required>
                 <option value="" disabled>국가를 선택하세요.</option>
-                <option value="japan" ${post.country == 'japan' ? 'selected' : ''}>일본</option>
-                <option value="korea" ${post.country == 'korea' ? 'selected' : ''}>한국</option>
-                <option value="china" ${post.country == 'china' ? 'selected' : ''}>중국</option>
-                <option value="usa" ${post.country == 'usa' ? 'selected' : ''}>미국</option>
-                <option value="thailand" ${post.country == 'thailand' ? 'selected' : ''}>태국</option>
-                <option value="vietnam" ${post.country == 'vietnam' ? 'selected' : ''}>베트남</option>
-                <option value="singapore" ${post.country == 'singapore' ? 'selected' : ''}>싱가포르</option>
-                <option value="malaysia" ${post.country == 'malaysia' ? 'selected' : ''}>말레이시아</option>
-                <option value="philippines" ${post.country == 'philippines' ? 'selected' : ''}>필리핀</option>
-                <option value="france" ${post.country == 'france' ? 'selected' : ''}>프랑스</option>
-                <option value="italy" ${post.country == 'italy' ? 'selected' : ''}>이탈리아</option>
-                <option value="spain" ${post.country == 'spain' ? 'selected' : ''}>스페인</option>
-                <option value="germany" ${post.country == 'germany' ? 'selected' : ''}>독일</option>
-                <option value="uk" ${post.country == 'uk' ? 'selected' : ''}>영국</option>
+                <c:forEach var="country" items="${countries}">
+                    <option value="${country.countryId}"
+                        ${post.countryId == country.countryId ? 'selected' : ''}>
+                            ${country.countryName}
+                    </option>
+                </c:forEach>
             </select>
         </div>
 
@@ -167,7 +159,7 @@
             const title = $('input[name="title"]').val().trim();
             const content = $('#content').summernote('code').trim();
             const category = $('select[name="category"]').val();
-            const country = $('select[name="country"]').val();
+            const countryId = $('select[name="countryId"]').val();
 
             if (!title) {
                 alert('제목을 입력해주세요.');
@@ -187,9 +179,9 @@
                 return;
             }
 
-            if (!country) {
-                alert('나라를 선택해주세요.');
-                $('select[name="country"]').focus();
+            if (!countryId) {
+                alert('국가를 선택해주세요.');
+                $('select[name="countryId"]').focus();
                 return;
             }
 

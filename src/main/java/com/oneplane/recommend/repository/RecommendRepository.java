@@ -25,4 +25,6 @@ public interface RecommendRepository {
     List<TopCountryStatsDTO> getTopRecommendCountries();
 
     void softDeleteRecommend(Map<String, Object> params);
+
+    int softDeleteRecommendMyPage(@Param("recommendId") Long recommendId);
 }

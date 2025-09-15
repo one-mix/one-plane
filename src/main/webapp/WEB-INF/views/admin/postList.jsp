@@ -115,9 +115,9 @@
                 </td>
                 <td>
                   <div class="post-country">
-                    <c:if test="${not empty post.country}">
+                    <c:if test="${not empty post.countryName}">
                       <small class="text-muted">
-                          ${post.country}
+                          ${post.countryName}
                       </small>
                     </c:if>
                   </div>

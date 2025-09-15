@@ -73,6 +73,7 @@
                    AND r.companion IS NOT NULL
                    AND r.recommend_rating IS NOT NULL
                    AND r.rating_content IS NOT NULL
+                   AND r.deleted_at IS NULL
              )
         WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{limit}
     </select>
@@ -82,13 +83,14 @@
         SELECT COUNT(*)
         FROM recommend
         WHERE user_id = #{userId}
-        AND recommend_id IS NOT NULL
-        AND user_id IS NOT NULL
-        AND country_id IS NOT NULL
-        AND travel_purpose IS NOT NULL
-        AND companion IS NOT NULL
-        AND recommend_rating IS NOT NULL
-        AND rating_content IS NOT NULL
+          AND recommend_id IS NOT NULL
+          AND user_id IS NOT NULL
+          AND country_id IS NOT NULL
+          AND travel_purpose IS NOT NULL
+          AND companion IS NOT NULL
+          AND recommend_rating IS NOT NULL
+          AND rating_content IS NOT NULL
+          AND deleted_at IS NULL
     </select>
 
     <select id="getTopRecommendCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
@@ -96,6 +98,7 @@
                COUNT(r.recommend_id) AS count
         FROM recommend r
             JOIN country c ON r.country_id = c.country_id
+        WHERE r.deleted_at IS NULL
         GROUP BY c.country_name
         ORDER BY count DESC
             FETCH FIRST 10 ROWS ONLY
@@ -108,4 +111,12 @@
         WHERE recommend_id = #{recommendId}
         AND user_id = #{userId}
     </update>
+
+    <update id="softDeleteRecommendMyPage" parameterType="java.lang.Long">
+        UPDATE RECOMMEND
+        SET DELETED_AT = SYSDATE
+        WHERE RECOMMEND_ID = #{recommendId}
+        AND deleted_at IS NULL
+    </update>
+
 </mapper>

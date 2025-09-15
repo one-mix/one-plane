@@ -23,5 +23,7 @@ public interface RecommendService {
     int getTotalRecommendHistoryCount(Integer userId);
     Map<String, Object> getRecommendHistoryWithPagination(Integer userId, int page);
 
-    public void softDeleteRecommend(Integer recommendId, Integer userId);
+    void softDeleteRecommend(Integer recommendId, Integer userId);
+
+    boolean softDeleteRecommendMyPage(Long recommendId);
 }

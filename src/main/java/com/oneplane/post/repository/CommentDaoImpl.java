@@ -78,4 +78,21 @@ public class CommentDaoImpl implements CommentDao {
     public int countAllComments(String search) {
         return sqlSession.selectOne(NAMESPACE + "countAllComments", search);
     }
+
+    @Override
+    public int countAllComments() {
+        return sqlSession.selectOne(NAMESPACE + "countAllCommentsForStats");
+    }
+
+    @Override
+    public int countTodayComments() {
+        return sqlSession.selectOne(NAMESPACE + "countTodayComments");
+    }
+
+    @Override
+    public List<Map<String, Object>> getDailyCommentStats() {
+        return sqlSession.selectList(NAMESPACE + "getDailyCommentStats");
+    }
+
+
 }

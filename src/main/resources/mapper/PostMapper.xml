@@ -12,7 +12,8 @@
         <result property="content" column="content"/>
         <result property="thumbnailImage" column="thumbnail_image"/>
         <result property="category" column="category" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
-        <result property="country" column="country"/>
+        <result property="countryId" column="country_id"/>
+        <result property="countryName" column="country_name"/>
         <result property="viewCount" column="view_count"/>
         <result property="likeCount" column="like_count"/>
         <result property="commentCount" column="comment_count"/>
@@ -41,7 +42,8 @@
                 p.content,
                 p.thumbnail_image,
                 p.category,
-                p.country,
+                p.country_id,
+                c.country_name,
                 p.view_count,
                 p.like_count,
                 p.comment_count,
@@ -58,6 +60,7 @@
 
             FROM posts p
             LEFT JOIN users u ON p.user_id = u.user_id
+            LEFT JOIN country c ON p.country_id = c.country_id
             WHERE p.deleted_at IS NULL
     ]]>
 
@@ -66,9 +69,14 @@
             AND p.category = #{category}
         </if>
 
-        <!-- 국가 필터 -->
+        <!-- 국가 필터 (country_id 기준) -->
+        <if test="countryId != null">
+            AND p.country_id = #{countryId}
+        </if>
+
+        <!-- 국가명 필터 (country_name 기준) -->
         <if test="country != null and country != ''">
-            AND p.country = #{country}
+            AND c.country_name = #{country}
         </if>
 
         <!-- 검색 조건 -->
@@ -94,7 +102,7 @@
             AND p.user_id = #{userId}
         </if>
 
-        <!-- 정렬 (수정된 부분) -->
+        <!-- 정렬 -->
         ORDER BY
         <choose>
             <when test="sortBy == 'view'">p.view_count DESC, p.post_id DESC</when>
@@ -119,7 +127,8 @@
             p.content,
             p.thumbnail_image,
             p.category,
-            p.country,
+            p.country_id,
+            c.country_name,
             p.view_count,
             p.like_count,
             p.comment_count,
@@ -135,6 +144,7 @@
 
         FROM posts p
                  LEFT JOIN users u ON p.user_id = u.user_id
+                 LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.deleted_at IS NULL
         ORDER BY p.created_at DESC, p.post_id DESC
     </select>
@@ -144,6 +154,7 @@
         SELECT COUNT(*)
         FROM posts p
         LEFT JOIN users u ON p.user_id = u.user_id
+        LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.deleted_at IS NULL
 
         <!-- 카테고리 필터 -->
@@ -151,9 +162,14 @@
             AND p.category = #{category}
         </if>
 
-        <!-- 국가 필터 -->
+        <!-- 국가 필터 (country_id 기준) -->
+        <if test="countryId != null">
+            AND p.country_id = #{countryId}
+        </if>
+
+        <!-- 국가명 필터 (country_name 기준) -->
         <if test="country != null and country != ''">
-            AND p.country = #{country}
+            AND c.country_name = #{country}
         </if>
 
         <!-- 검색 조건 -->
@@ -192,7 +208,8 @@
                                                              p.content,
                                                              p.thumbnail_image,
                                                              p.category,
-                                                             p.country,
+                                                             p.country_id,
+                                                             c.country_name,
                                                              p.view_count,
                                                              p.like_count,
                                                              p.comment_count,
@@ -209,6 +226,7 @@
 
                                                          FROM posts p
                                                                   LEFT JOIN users u ON p.user_id = u.user_id
+                                                                  LEFT JOIN country c ON p.country_id = c.country_id
                                                          WHERE p.deleted_at IS NULL
                                                            AND p.category = #{category}
                                                          ORDER BY p.created_at DESC, p.post_id DESC
@@ -231,10 +249,10 @@
     <insert id="insertPost" parameterType="com.oneplane.post.domain.Post"
             useGeneratedKeys="true" keyProperty="postId" keyColumn="post_id">
         INSERT INTO posts (
-            user_id, title, content, thumbnail_image, category, country,
+            user_id, title, content, thumbnail_image, category, country_id,
             view_count, like_count, comment_count, created_at, updated_at
         ) VALUES (
-                     #{userId}, #{title}, #{content}, #{thumbnailImage}, #{category}, #{country},
+                     #{userId}, #{title}, #{content}, #{thumbnailImage}, #{category}, #{countryId},
                      #{viewCount}, #{likeCount}, #{commentCount}, SYSDATE, SYSDATE
                  )
     </insert>
@@ -248,7 +266,8 @@
             p.content,
             p.thumbnail_image,
             p.category,
-            p.country,
+            p.country_id,
+            c.country_name,
             p.view_count,
             p.like_count,
             p.comment_count,
@@ -265,6 +284,7 @@
 
         FROM posts p
                  LEFT JOIN users u ON p.user_id = u.user_id
+                 LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.post_id = #{postId}
     </select>
 
@@ -292,7 +312,7 @@
             content = #{content},
             thumbnail_image = #{thumbnailImage},
             category = #{category},
-            country = #{country},
+            country_id = #{countryId},
             updated_at = SYSDATE
         WHERE post_id = #{postId}
           AND deleted_at IS NULL
@@ -309,7 +329,8 @@
                               p.content,
                               p.thumbnail_image,
                               p.category,
-                              p.country,
+                              p.country_id,
+                              c.country_name,
                               p.view_count,
                               p.like_count,
                               p.comment_count,
@@ -325,6 +346,7 @@
 
                           FROM posts p
                                    LEFT JOIN users u ON p.user_id = u.user_id
+                                   LEFT JOIN country c ON p.country_id = c.country_id
                           WHERE p.deleted_at IS NULL
                           ORDER BY p.created_at DESC, p.post_id DESC
                       )
@@ -342,7 +364,8 @@
             content,
             thumbnail_image,
             category,
-            country,
+            country_id,
+            country_name,
             view_count,
             like_count,
             comment_count,
@@ -362,7 +385,8 @@
                      p.content,
                      p.thumbnail_image,
                      p.category,
-                     p.country,
+                     p.country_id,
+                     c.country_name,
                      p.view_count,
                      p.like_count,
                      p.comment_count,
@@ -381,6 +405,7 @@
 
                  FROM posts p
                           LEFT JOIN users u ON p.user_id = u.user_id
+                          LEFT JOIN country c ON p.country_id = c.country_id
                  WHERE p.deleted_at IS NULL
                    AND p.created_at >= SYSDATE - 30  -- 최근 30일 내 게시글만
                  ORDER BY
@@ -402,7 +427,8 @@
             content,
             thumbnail_image,
             category,
-            country,
+            country_id,
+            country_name,
             view_count,
             like_count,
             comment_count,
@@ -422,7 +448,8 @@
                      p.content,
                      p.thumbnail_image,
                      p.category,
-                     p.country,
+                     p.country_id,
+                     c.country_name,
                      p.view_count,
                      p.like_count,
                      p.comment_count,
@@ -441,6 +468,7 @@
 
                  FROM posts p
                           LEFT JOIN users u ON p.user_id = u.user_id
+                          LEFT JOIN country c ON p.country_id = c.country_id
                  WHERE p.deleted_at IS NULL
                    AND p.category = 'REVIEW'
                    AND p.created_at >= SYSDATE - 30  -- 최근 30일 내 게시글만
@@ -476,13 +504,6 @@
         WHERE post_id = #{postId}
     </update>
 
-    <!--내가 작성한 게시글 조회  -->
-    <select id="selectPostsByAuthor" parameterType="java.lang.String" resultType="Post">
-        SELECT *
-        FROM posts
-        WHERE user_id = #{userid}
-        ORDER BY created_at DESC
-    </select>
     <!-- 인기 게시글 페이징 조회 (관리자용) -->
     <select id="findPopularPostsWithPaging" parameterType="com.oneplane.post.domain.PostSearchCondition" resultMap="PostResultMap">
         <![CDATA[
@@ -495,7 +516,8 @@
                 p.content,
                 p.thumbnail_image,
                 p.category,
-                p.country,
+                p.country_id,
+                c.country_name,
                 p.view_count,
                 p.like_count,
                 p.comment_count,
@@ -512,6 +534,7 @@
 
             FROM posts p
             LEFT JOIN users u ON p.user_id = u.user_id
+            LEFT JOIN country c ON p.country_id = c.country_id
             WHERE p.deleted_at IS NULL
     ]]>
 
@@ -561,6 +584,7 @@
         SELECT COUNT(*)
         FROM posts p
         LEFT JOIN users u ON p.user_id = u.user_id
+        LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.deleted_at IS NULL
 
         <!-- 기간 필터 -->
@@ -592,4 +616,127 @@
         </if>
     </select>
 
+    <!-- 전체 게시글 수 조회 -->
+    <select id="countAllPosts" resultType="int">
+        SELECT COUNT(*)
+        FROM posts
+        WHERE deleted_at IS NULL
+    </select>
+
+    <!-- 오늘 작성된 게시글 수 -->
+    <select id="countTodayPosts" resultType="int">
+    <![CDATA[
+        SELECT COUNT(*)
+        FROM posts
+        WHERE deleted_at IS NULL
+          AND created_at >= TRUNC(SYSDATE)
+          AND created_at < TRUNC(SYSDATE) + 1
+        ]]>
+</select>
+
+    <!-- 전체 좋아요 수 합계 -->
+    <select id="countTotalLikes" resultType="int">
+        SELECT NVL(SUM(like_count), 0)
+        FROM posts
+        WHERE deleted_at IS NULL
+    </select>
+
+    <!-- 차트용 통계 쿼리들 -->
+
+    <!-- 카테고리별 게시글 수 (차트용) -->
+    <select id="getCategoryStats" resultType="map">
+        SELECT
+            category as CATEGORY,
+            COUNT(*) as COUNT
+        FROM posts
+        WHERE deleted_at IS NULL
+        GROUP BY category
+        ORDER BY COUNT(*) DESC
+    </select>
+
+    <!-- 월별 게시글 작성 추이 (최근 6개월) -->
+    <select id="getMonthlyPostTrend" resultType="map">
+    <![CDATA[
+        SELECT
+            TO_CHAR(created_at, 'YYYY-MM') as MONTH,
+        COUNT(*) as COUNT
+        FROM posts
+        WHERE deleted_at IS NULL
+          AND created_at >= ADD_MONTHS(TRUNC(SYSDATE, 'MM'), -6)
+        GROUP BY TO_CHAR(created_at, 'YYYY-MM')
+        ORDER BY TO_CHAR(created_at, 'YYYY-MM')
+        ]]>
+</select>
+
+    <!-- 인기 게시글 TOP 10 -->
+    <select id="getTop10PopularPosts" resultMap="PostResultMap">
+    <![CDATA[
+        SELECT * FROM (
+                          SELECT
+                              p.post_id,
+                              p.user_id,
+                              p.title,
+                              p.content,
+                              p.thumbnail_image,
+                              p.category,
+                              p.country_id,
+                              c.country_name,
+                              p.view_count,
+                              p.like_count,
+                              p.comment_count,
+                              p.created_at,
+                              p.updated_at,
+                              p.deleted_at,
+
+                              -- 작성자 정보
+                              u.user_id as user_user_id,
+                              u.email as user_email,
+                              u.name as user_name,
+                              u.nickname as user_nickname,
+                              u.profile_img as user_profile_img,
+
+                              -- 인기도 점수 계산
+                              (NVL(p.view_count, 0) * 2 + NVL(p.like_count, 0) * 3 + NVL(p.comment_count, 0) * 1) as popularity_score
+
+                          FROM posts p
+                                   LEFT JOIN users u ON p.user_id = u.user_id
+                                   LEFT JOIN country c ON p.country_id = c.country_id
+                          WHERE p.deleted_at IS NULL
+                          ORDER BY
+                              (NVL(p.view_count, 0) * 2 + NVL(p.like_count, 0) * 3 + NVL(p.comment_count, 0) * 1) DESC,
+                              p.created_at DESC
+                      )
+        WHERE ROWNUM <= 10
+        ]]>
+</select>
+
+    <!-- 최근 7일간 일별 게시글 수 -->
+    <select id="getDailyPostStats" resultType="map">
+    <![CDATA[
+        SELECT
+            TO_CHAR(created_at, 'YYYY-MM-DD') as DAY,
+        COUNT(*) as COUNT
+        FROM posts
+        WHERE deleted_at IS NULL
+          AND created_at >= TRUNC(SYSDATE) - 6
+        GROUP BY TO_CHAR(created_at, 'YYYY-MM-DD')
+        ORDER BY TO_CHAR(created_at, 'YYYY-MM-DD')
+        ]]>
+</select>
+
+    <update id="updatePostCounts" parameterType="Integer">
+        UPDATE posts
+        SET like_count = (
+            SELECT COUNT(*)
+            FROM post_like
+            WHERE post_id = #{postId}
+        ),
+            comment_count = (
+                SELECT COUNT(*)
+                FROM comments
+                WHERE post_id = #{postId}
+                  AND deleted_at IS NULL
+            )
+        WHERE post_id = #{postId}
+    </update>
 </mapper>

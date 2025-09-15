@@ -5,6 +5,7 @@ import com.oneplane.post.domain.PostSearchCondition;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostDao {
     // 게시글 전체 조회
@@ -62,4 +63,26 @@ public interface PostDao {
 
     // 인기 게시글 총 개수 조회
     int countPopularPosts(PostSearchCondition condition);
+
+    // 전체 게시글 수 조회 (삭제되지 않은)
+    int countAllPosts();
+
+    // 오늘 작성된 게시글 수
+    int countTodayPosts();
+
+    // 전체 좋아요 수 합계
+    int countTotalLikes();
+
+    // 카테고리별 게시글 수 (차트용)
+    List<Map<String, Object>> getCategoryStats();
+
+    // 월별 게시글 작성 추이 (최근 12개월)
+    List<Map<String, Object>> getMonthlyPostTrend();
+
+    // 인기 게시글 TOP 10 (조회수, 좋아요, 댓글 수 기준)
+    List<Post> getTop10PopularPosts();
+
+    // 최근 7일간 일별 게시글 수
+    List<Map<String, Object>> getDailyPostStats();
+
 }

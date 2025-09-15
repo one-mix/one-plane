@@ -36,25 +36,10 @@
                     <div class="result-card" onclick="location.href='/post/detail/${post.postId}'">
                         <div class="result-info">
                                 <span class="country-badge">
+                                    <!-- countryName 직접 사용 -->
                                     <c:choose>
-                                        <c:when test="${not empty post.country}">
-                                            <c:choose>
-                                                <c:when test="${post.country eq 'japan'}">일본</c:when>
-                                                <c:when test="${post.country eq 'korea'}">한국</c:when>
-                                                <c:when test="${post.country eq 'china'}">중국</c:when>
-                                                <c:when test="${post.country eq 'usa'}">미국</c:when>
-                                                <c:when test="${post.country eq 'thailand'}">태국</c:when>
-                                                <c:when test="${post.country eq 'vietnam'}">베트남</c:when>
-                                                <c:when test="${post.country eq 'singapore'}">싱가포르</c:when>
-                                                <c:when test="${post.country eq 'malaysia'}">말레이시아</c:when>
-                                                <c:when test="${post.country eq 'philippines'}">필리핀</c:when>
-                                                <c:when test="${post.country eq 'france'}">프랑스</c:when>
-                                                <c:when test="${post.country eq 'italy'}">이탈리아</c:when>
-                                                <c:when test="${post.country eq 'spain'}">스페인</c:when>
-                                                <c:when test="${post.country eq 'germany'}">독일</c:when>
-                                                <c:when test="${post.country eq 'uk'}">영국</c:when>
-                                                <c:otherwise>${post.country}</c:otherwise>
-                                            </c:choose>
+                                        <c:when test="${not empty post.countryName}">
+                                            ${post.countryName}
                                         </c:when>
                                         <c:otherwise>미분류</c:otherwise>
                                     </c:choose>
@@ -125,7 +110,7 @@
         <div class="pagination-container">
             <c:choose>
                 <c:when test="${currentPage > 1}">
-                    <a href="?page=1&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">«</a>
+                    <a href="?page=1&category=${selectedCategory}&country=${selectedCountry}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">«</a>
                 </c:when>
                 <c:otherwise>
                     <span class="pagination-btn disabled">«</span>
@@ -134,7 +119,7 @@
 
             <c:choose>
                 <c:when test="${hasPrevious}">
-                    <a href="?page=${currentPage - 1}&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">‹</a>
+                    <a href="?page=${currentPage - 1}&category=${selectedCategory}&country=${selectedCountry}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">‹</a>
                 </c:when>
                 <c:otherwise>
                     <span class="pagination-btn disabled">‹</span>
@@ -150,14 +135,14 @@
                         <span class="pagination-btn active">${i}</span>
                     </c:when>
                     <c:otherwise>
-                        <a href="?page=${i}&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">${i}</a>
+                        <a href="?page=${i}&category=${selectedCategory}&country=${selectedCountry}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">${i}</a>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
 
             <c:choose>
                 <c:when test="${hasNext}">
-                    <a href="?page=${currentPage + 1}&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">›</a>
+                    <a href="?page=${currentPage + 1}&category=${selectedCategory}&country=${selectedCountry}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">›</a>
                 </c:when>
                 <c:otherwise>
                     <span class="pagination-btn disabled">›</span>
@@ -166,7 +151,7 @@
 
             <c:choose>
                 <c:when test="${currentPage < totalPages}">
-                    <a href="?page=${totalPages}&category=${selectedCategory}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">»</a>
+                    <a href="?page=${totalPages}&category=${selectedCategory}&country=${selectedCountry}&searchType=${searchType}&search=${searchKeyword}&sortBy=${sortBy}" class="pagination-btn">»</a>
                 </c:when>
                 <c:otherwise>
                     <span class="pagination-btn disabled">»</span>
@@ -177,11 +162,15 @@
 </main>
 
 <script>
-
     document.querySelector('form').addEventListener('submit', function(e) {
         const searchInput = document.querySelector('input[name="search"]');
         if (searchInput && searchInput.value.trim() === '') {
             return true;
         }
+    });
+
+    // 국가 필터 변경 시 자동 제출
+    document.querySelector('select[name="country"]').addEventListener('change', function() {
+        this.form.submit();
     });
 </script>

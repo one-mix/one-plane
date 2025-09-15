@@ -99,4 +99,20 @@
           AND p.deleted_at IS NULL
     </select>
 
+    <!-- 전체 좋아요 수 조회 -->
+    <select id="countAllPostLikes" resultType="int">
+        SELECT COUNT(*)
+        FROM post_like
+    </select>
+
+    <!-- 오늘 작성된 좋아요 수 -->
+    <select id="countTodayPostLikes" resultType="int">
+    <![CDATA[
+        SELECT COUNT(*)
+        FROM post_like
+        WHERE created_at >= TRUNC(SYSDATE)
+          AND created_at < TRUNC(SYSDATE) + 1
+        ]]>
+</select>
+
 </mapper>
