@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/recommend")
+@RequestMapping({"/api/recommend", "/recommend"})
 public class RecommendController {
 
     private final RecommendService recommendService;
@@ -131,4 +132,5 @@ public class RecommendController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제 실패: 대상 없음");
         }
     }
+
 }

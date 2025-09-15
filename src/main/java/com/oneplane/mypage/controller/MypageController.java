@@ -168,6 +168,7 @@ public class MyPageController extends BaseController {
         model.addAttribute("totalCount", result.get("totalCount"));
         model.addAttribute("hasNext", result.get("hasNext"));
         model.addAttribute("hasPrevious", result.get("hasPrevious"));
-        return "mypage/recommend";
+        model.addAttribute("contentPage", "mypage/recommend.jsp"); // 중복 제거
+        return "layout/layout";
     }
 }

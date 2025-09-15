@@ -84,7 +84,7 @@
             <ul class="menu-list">
                 <li><a href="/mypage/travelHistory" class="${activeMenu == 'travelHistory' ? 'active' : ''}">방문한</a>
                 </li>
-                <li><a href="/section/recommend" class="${activeMenu == 'recommend' ? 'active' : ''}">추천받은</a></li>
+                <li><a href="/mypage/dashboard/recommend" class="${activeMenu == 'recommend' ? 'active' : ''}">추천받은</a></li>
             </ul>
         </div>
 
@@ -114,12 +114,14 @@
 
                     <c:otherwise>
                         <li class="danger"><a href="/mypage/profile/out">회원탈퇴</a></li>
+                        <!-- 기존 메뉴 항목 수정: “추가하기” 버튼이 CertificationController의 add 매핑을 호출하도록 변경 -->
                     </c:otherwise>
                 </c:choose>
 
             </ul>
         </div>
     </div>
+
 
 
     <div class="content">

@@ -81,7 +81,7 @@
                     <ul class="menu-list">
                         <li><a href="/mypage/travelHistory" class="${activeMenu == 'travelHistory' ? 'active' : ''}">방문한</a>
                         </li>
-                        <li><a href="/section/recommend" class="${activeMenu == 'recommend' ? 'active' : ''}">추천받은</a></li>
+                        <li><a href="/mypage/dashboard/recommend" class="${activeMenu == 'recommend' ? 'active' : ''}">추천받은</a></li>
                     </ul>
                 </div>
 
@@ -118,6 +118,7 @@
                     </ul>
                 </div>
             </div>
+
 
             <div class="main">
                 <div class="header">

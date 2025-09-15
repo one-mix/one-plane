@@ -1,24 +1,14 @@
 
-/* 콘텐츠 래퍼 - 사이드바 옆에 위치 */
-.content-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* 세로 중앙 정렬 추가 */
-    padding: 20px;
-    width: 100%;
-}
+/*!* 콘텐츠 래퍼 - 사이드바 옆에 위치 *!*/
+/*.content-wrapper {*/
+/*    flex: 1;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center; !* 세로 중앙 정렬 추가 *!*/
+/*    padding: 20px;*/
+/*    width: 100%;*/
+/*}*/
 
-/* 콘텐츠 영역 */
-.content {
-    width: 90%; /* 또는 max-width: 1200px; */
-    max-width: 1400px; /* 최대 너비 설정 */
-    height: auto; /* 높이는 콘텐츠에 맞게 자동 조절 */
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-}
 
 /* 헤더 */
 .content-header {
@@ -75,50 +65,47 @@
 }
 
 
-/* 그리드 - 크기를 1/2로 축소 */
+/* 그리드 - myvisit 크기 유지 */
 .travel-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 300px → 150px */
-    gap: 12px; /* 24px → 12px */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
     padding: 0;
 }
 
-/* 카드 - 배경색도 흰색으로 통일 */
+/* 카드 - recommend 스타일 기반 */
 .travel-card {
     position: relative;
-    background: #fff; /* #f0f0f0 → #fff로 변경 */
+    background: #fff;
     border-radius: 8px;
-    /*overflow: hidden;*/
-    height: 200px; /* 300px → 150px */
-    /*transition: transform .3s, box-shadow .3s;*/
+    height: 200px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 카드에 그림자 추가 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden; /* recommend 스타일 적용 */
 }
 
 .travel-card:hover {
-    /*transform: translateY(-4px);*/
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* 이미지 컨테이너에서도 여백 없애기 */
+/* 이미지 컨테이너 */
 .card-image-container {
     width: 100%;
     height: 100%;
     padding: 0;
     margin: 0;
-    /*overflow: hidden;*/
-    position: relative;   /* 반드시 설정 */
-    overflow: hidden;     /* 오버레이, 이미지가 벗어나지 않도록 */
+    position: relative;
+    overflow: hidden;
 }
 
-/* 카드 이미지 - 여백 완전 제거 */
+/* 카드 이미지 */
 .card-image {
     width: 100%;
     height: 100%;
-    /*object-fit: cover; !* contain → cover로 변경하여 여백 제거 *!*/
+    object-fit: cover;
     object-position: center;
-    /*transition: transform .6s ease;*/
     display: block;
+    transition: transform 0.4s ease, filter 0.4s ease;
 }
 
 .card-no-image {
@@ -129,67 +116,78 @@
     align-items: center;
     justify-content: center;
     color: #666;
-    font-size: 14px; /* 16px → 14px */
+    font-size: 14px;
     font-weight: 500;
 }
 
-/* 기본 오버레이 */
+/* 오버레이 - recommend 스타일 기반 */
 .content-overlay {
     position: absolute;
-    inset: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 16px;
-    box-sizing: border-box;
-    z-index: 2;
-    /* 배경색과 텍스트 색상 추가 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(
             to bottom,
             rgba(0, 0, 0, 0.3) 0%,
             rgba(0, 0, 0, 0.7) 100%
     );
     color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
 }
 
-/* 호버 시 오버레이 보이기 */
-.card-image-container:hover .content-overlay,
 .travel-card:hover .content-overlay {
     opacity: 1;
-    visibility: visible;
 }
 
-/* 카드 이미지 확대 및 밝기 조절 */
-.card-image-container:hover .card-image,
+/* 호버 시 이미지 효과 */
 .travel-card:hover .card-image {
     transform: scale(1.05);
     filter: brightness(0.7);
-    transition: transform 0.4s ease, filter 0.4s ease;
 }
 
-/* 오버레이 텍스트 스타일 - 핵심만 */
+/* 오버레이 헤더 */
+.overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .overlay-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-size: 1.1em;
+    font-weight: bold;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .overlay-date {
-    font-size: 0.85rem;
+    font-size: 0.85em;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 3px 8px;
     opacity: 0.9;
-    margin-bottom: 8px;
+}
+
+/* 오버레이 바디 */
+.overlay-body {
+    flex: 1;
+    margin-top: 10px;
+    font-size: 0.9em;
+    line-height: 1.4;
 }
 
 .overlay-location {
-    font-size: 0.9rem;
+    font-size: 0.9em;
     font-weight: 500;
     margin-bottom: 6px;
+    color: #ccc;
 }
 
+/* 별점 */
 .overlay-rating {
     display: flex;
     align-items: center;
@@ -200,6 +198,7 @@
 .overlay-stars {
     color: #FFD700;
     font-size: 0.85rem;
+    letter-spacing: 1px;
 }
 
 .overlay-rating-text {
@@ -207,59 +206,127 @@
     opacity: 0.8;
 }
 
+/* 태그 */
 .overlay-tags {
+    margin-top: 8px;
+    margin-bottom: 10px;
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
-    margin-bottom: 10px;
 }
 
 .overlay-tag {
+    display: inline-block;
     background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-size: 0.75em;
     color: #fff;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    white-space: nowrap;
     backdrop-filter: blur(10px);
 }
 
-/* 오버레이 액션 버튼 - 간소화 */
+/* 오버레이 콘텐츠 */
+.overlay-content {
+    margin-top: 8px;
+    font-size: 0.85em;
+    line-height: 1.3;
+    opacity: 0.9;
+}
+
+/* 액션 버튼들 - recommend의 delete-button 스타일 기반 */
 .overlay-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
     display: flex;
     gap: 6px;
-    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.travel-card:hover .overlay-actions {
+    opacity: 1;
 }
 
 .btn-edit,
 .btn-delete {
-    flex: 1;
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    border-radius: 4px;
-    text-align: center;
-    font-weight: 500;
-    transition: all 0.2s;
-    border: none;
+    padding: 8px 14px;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-radius: 6px;
     cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .btn-edit {
-    background: #007AFF;
-    color: #fff;
-    text-decoration: none;
-    display: block;
+    background-color: #007AFF;
+    color: white;
 }
 
 .btn-edit:hover {
-    background: #0056CC;
+    background-color: #0056CC;
 }
 
 .btn-delete {
-    background: #ff4444;
-    color: #fff;
+    background-color: #dc3545;
+    color: white;
 }
 
 .btn-delete:hover {
-    background: #cc3333;
+    background-color: #cc3333;
+}
+
+/* 빈 상태 메시지 - recommend 스타일 */
+.empty-message {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.empty-message h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.empty-message p {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* 헤더 스타일 */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.content-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.btn-add {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-add:hover {
+    background-color: #0056b3;
 }
