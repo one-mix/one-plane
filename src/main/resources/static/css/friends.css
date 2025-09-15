@@ -1,0 +1,272 @@
+
+.main {
+    flex: 1;
+    padding: var(--spacing-md) 20px;
+    width: 1000px;
+}
+
+/* 2. 자식 .page-wrapper */
+.wrapper {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    align-items: flex-start;  /* 높이를 강제로 맞추지 않고 위쪽 기준 정렬 */
+    display: flex;
+    gap: 15px;  /* <-- 여기서 간격 제어 */
+}
+
+/* 탭 메뉴 */
+.tab-menu {
+    display: flex;
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.tab-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 13px;
+    font-weight: var(--font-medium);
+    color: var(--gray-400);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 12px;
+}
+
+.tab-btn:hover {
+    color: var(--gray-600);
+    border-bottom-color: var(--gray-200);
+}
+
+.tab-btn.active {
+    color: var(--main-700);
+    border-bottom-color: var(--main-700);
+}
+
+.search-section {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-box {
+    position: relative;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    background-color: var(--gray-0);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--spacing-sm);
+    padding: 0 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-box i {
+    color: var(--gray-400);
+    margin-right: var(--spacing-sm);
+    font-size: 14px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    padding: 10px 0;
+    font-size: 13px;
+    color: var(--gray-600);
+    width: 250px;
+}
+
+.search-box input::placeholder {
+    color: var(--gray-300);
+}
+
+.search-btn {
+    background-color: var(--gray-800);
+    color: var(--gray-0);
+    border: none;
+    padding: var(--spacing-sm) 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-left: var(--spacing-sm);
+}
+
+.search-btn:hover {
+    background-color: var(--gray-700);
+}
+
+.friends-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.friend-card {
+    background-color: var(--gray-0);
+    border-radius: 10px;
+    padding: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--gray-100);
+    margin-left: -5px;
+}
+
+.friend-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.friend-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.friend-name {
+    font-size: 12px;
+    font-weight: var(--font-semibold);
+    color: var(--gray-800);
+    width: 90px;
+    margin-left: 10px;
+}
+
+.follow-action-btn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 11px;
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 60px;
+    flex-shrink: 0;
+}
+
+/*.follow-action-btn.following {*/
+/*    background-color: var(--main-500);*/
+/*    color: var(--gray-0);*/
+/*}*/
+
+/*!* 빈 상태 *!*/
+/*.empty-state {*/
+/*    grid-column: 1 / -1;*/
+/*    text-align: center;*/
+/*    padding: 30px var(--spacing-md);*/
+/*    color: var(--gray-400);*/
+/*}*/
+
+/*.empty-state i {*/
+/*    font-size: 32px;*/
+/*    margin-bottom: 10px;*/
+/*    display: block;*/
+/*    color: var(--gray-300);*/
+/*}*/
+
+/*.empty-state p {*/
+/*    font-size: 14px;*/
+/*    margin: 0;*/
+/*}*/
+
+/*.pagination {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    gap: 4px;*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.page-btn {*/
+/*    display: inline-flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    width: 28px;*/
+/*    height: 28px;*/
+/*    border: 1px solid var(--gray-100);*/
+/*    background-color: var(--gray-0);*/
+/*    color: var(--gray-400);*/
+/*    text-decoration: none;*/
+/*    border-radius: 6px;*/
+/*    font-size: 12px;*/
+/*    font-weight: var(--font-medium);*/
+/*    transition: all 0.2s ease;*/
+/*}*/
+
+/*.page-btn:hover {*/
+/*    background-color: var(--semantic-background);*/
+/*    border-color: var(--gray-200);*/
+/*    color: var(--gray-600);*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.page-btn.active {*/
+/*    background-color: var(--main-700);*/
+/*    border-color: var(--main-700);*/
+/*    color: var(--gray-0);*/
+/*}*/
+
+/*.page-btn i {*/
+/*    font-size: 10px;*/
+/*}*/
+
+/*.friends-grid.loading {*/
+/*    opacity: 0.6;*/
+/*    pointer-events: none;*/
+/*}*/
+
+/*.friend-card {*/
+/*    animation: fadeInUp 0.3s ease forwards;*/
+/*}*/
+
+/*.sidebar::-webkit-scrollbar-track {*/
+/*    background: var(--semantic-background);*/
+/*}*/
+
+/*.sidebar::-webkit-scrollbar-thumb {*/
+/*    background: var(--gray-200);*/
+/*    border-radius: 2px;*/
+/*}*/
+
+/*.sidebar::-webkit-scrollbar-thumb:hover {*/
+/*    background: var(--gray-300);*/
+/*}*/
+
+/*!* 포커스 스타일 *!*/
+/*.search-box input:focus {*/
+/*    outline: none;*/
+/*    box-shadow: 0 0 0 1px rgba(48, 96, 157, 0.25);*/
+/*}*/
+
+/*.tab-btn:focus,*/
+/*.follow-action-btn:focus,*/
+/*.search-btn:focus,*/
+/*.page-btn:focus {*/
+/*    outline: none;*/
+/*    box-shadow: 0 0 0 1px rgba(48, 96, 157, 0.25);*/
+/*}*/
+
+/*.sr-only {*/
+/*    position: absolute;*/
+/*    width: 1px;*/
+/*    height: 1px;*/
+/*    padding: 0;*/
+/*    margin: -1px;*/
+/*    overflow: hidden;*/
+/*    clip: rect(0, 0, 0, 0);*/
+/*    white-space: nowrap;*/
+/*    border: 0;*/
+/*}*/
