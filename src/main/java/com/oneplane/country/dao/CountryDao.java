@@ -29,11 +29,32 @@ public interface CountryDao {
 
     RecommendResultDTO findCountryInfo(@Param("isoCode") String isoCode);
 
-    List<CountryAlertDTO> findCountries(String levelValue, String keyword);
+    /**
+     * 조건에 따른 국가 리스트 조회
+     * @param levelValue 여행경보 단계 (여행유의 / 여행자제 / 철수권고 / 여행금지)
+     * @param keyword 국가명 검색 키워드
+     * @return 국가 리스트 (경보 단계, 국가명, 이미지 포함)
+     */
+    List<CountryAlertDTO> findCountries(@Param("levelValue") String levelValue,
+                                        @Param("keyword") String keyword);
 
-    CountryAlertDTO findCountryById(Long countryId);
+    /**
+     * 국가 ID로 단일 국가 조회
+     * @param countryId 국가 PK
+     * @return CountryAlertDTO (해당 국가 정보 + 경보 단계)
+     */
+    CountryAlertDTO findCountryById(@Param("countryId") Long countryId);
 
+    /**
+     * 관리자(Admin)에서 국가 정보 수정
+     * @param country 수정할 국가 정보 DTO
+     */
     void updateCountryAdmin(CountryAlertDTO country);
 
+    /**
+     * 전체 국가 요약 정보 조회
+     * - 총 국가 수, 여행경보 분포, 대륙별 요약 등
+     * @return CountrySummaryDTO
+     */
     CountrySummaryDTO getCountrySummary();
 }

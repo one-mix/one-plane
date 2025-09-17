@@ -70,7 +70,7 @@
 </div>
 
 <script>
-    // ✅ 대륙별 파이차트
+    // 대륙별 파이차트
     fetch("/admin/continent")
         .then(response => response.json())
         .then(data => {
@@ -91,11 +91,11 @@
                     }]
                 },
                 options: {
-                    maintainAspectRatio: false, // ✅ 높이 강제 적용 가능하게
+                    maintainAspectRatio: false,
                     responsive: true,
                     layout: {
                         padding: {
-                            bottom: 20, // ✅ 라벨이 잘리지 않게 아래쪽 여백 확보
+                            bottom: 20,
                             top: 10
                         }
                     },
@@ -106,7 +106,7 @@
             });
         });
 
-    // ✅ 월별 라인차트
+    // 월별 라인차트
     fetch("/admin/monthly")
         .then(response => response.json())
         .then(data => {
@@ -127,11 +127,11 @@
                     }]
                 },
                 options: {
-                    maintainAspectRatio: false, // ✅ 높이 강제 적용 가능하게
+                    maintainAspectRatio: false,
                     responsive: true,
                     layout: {
                         padding: {
-                            bottom: 20, // ✅ 라벨이 잘리지 않게 아래쪽 여백 확보
+                            bottom: 20,
                             top: 10
                         }
                     },
@@ -222,7 +222,7 @@
     }
 
     .equal-height {
-        height: 40vh; /* 원하는 높이 */
+        height: 40vh;
     }
 
     .equal-height canvas {
@@ -230,9 +230,9 @@
     }
 
     .chart-box h7 {
-        display: block; /* 블록요소로 변경 */
-        font-weight: 600; /* 굵게 */
-        padding-bottom: 20px; /* 제목과 차트 사이 간격 */
+        display: block;
+        font-weight: 600;
+        padding-bottom: 20px;
     }
 
     .stat-line {

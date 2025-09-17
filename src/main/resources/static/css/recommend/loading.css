@@ -22,8 +22,8 @@ body.loading .content {
     width: 100%;
     background: linear-gradient(to right, #eaf4ff 0%, #fffbe6 100%);
     display: flex;
-    align-items: center;     /* 중앙 세로 정렬 */
-    justify-content: center; /* 중앙 가로 정렬 */
+    align-items: center;
+    justify-content: center;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
