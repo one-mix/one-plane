@@ -9,8 +9,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 import joblib
 
-USERS_CSV = "/Users/osuky/Downloads/TodoList/one-plane/one-plane-chatbot/users_test2.csv"
-HIST_CSV  = "/Users/osuky/Downloads/TodoList/one-plane/one-plane-chatbot/travel_history_test2.csv"
+USERS_CSV = "/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/users_test2.csv"
+HIST_CSV  = "/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/travel_history_test2.csv"
 
 users = pd.read_csv(USERS_CSV)
 hist  = pd.read_csv(HIST_CSV)
