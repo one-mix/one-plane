@@ -139,5 +139,4 @@ public class RecommendController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제 실패: 대상 없음");
         }
     }
-
 }

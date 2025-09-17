@@ -8,8 +8,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
 import joblib
 
-USERS_CSV = "users_test.csv"
-HIST_CSV  = "travel_history_test.csv"
+USERS_CSV = "/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/users_test.csv"
+HIST_CSV  = "/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/travel_history_test.csv"
 
 users = pd.read_csv(USERS_CSV)
 hist  = pd.read_csv(HIST_CSV)

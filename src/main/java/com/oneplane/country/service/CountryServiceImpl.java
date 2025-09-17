@@ -1,7 +1,5 @@
 package com.oneplane.country.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.alert.dto.CountryAlertDTO;
 import com.oneplane.country.dao.CountryDao;
@@ -10,12 +8,8 @@ import com.oneplane.country.dto.CountrySummaryDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Slf4j
@@ -24,9 +18,11 @@ public class CountryServiceImpl implements CountryService {
     private final CountryDao countryDao;
     private final AlertLevelDao alertLevelDao;
 
+    // application-secret.yml 에 저장된 API 키 (원본 키, 인코딩 전 값)
     @Value("${api.country.key}")
-    private String apiKey;   // application.yml에 원본 키(인코딩되지 않은 값) 저장
+    private String apiKey;
 
+    // 외부 API 호출용 WebClient (기본 baseUrl 세팅)
     private final WebClient webClient =
             WebClient.create("https://apis.data.go.kr/1262000/CountryBasicService");
 
@@ -76,22 +72,46 @@ public class CountryServiceImpl implements CountryService {
         return countryDao.findByName(name);
     }
 
+    /**
+     * 여행경보 레벨 및 검색 키워드 조건에 따라 국가 목록 조회
+     *
+     * @param levelValue 여행경보 단계 필터
+     * @param keyword    국가명 검색 키워드
+     * @return 국가 리스트
+     */
     @Override
     public List<CountryAlertDTO> getCountries(String levelValue, String keyword) {
         return countryDao.findCountries(levelValue, keyword);
     }
 
+    /**
+     * 국가 ID로 특정 국가 상세 조회
+     *
+     * @param countryId 국가 ID
+     * @return 국가 정보
+     */
     @Override
     public CountryAlertDTO getCountryByIdAdmin(Long countryId) {
         return countryDao.findCountryById(countryId);
     }
 
+    /**
+     * 국가 및 여행경보 정보 업데이트
+     * - CountryDao 와 AlertLevelDao 모두 업데이트
+     *
+     * @param country 업데이트할 국가 DTO
+     */
     @Override
     public void updateCountry(CountryAlertDTO country) {
         countryDao.updateCountryAdmin(country);
         alertLevelDao.updateCountryLevelAdmin(country);
     }
 
+    /**
+     * 전체 국가 요약 통계 조회
+     *
+     * @return CountrySummaryDTO (총 국가 수, 안전 국가 수, 여행금지 국가 수)
+     */
     @Override
     public CountrySummaryDTO getCountrySummary() {
         return countryDao.getCountrySummary();

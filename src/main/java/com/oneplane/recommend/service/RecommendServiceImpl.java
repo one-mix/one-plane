@@ -24,44 +24,60 @@ public class RecommendServiceImpl implements RecommendService {
     private final AlertLevelDao alertLevelDao;
     private final RestTemplate restTemplate = new RestTemplate();
 
+    private static final int PAGE_SIZE = 9; // 페이지당 표시 개수
+
+    /**
+     * 추천 동의 저장
+     */
     @Override
+    @Transactional
     public Integer saveAgreement(Integer userId) {
         return recommendRepository.insertAgreement(userId);
     }
 
+    /**
+     * 최신 추천 동의 상태 조회
+     */
     @Override
     public String getLatestAgreement(Integer userId) {
-
         RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
-        return latestRecommend.getAgreement();
+        return latestRecommend != null ? latestRecommend.getAgreement() : null;
     }
 
+    /**
+     * 여행 목적/동행자 입력 저장
+     */
     @Override
+    @Transactional
     public void insertInput(RecommendDTO dto) {
         RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(dto.getUserId());
+        if (latestRecommend == null) {
+            throw new IllegalStateException("추천 정보를 찾을 수 없습니다.");
+        }
         dto.setRecommendId(latestRecommend.getRecommendId());
         recommendRepository.insertInput(dto);
     }
 
+    /**
+     * 최신 입력 조회
+     */
     @Override
     public RecommendDTO getLatestInput(Integer userId) {
         return recommendRepository.getLatestRecommend(userId);
     }
 
+    /**
+     * Flask 추천 API 호출
+     */
     @Override
     public List<RecommendResultDTO> callFlaskRecommend(Integer userId, String purpose, String companion) {
         String url = "http://localhost:5001/recommend";
 
-        Map<String, Object> payload = new HashMap<>();
-        Map<String, Object> userPart = new HashMap<>();
-        userPart.put("user_id", userId);
-
-        Map<String, Object> inputPart = new HashMap<>();
-        inputPart.put("travelPurpose", purpose);
-        inputPart.put("companion", companion);
-
-        payload.put("user", userPart);
-        payload.put("input", inputPart);
+        // 요청 바디 구성
+        Map<String, Object> payload = Map.of(
+                "user", Map.of("user_id", userId),
+                "input", Map.of("travelPurpose", purpose, "companion", companion)
+        );
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -70,100 +86,105 @@ public class RecommendServiceImpl implements RecommendService {
         ResponseEntity<RecommendResultDTO[]> response =
                 restTemplate.exchange(url, HttpMethod.POST, entity, RecommendResultDTO[].class);
 
-        List<RecommendResultDTO> results = Arrays.asList(response.getBody());
+        RecommendResultDTO[] body = response.getBody();
+        if (body == null) return Collections.emptyList();
 
-        // 각 국가 코드 기준으로 DB에서 continent, img 가져오기
+        List<RecommendResultDTO> results = Arrays.asList(body);
+
+        // 각 국가 코드 기준으로 DB 보강 정보 추가
         for (RecommendResultDTO dto : results) {
             if (dto.getCountryIso3() != null) {
+                // 대륙/국기 이미지 조회
                 RecommendResultDTO info = countryDao.findCountryInfo(dto.getCountryIso3());
                 if (info != null) {
                     dto.setContinent(info.getContinent());
                     dto.setCountryImg(info.getCountryImg());
                 }
 
-                // 알림 테이블에서 여행 경보 정보 가져오기 (국가 코드로 검색)
+                // 여행 경보 레벨 조회
                 AlertLevelDTO alertLevel = alertLevelDao.findByIsoCode(dto.getCountryIso3());
                 if (alertLevel != null) {
-                    // 경보 레벨이 없으면 "안전"으로 처리
-                    if (alertLevel.getLevelValue() == null || alertLevel.getLevelValue().isEmpty()) {
-                        alertLevel.setLevelValue("안전");
-                    }
-                    String levelValue = alertLevel.getLevelValue();
-                    dto.setAlertLevel(levelValue);
+                    dto.setAlertLevel(
+                            (alertLevel.getLevelValue() == null || alertLevel.getLevelValue().isEmpty())
+                                    ? "안전"
+                                    : alertLevel.getLevelValue()
+                    );
                 } else {
-                    // 만약 경보 정보가 없으면 "안전"으로 처리
-                    String safeLevel = "안전";
-                    dto.setAlertLevel(safeLevel);
+                    dto.setAlertLevel("안전");
                 }
             }
         }
         return results;
     }
 
+    /**
+     * 선택 국가 저장
+     */
     @Override
+    @Transactional
     public Integer saveSelectedCountry(Integer userId, String country, String city) {
-        // 1. 가장 최근 recommendId 가져오기
         RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
         if (latestRecommend == null) {
             throw new IllegalStateException("추천 정보를 찾을 수 없습니다.");
         }
 
-        // 2. ISO 코드로 countryId 조회
         Integer countryId = countryDao.findCountryIdByIsoCode(country);
         if (countryId == null) {
             throw new IllegalArgumentException("유효하지 않은 국가 코드입니다: " + country);
         }
 
-        // 3. countryId 업데이트
         recommendRepository.updateCountryAndCity(latestRecommend.getRecommendId(), countryId, city);
-
         return latestRecommend.getRecommendId();
     }
 
+    /**
+     * 피드백 업데이트
+     */
     @Override
+    @Transactional
     public void updateFeedback(Integer recommendId, Integer rating, String content) {
         recommendRepository.updateFeedback(recommendId, rating, content);
     }
 
+    /**
+     * 추천 이력 조회 (페이지네이션)
+     */
     @Override
     public List<RecommendResultDTO> getRecommendHistory(Integer userId, int page) {
-        int limit = 9; // 한 페이지당 9개씩 표시
-        int offset = (page - 1) * limit;
-
-        // 페이지네이션을 적용한 추천 이력 조회
-        return recommendRepository.findRecommendHistoryByUserId(userId, offset, limit);
+        int offset = (page - 1) * PAGE_SIZE;
+        return recommendRepository.findRecommendHistoryByUserId(userId, offset, PAGE_SIZE);
     }
 
+    /**
+     * 추천 이력 전체 개수
+     */
     @Override
     public int getTotalRecommendHistoryCount(Integer userId) {
         return recommendRepository.getTotalRecommendHistoryCount(userId);
     }
 
+    /**
+     * 추천 이력 + 페이지네이션 정보 조회
+     */
+    @Override
     public Map<String, Object> getRecommendHistoryWithPagination(Integer userId, int page) {
-        if (page < 1) {
-            page = 1; // 최소 페이지는 1
-        }
+        if (page < 1) page = 1;
 
-        int limit = 9;
         int totalCount = getTotalRecommendHistoryCount(userId);
-        int totalPages = (int) Math.ceil((double) totalCount / limit);
+        int totalPages = (int) Math.ceil((double) totalCount / PAGE_SIZE);
 
-        // 페이지가 총 페이지 수를 초과하지 않도록 제한
-        if (page > totalPages && totalPages > 0) {
-            page = totalPages;
-        }
+        if (page > totalPages && totalPages > 0) page = totalPages;
 
         List<RecommendResultDTO> recommendHistory = getRecommendHistory(userId, page);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("recommendHistory", recommendHistory);
-        result.put("currentPage", page);
-        result.put("totalPages", totalPages);
-        result.put("totalCount", totalCount);
-        result.put("hasNext", page < totalPages);
-        result.put("hasPrevious", page > 1);
-
-        return result;
+        return Map.of(
+                "recommendHistory", recommendHistory,
+                "currentPage", page,
+                "totalPages", totalPages,
+                "totalCount", totalCount,
+                "hasNext", page < totalPages,
+                "hasPrevious", page > 1
+        );
     }
 
     @Override
@@ -171,11 +192,14 @@ public class RecommendServiceImpl implements RecommendService {
         Map<String, Object> params = new HashMap<>();
         params.put("recommendId", recommendId);
         params.put("userId", userId);
-
         recommendRepository.softDeleteRecommend(params);
     }
 
+    /**
+     * Soft Delete (마이페이지 전용)
+     */
     @Override
+    @Transactional
     public boolean softDeleteRecommendMyPage(Long recommendId) {
         return recommendRepository.softDeleteRecommendMyPage(recommendId) > 0;
     }
