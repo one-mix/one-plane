@@ -6,7 +6,7 @@
     justify-content: center;
     text-align: center;
     padding: 2rem;
-    min-height: calc(100vh - 200px); /* header/footer 고려 */
+    min-height: calc(100vh - 200px);
 }
 
 .result h2 {
@@ -39,7 +39,7 @@
     justify-content: center;
     gap: 2rem;
     margin-bottom: 2rem;
-    flex-wrap: nowrap; /* 줄바꿈 금지 */
+    flex-wrap: nowrap;
 }
 
 /* 카드 */
@@ -188,7 +188,6 @@ button.submit {
     color: #fff;
 }
 
-/* 토스트 */
 .toast {
     visibility: hidden;
     min-width: 240px;
@@ -214,35 +213,35 @@ button.submit {
 
 .alert-danger {
     color: white;
-    background-color: red; /* 빨간색 - 여행금지 */
+    background-color: red;
     padding: 5px;
     border-radius: 5px;
 }
 
 .alert-warning {
     color: white;
-    background-color: orange; /* 주황색 - 철수권고 */
+    background-color: orange;
     padding: 5px;
     border-radius: 5px;
 }
 
 .alert-info {
     color: white;
-    background-color: yellow; /* 노란색 - 여행자제 */
+    background-color: yellow;
     padding: 5px;
     border-radius: 5px;
 }
 
 .alert-caution {
     color: white;
-    background-color: yellowgreen; /* 노란 초록색 - 여행유의 */
+    background-color: yellowgreen;
     padding: 5px;
     border-radius: 5px;
 }
 
 .alert-safe {
     color: white;
-    background-color: green; /* 초록색 - 안전 */
+    background-color: green;
     padding: 5px;
     border-radius: 5px;
 }

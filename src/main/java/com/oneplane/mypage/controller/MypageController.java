@@ -152,7 +152,9 @@ public class MyPageController extends BaseController {
         }
     }
 
-    // 기존 추천 이력 페이지 매핑 (변경 없음)
+    /**
+     * 추천 이력 페이지 조회 (페이징 지원)
+     */
     @GetMapping("/recommend")
     public String getRecommendationHistory(
             @RequestParam(value = "page", defaultValue = "1") int page,
@@ -160,6 +162,10 @@ public class MyPageController extends BaseController {
             Model model) {
 
         Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return "redirect:/login"; // 로그인 안 된 경우 처리
+        }
+
         Map<String, Object> result = recommendService.getRecommendHistoryWithPagination(userId, page);
 
         model.addAttribute("recommendHistory", result.get("recommendHistory"));
@@ -168,7 +174,8 @@ public class MyPageController extends BaseController {
         model.addAttribute("totalCount", result.get("totalCount"));
         model.addAttribute("hasNext", result.get("hasNext"));
         model.addAttribute("hasPrevious", result.get("hasPrevious"));
-        model.addAttribute("contentPage", "mypage/recommend.jsp"); // 중복 제거
+        model.addAttribute("contentPage", "mypage/recommend.jsp");
+
         return "layout/layout";
     }
 }

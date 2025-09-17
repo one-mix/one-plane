@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime, timedelta
 
 # 사용자 데이터 로드
-users_df = pd.read_csv("/Users/osuky/Downloads/TodoList/one-plane/one-plane-chatbot/users_test2.csv")
+users_df = pd.read_csv("/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/users_test2.csv")
 
 # 국가 및 도시 데이터 정의 (제공받은 리스트 기반)
 countries_data = [
@@ -427,7 +427,7 @@ print(f"아시아: {asia_count} ({asia_count/len(travel_df)*100:.1f}%)")
 print(f"유럽: {europe_count} ({europe_count/len(travel_df)*100:.1f}%)")
 
 # CSV 저장
-travel_df.to_csv("/Users/osuky/Downloads/TodoList/one-plane/one-plane-chatbot/travel_history_test2.csv", index=False)
+travel_df.to_csv("/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/travel_history_test2.csv", index=False)
 print(f"\n여행 데이터가 성공적으로 저장되었습니다!")
 
 # 데이터 검증
