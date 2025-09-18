@@ -1,8 +1,10 @@
+//작성자:방대혁
 package com.oneplane.recommend.dto;
 
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 추천 결과 DTO
@@ -49,5 +51,5 @@ public class RecommendResultDTO {
     private String ratingContent;
 
     /** 생성 시각 */
-    private LocalDateTime createdAt;
+    private Date createdAt;
 }

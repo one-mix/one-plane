@@ -1,3 +1,4 @@
+//작성자:방대혁,오수경
 package com.oneplane.recommend.service;
 
 import com.oneplane.alert.dao.AlertLevelDao;
@@ -7,6 +8,7 @@ import com.oneplane.country.domain.Country;
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
 import com.oneplane.recommend.repository.RecommendRepository;
+import com.oneplane.recommend.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 추천 동의 저장
+     * 작성자:방대혁
      */
     @Override
     @Transactional
@@ -37,6 +40,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 최신 추천 동의 상태 조회
+     * 작성자:방대혁
      */
     @Override
     public String getLatestAgreement(Integer userId) {
@@ -46,6 +50,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 여행 목적/동행자 입력 저장
+     * 작성자:방대혁
      */
     @Override
     @Transactional
@@ -60,6 +65,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 최신 입력 조회
+     * 작성자:방대혁
      */
     @Override
     public RecommendDTO getLatestInput(Integer userId) {
@@ -68,6 +74,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * Flask 추천 API 호출
+     * 작성자:방대혁
      */
     @Override
     public List<RecommendResultDTO> callFlaskRecommend(Integer userId, String purpose, String companion) {
@@ -119,6 +126,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 선택 국가 저장
+     * 작성자:방대혁
      */
     @Override
     @Transactional
@@ -139,6 +147,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 피드백 업데이트
+     * 작성자:방대혁
      */
     @Override
     @Transactional
@@ -148,6 +157,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 추천 이력 조회 (페이지네이션)
+     * 작성자:방대혁
      */
     @Override
     public List<RecommendResultDTO> getRecommendHistory(Integer userId, int page) {
@@ -157,6 +167,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 추천 이력 전체 개수
+     * 작성자:방대혁
      */
     @Override
     public int getTotalRecommendHistoryCount(Integer userId) {
@@ -165,6 +176,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * 추천 이력 + 페이지네이션 정보 조회
+     * 작성자:방대혁
      */
     @Override
     public Map<String, Object> getRecommendHistoryWithPagination(Integer userId, int page) {
@@ -197,6 +209,7 @@ public class RecommendServiceImpl implements RecommendService {
 
     /**
      * Soft Delete (마이페이지 전용)
+     * 작성자:방대혁
      */
     @Override
     @Transactional

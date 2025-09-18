@@ -1,3 +1,4 @@
+//작성자:방대혁,오수경
 package com.oneplane.country.service;
 
 import com.oneplane.alert.dao.AlertLevelDao;
@@ -78,6 +79,7 @@ public class CountryServiceImpl implements CountryService {
      * @param levelValue 여행경보 단계 필터
      * @param keyword    국가명 검색 키워드
      * @return 국가 리스트
+     * 작성자:방대혁
      */
     @Override
     public List<CountryAlertDTO> getCountries(String levelValue, String keyword) {
@@ -89,6 +91,7 @@ public class CountryServiceImpl implements CountryService {
      *
      * @param countryId 국가 ID
      * @return 국가 정보
+     * 작성자:방대혁
      */
     @Override
     public CountryAlertDTO getCountryByIdAdmin(Long countryId) {
@@ -100,6 +103,7 @@ public class CountryServiceImpl implements CountryService {
      * - CountryDao 와 AlertLevelDao 모두 업데이트
      *
      * @param country 업데이트할 국가 DTO
+     * 작성자:방대혁
      */
     @Override
     public void updateCountry(CountryAlertDTO country) {
@@ -111,6 +115,7 @@ public class CountryServiceImpl implements CountryService {
      * 전체 국가 요약 통계 조회
      *
      * @return CountrySummaryDTO (총 국가 수, 안전 국가 수, 여행금지 국가 수)
+     * 작성자:방대혁
      */
     @Override
     public CountrySummaryDTO getCountrySummary() {

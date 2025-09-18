@@ -1,3 +1,4 @@
+# 작성자: 방대혁
 import pandas as pd
 import random
 
@@ -61,7 +62,7 @@ csv_path = "/Users/bangdaehyeog/Desktop/one-plane/one-plane-chatbot/users_test2.
 users_df.to_csv(csv_path, index=False)
 print(f"사용자 데이터가 성공적으로 저장되었습니다! ({csv_path})")
 
-# ✅ 생성된 데이터 통계 확인
+# 생성된 데이터 통계 확인
 print("\n생성된 사용자 데이터 통계:")
 print(f"총 사용자 수: {len(users_df)}")
 print("\n연령대 분포:")

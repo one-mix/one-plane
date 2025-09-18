@@ -1,3 +1,4 @@
+//작성자:방대혁,허겸
 package com.oneplane.myPage.controller;
 
 import com.oneplane.myPage.dto.CertificationTimelineDto;
@@ -181,6 +182,7 @@ public class MyPageController extends BaseController {
      * @param session HTTP 세션 (사용자 인증)
      * @param model 뷰 데이터 모델
      * @return 추천 이력 페이지 또는 로그인 리다이렉트
+     * 작성자:방대혁
      */
     @GetMapping("/recommend")
     public String getRecommendationHistory(

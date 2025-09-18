@@ -1,9 +1,11 @@
+//작성자: 방대혁,오수경
 package com.oneplane.alert.service;
 
 import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.alert.domain.AlertLevel;
 import com.oneplane.alert.dto.AlertLevelDTO;
 import com.oneplane.alert.dto.TravelWarningApiResponse;
+import com.oneplane.alert.service.AlertLevelService;
 import com.oneplane.country.dao.CountryDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +41,7 @@ public class AlertLevelServiceImpl implements AlertLevelService {
      * API 응답 데이터를 기준으로 경보 레벨 문자열을 판별
      * @param item API에서 내려온 여행경보 항목
      * @return 경보 레벨 (여행금지 / 철수권고 / 여행자제 / 여행유의)
+     * 작성자: 방대혁
      */
     @Override
     public String determineLevelValue(TravelWarningApiResponse.Item item) {
@@ -59,6 +62,7 @@ public class AlertLevelServiceImpl implements AlertLevelService {
 
     /**
      * 공공데이터포털 여행경보 API 호출 후 DB에 저장/갱신
+     * 작성자: 방대혁
      */
     @Override
     public void fetchAndSaveAlertLevels() {

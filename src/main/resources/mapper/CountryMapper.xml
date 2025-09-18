@@ -29,6 +29,8 @@
         WHERE iso_code = #{isoCode}
     </select>
 
+    <!-- 국가 상세 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="findCountryInfo" parameterType="string" resultType="com.oneplane.recommend.dto.RecommendResultDTO">
         SELECT continent,
         img AS countryImg
@@ -36,6 +38,8 @@
         WHERE iso_code = #{isoCode}
     </select>
 
+    <!-- ISO코드로 국가조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="findCountryIdByIsoCode" parameterType="string" resultType="java.lang.Integer">
         SELECT country_id
         FROM country
@@ -48,6 +52,8 @@
         WHERE currency = #{curUnit}
     </select>
 
+    <!-- 국가 리스트 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="findCountries" resultType="com.oneplane.alert.dto.CountryAlertDTO">
         SELECT c.country_id      AS countryId,
         c.country_name    AS countryName,
@@ -69,6 +75,8 @@
         ORDER BY c.country_name
     </select>
 
+    <!-- 단일 국가 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="findCountryById" parameterType="long" resultType="com.oneplane.alert.dto.CountryAlertDTO">
         SELECT c.country_id AS countryId,
                c.country_name AS countryName,
@@ -83,6 +91,8 @@
         WHERE c.country_id = #{countryId}
     </select>
 
+    <!-- 국가정보 수정 -->
+    <!-- 작성자:방대혁 -->
     <update id="updateCountryAdmin" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
         UPDATE country
         SET country_name = #{countryName},
@@ -99,6 +109,8 @@
         WHERE country_id = #{countryId}
     </update>
 
+    <!-- 전체 국가 요약 정보 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="getCountrySummary" resultType="com.oneplane.country.dto.CountrySummaryDTO">
         SELECT
                 (SELECT COUNT(*) FROM alert_level) AS totalCountries,
