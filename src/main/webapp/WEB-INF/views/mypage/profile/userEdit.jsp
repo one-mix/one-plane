@@ -1,5 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<style>
+    /* 부모 컨테이너 */
+    .container {
+        width: 1000px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    /* 2. 자식 .page-wrapper */
+    .page-wrapper {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        align-items: flex-start;  /* 높이를 강제로 맞추지 않고 위쪽 기준 정렬 */
+        display: flex;
+        gap: 40px;  /* <-- 여기서 간격 제어 */
+    }
+</style>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
