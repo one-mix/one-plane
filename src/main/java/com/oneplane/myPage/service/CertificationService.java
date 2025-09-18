@@ -25,7 +25,7 @@ import java.util.UUID;
  * 국가 인증 관련 비즈니스 로직을 처리하는 서비스
  * 사용자의 국가 인증 등록, 조회, 타임라인 데이터 생성, 통계 정보 제공 기능 포함
  *
- * 작성자: 허겸
+ * @author 허겸
  */
 @Service
 public class CertificationService {

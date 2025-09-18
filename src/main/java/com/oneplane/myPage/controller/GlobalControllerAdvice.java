@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  * 모든 컨트롤러에 공통으로 적용되는 Advice
  * 로그인된 사용자의 프로필 정보를 세션에 캐시하고 뷰에 제공
  *
- * 작성자: 허겸
+ * @author 허겸
  */
 @ControllerAdvice(basePackages = "com.oneplane")
 public class GlobalControllerAdvice {

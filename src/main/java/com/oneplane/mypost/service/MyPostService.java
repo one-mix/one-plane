@@ -13,7 +13,7 @@ import java.util.List;
  * 내 게시글 및 팔로워 게시글 조회 서비스
  * MyPostController에서 호출하여 DB 조회 결과를 반환
  *
- * 작성자: 허겸
+ * @author 허겸
  */
 @Service
 @RequiredArgsConstructor

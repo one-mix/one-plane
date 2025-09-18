@@ -17,7 +17,7 @@ import java.util.List;
  * 여행 기록 관리 서비스
  * 여행 이력의 생성, 조회, 수정, 삭제 및 DTO-Entity 변환 로직 처리
  *
- * 작성자: 허겸
+ * @author 허겸
  */
 @Service
 @Transactional

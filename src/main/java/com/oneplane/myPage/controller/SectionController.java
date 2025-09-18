@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 섹션 관련 컨트롤러
  * 여행 추천 섹션 등 페이지 전환을 처리
  *
- * 작성자: 허겸
+ * @author 허겸
  */
 @Controller
 @RequestMapping("/section")

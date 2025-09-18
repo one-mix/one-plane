@@ -20,7 +20,7 @@ import java.util.UUID;
  * 사용자 프로필 관리 서비스
  * 프로필 이미지 저장 및 사용자 정보 조회/수정 로직 제공
  *
- * 작성자: 허겸
+ * @author 허겸
  */
 @Service
 public class UserProfileService {
