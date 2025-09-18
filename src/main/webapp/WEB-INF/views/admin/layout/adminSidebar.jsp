@@ -51,9 +51,6 @@
         <a href="/admin/countries" class="${activeMenu eq 'countries' ? 'active' : ''}">
           전체국가
         </a>
-        <a href="/admin/countries/risk" class="${activeMenu eq 'country-risk' ? 'active' : ''}">
-          위험도 국가
-        </a>
       </div>
     </div>
 
