@@ -28,13 +28,13 @@
     border: 2px solid var(--gray-100);
     border-radius: 10px;
     background: white;
-    color: var(--gray-500);
-    text-decoration: none;
+    cxt-decoration: none;
     font-size: 16px;
     font-weight: var(--font-medium);
     cursor: pointer;
     text-align: center;
-    padding: 12px 24px;
+    paolor: var(--gray-500);
+    tedding: 12px 24px;
 }
 
 .top-tab.active {

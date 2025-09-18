@@ -3,6 +3,26 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+<style>
+    /* 부모 컨테이너 */
+    .container {
+        width: 1200px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    /* 2. 자식 .page-wrapper */
+    .page-wrapper {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        align-items: flex-start;  /* 높이를 강제로 맞추지 않고 위쪽 기준 정렬 */
+        display: flex;
+        gap: 40px;  /* <-- 여기서 간격 제어 */
+    }
+</style>
+
+
 <link href="/css/postList.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/mypage/mypageContent.css" />
 
@@ -119,7 +139,7 @@
             <div class="top-tabs">
                 <a href="/myPost/myPost" class="top-tab ${empty selectedCategory ? 'active' : 'null'}">전체</a>
                 <a href="/myPost/myPost?category=READY" class="top-tab ${selectedCategory eq 'READY' ? 'active' : ''}">준비</a>
-                <a href="/myPost/myPost?category=REVIEW" class="to  p-tab ${selectedCategory eq 'REVIEW' ? 'active' : ''}">후기</a>
+                <a href="/myPost/myPost?category=REVIEW" class="top-tab ${selectedCategory eq 'REVIEW' ? 'active' : ''}">후기</a>
                 <a href="/myPost/myPost?category=ACCOMPANY" class="top-tab ${selectedCategory eq 'ACCOMPANY' ? 'active' : ''}">동행</a>
                 <a href="/myPost/myPost?category=FREE" class="top-tab ${selectedCategory eq 'FREE' ? 'active' : ''}">자유</a>
             </div>

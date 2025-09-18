@@ -31,6 +31,8 @@
                    accept="image/*"
                    style="display:none;"
                    onchange="uploadAvatar()"/>
+
+            <%--            <div class="upload-overlay">📷</div>--%>
         </div>
 
         <div class="profile-info">
