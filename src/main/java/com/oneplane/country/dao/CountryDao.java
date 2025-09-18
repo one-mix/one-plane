@@ -33,8 +33,6 @@ public interface CountryDao {
      */
     Integer findCountryIdByIsoCode(@Param("isoCode") String isoCode);
 
-    List<Long> findCountryIdsByCurrency(@Param("curUnit") String curUnit);
-
     /**
      * ISO 코드 기준으로 국가 상세 정보를 조회합니다.
      * - 대륙(continent), 국가 이미지(countryImg) 등 추가 정보 포함

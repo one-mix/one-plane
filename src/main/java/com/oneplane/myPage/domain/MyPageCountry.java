@@ -9,7 +9,6 @@ public class MyPageCountry {
     private String img;
     private Double latitude;
     private Double longitude;
-    private String currency;
     private Integer distance;
 
     // 생성자
@@ -39,9 +38,6 @@ public class MyPageCountry {
 
     public Double getLongitude() { return longitude; }
     public void setLongitude(Double longitude) { this.longitude = longitude; }
-
-    public String getCurrency() { return currency; }
-    public void setCurrency(String currency) { this.currency = currency; }
 
     public Integer getDistance() { return distance; }
     public void setDistance(Integer distance) { this.distance = distance; }

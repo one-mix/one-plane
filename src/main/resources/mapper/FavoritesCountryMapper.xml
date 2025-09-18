@@ -23,7 +23,6 @@
             <result property="img" column="img"/>
             <result property="latitude" column="latitude"/>
             <result property="longitude" column="longitude"/>
-            <result property="currency" column="currency"/>
             <result property="distance" column="distance"/>
         </association>
     </resultMap>
@@ -52,7 +51,6 @@
         c.img,
         c.latitude,
         c.longitude,
-        c.currency,
         c.distance
         FROM favorites_country f
         JOIN country c ON f.country_id = c.country_id
@@ -64,7 +62,7 @@
         NULL                AS favorites_country_id,
         r.country_id,
         r.user_id,
-        r.recommend_id      AS recommend_id,  <!-- ✅ 여기 수정 -->
+        r.recommend_id      AS recommend_id,
         c.country_id        AS c_country_id,
         c.country_name,
         c.country_en_name,
@@ -73,7 +71,6 @@
         c.img,
         c.latitude,
         c.longitude,
-        c.currency,
         c.distance
         FROM recommend r
         JOIN country c ON r.country_id = c.country_id

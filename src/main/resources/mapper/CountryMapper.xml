@@ -48,12 +48,6 @@
         WHERE iso_code = #{isoCode}
     </select>
 
-    <select id="findCountryIdsByCurrency" parameterType="string" resultType="long">
-        SELECT country_id
-        FROM country
-        WHERE currency = #{curUnit}
-    </select>
-
     <!-- 국가 리스트 조회 -->
     <!-- 작성자:방대혁 -->
     <select id="findCountries" resultType="com.oneplane.alert.dto.CountryAlertDTO">
