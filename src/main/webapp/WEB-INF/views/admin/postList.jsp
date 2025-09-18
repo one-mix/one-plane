@@ -1,10 +1,10 @@
+<!-- 작성자: 김동현 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <link rel="stylesheet" href="/css/admin/postList.css"/>
 
-  <!-- 검색 및 필터 섹션 -->
   <div class="search-filter-section">
     <div class="d-flex justify-content-between align-items-center">
       <div class="result-summary">
@@ -20,7 +20,6 @@
     </div>
   </div>
 
-  <!-- 사용자 테이블 -->
   <div class="posts-table-container">
     <div class="table-responsive">
       <table class="table table-hover align-middle" id="postsTable">
@@ -123,12 +122,9 @@
                   </div>
                 </td>
 
-                <%-- 조회수 --%>
                 <td class="text-center">
                   <span>${post.viewCount != null ? post.viewCount : 0}</span>
                 </td>
-                <%-- 조회수 --%>
-                <%-- 생성일 --%>
                 <td class="text-center">
                   <c:choose>
                     <c:when test="${post.createdAt != null}">
@@ -138,7 +134,6 @@
                     <c:otherwise>-</c:otherwise>
                   </c:choose>
                 </td>
-                <%-- 생성일 --%>
                 <td class="text-center">
                   <div class="action-buttons">
                     <button type="button"
@@ -158,13 +153,9 @@
     </div>
   </div>
 
-
-
-  <!-- 페이지네이션 -->
   <c:if test="${totalPages > 1}">
     <nav class="mt-4">
       <ul class="pagination justify-content-center">
-        <!-- 맨 처음 -->
         <c:if test="${currentPage > 1}">
           <li class="page-item">
             <a class="page-link" href="?page=1${searchParams}">
@@ -173,7 +164,6 @@
           </li>
         </c:if>
 
-        <!-- 이전 페이지 -->
         <c:if test="${hasPrevious}">
           <li class="page-item">
             <a class="page-link" href="?page=${currentPage - 1}${searchParams}">
@@ -182,7 +172,6 @@
           </li>
         </c:if>
 
-        <!-- 페이지 번호들 -->
         <c:forEach begin="${currentPage > 5 ? currentPage - 4 : 1}"
                    end="${currentPage + 4 < totalPages ? currentPage + 4 : totalPages}"
                    var="pageNum">
@@ -193,7 +182,6 @@
           </li>
         </c:forEach>
 
-        <!-- 다음 페이지 -->
         <c:if test="${hasNext}">
           <li class="page-item">
             <a class="page-link" href="?page=${currentPage + 1}${searchParams}">
@@ -202,7 +190,6 @@
           </li>
         </c:if>
 
-        <!-- 맨 끝 -->
         <c:if test="${currentPage < totalPages}">
           <li class="page-item">
             <a class="page-link" href="?page=${totalPages}${searchParams}">
@@ -214,7 +201,6 @@
     </nav>
   </c:if>
 
-  <!-- 페이지 정보 -->
   <div class="text-center mt-3">
     <small class="text-muted">
       <c:choose>

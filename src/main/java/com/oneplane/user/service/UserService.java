@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.user.service;
 
 import com.oneplane.user.dao.UserDao;
@@ -19,6 +20,7 @@ public class UserService {
 
     /**
      * 사용자 ID로 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public User findById(Integer userId) {
@@ -28,6 +30,7 @@ public class UserService {
 
     /**
      * 이메일로 사용자 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
@@ -37,6 +40,7 @@ public class UserService {
 
     /**
      * 프로필 완성 처리 (카카오 로그인 후 추가 정보 입력)
+     * 작성자 : 김동현
      */
     public User completeProfile(Integer userId, ProfileCompleteRequestDto profileRequest) {
         log.info("프로필 완성 처리 시작 - 사용자 ID: {}", userId);
@@ -86,6 +90,7 @@ public class UserService {
 
     /**
      * 닉네임 중복 확인
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public boolean isNicknameDuplicate(String nickname) {
@@ -97,6 +102,7 @@ public class UserService {
 
     /**
      * 사용자 탈퇴 (논리 삭제)
+     * 작성자 : 김동현
      */
     public void deleteUser(Integer userId) {
         log.info("사용자 탈퇴 처리 - 사용자 ID: {}", userId);
@@ -116,6 +122,7 @@ public class UserService {
 
     /**
      * 사용자 프로필 완성 여부 확인
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public boolean isProfileComplete(Integer userId) {
@@ -125,6 +132,7 @@ public class UserService {
 
     /**
      * 사용자 정보 업데이트
+     * 작성자 : 김동현
      */
     public User updateUser(User user) {
         log.info("사용자 정보 업데이트 - 사용자 ID: {}", user.getUser_id());
@@ -141,6 +149,7 @@ public class UserService {
 
     /**
      * 건강 정보 보유 여부 확인
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public boolean hasHealthInfo(Integer userId) {
@@ -150,6 +159,7 @@ public class UserService {
 
     /**
      * 여행 시 주의가 필요한 사용자인지 확인
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public boolean needsTravelCaution(Integer userId) {

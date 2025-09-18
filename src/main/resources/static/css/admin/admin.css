@@ -1,3 +1,4 @@
+/* 작성자: 김동현 */
 body {
     margin: 0;
     padding: 0;
@@ -14,14 +15,13 @@ body {
 }
 
 .admin-main {
-    flex: 1;              /* 남은 공간 다 차지 */
-    width: 100%;          /* 사이드바 제외 나머지 꽉 채움 */
-    padding: 20px;        /* 필요하면 여백만 남김 */
+    flex: 1;
+    width: 100%;
+    padding: 20px;
     box-sizing: border-box;
-    overflow-x: auto;     /* 테이블 가로 스크롤 */
+    overflow-x: auto;
 }
 
-/* Layout Variables */
 :root {
     --admin-header-height: 64px;
     --admin-sidebar-width: 240px;

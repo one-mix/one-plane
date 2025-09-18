@@ -69,12 +69,6 @@ function makeAjaxRequest(url, method = 'GET', data = null, options = {}) {
         data: data,
         dataType: 'json',
         beforeSend: function(xhr) {
-            // CSRF 토큰 추가
-            const token = $('meta[name="_csrf"]').attr('content');
-            const header = $('meta[name="_csrf_header"]').attr('content');
-            if (token && header) {
-                xhr.setRequestHeader(header, token);
-            }
         },
         success: function(response) {
             if (options.onSuccess) {

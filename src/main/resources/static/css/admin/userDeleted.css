@@ -1,3 +1,4 @@
+/* 작성자: 김동현 */
 .page-title {
     font-size: 1.8rem;
     font-weight: var(--font-bold);
@@ -26,7 +27,6 @@
     font-weight: var(--font-medium);
 }
 
-/* Deleted Users Table */
 .deleted-users-table-container {
     background: white !important;
     border-radius: 8px;
@@ -66,7 +66,6 @@
     background-color: #ffebee !important;
 }
 
-/* Deleted User Specific Styles */
 .deleted-user-row {
     opacity: 0.8;
     transition: all 0.2s ease;
@@ -91,7 +90,6 @@
     font-style: italic;
 }
 
-/* Grade Badges for Deleted Users */
 .grade-badge.deleted {
     opacity: 0.6;
     font-size: 0.75rem;
@@ -125,7 +123,6 @@
     color: white;
 }
 
-/* Date Styles */
 .join-date, .deleted-date {
     font-size: 0.9rem;
     color: var(--gray-700);
@@ -145,7 +142,6 @@
     color: var(--semantic-error) !important;
 }
 
-/* Empty State */
 .empty-state {
     padding: 3rem 0;
     text-align: center;
@@ -162,7 +158,6 @@
     font-size: 1rem;
 }
 
-/* Pagination */
 .pagination {
     margin-top: 2rem;
 }

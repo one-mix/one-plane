@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 작성자: 김동현 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oneplane.admin.mapper.AdminUserMapper">
 
-    <!-- ResultMap for AdminUser -->
     <resultMap id="userResultMap" type="com.oneplane.admin.domain.AdminUser">
         <id property="user_id" column="user_id" />
         <result property="email" column="email" />
@@ -203,7 +203,6 @@
     </select>
 
     <!-- 연령대별 통계 -->
-    <!-- 연령대별 통계 (단순화 버전) -->
     <select id="getUserAgeStats" resultType="map">
         WITH age_groups AS (
             SELECT
@@ -284,7 +283,7 @@
             )
     </select>
 
-    <!-- 월별 가입 추이 (Oracle 11g 호환 버전) -->
+    <!-- 월별 가입 추이 -->
     <select id="getMonthlySignupTrend" resultType="map">
         SELECT
             TO_CHAR(TRUNC(created_at, 'MM'), 'YYYY-MM') as month,

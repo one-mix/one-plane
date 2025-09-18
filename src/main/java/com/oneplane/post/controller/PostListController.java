@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.controller;
 
 import com.oneplane.config.SecurityUtil;
@@ -30,6 +31,10 @@ public class PostListController {
     private final PostService postService;
     private final CountryService countryService;
 
+    /**
+     * 게시글 목록 페이지
+     * 작성자 : 김동현
+     */
     @GetMapping("/list")
     public String postList(@RequestParam(value = "category", required = false) String category,
                            @RequestParam(value = "country", required = false) String country,
@@ -40,61 +45,58 @@ public class PostListController {
                            @RequestParam(value = "sortBy", defaultValue = "latest") String sortBy,
                            Model model) {
 
-            // 검색 조건 객체 생성
-            PostSearchCondition condition = PostSearchCondition.builder()
-                    .category(category != null && !category.isEmpty() ? Category.valueOf(category) : null)
-                    .country(country != null && !country.isEmpty() ? country : null)
-                    .searchType(searchType)
-                    .searchKeyword(searchKeyword)
-                    .sortBy(sortBy)
-                    .page(page)
-                    .size(size)
-                    .build();
+        // 검색 조건 객체 생성
+        PostSearchCondition condition = PostSearchCondition.builder()
+                .category(category != null && !category.isEmpty() ? Category.valueOf(category) : null)
+                .country(country != null && !country.isEmpty() ? country : null)
+                .searchType(searchType)
+                .searchKeyword(searchKeyword)
+                .sortBy(sortBy)
+                .page(page)
+                .size(size)
+                .build();
 
-            // 기본값 설정
-            condition.setDefaults();
+        // 기본값 설정
+        condition.setDefaults();
 
-            // 페이징된 게시글 목록 조회
-            PostListResponse response = postService.getPostsWithPaging(condition);
+        // 페이징된 게시글 목록 조회
+        PostListResponse response = postService.getPostsWithPaging(condition);
 
-            // 국가 목록 조회 (드롭다운용)
-            List<Country> countries = countryService.getAllCountries();
+        // 국가 목록 조회 (드롭다운용)
+        List<Country> countries = countryService.getAllCountries();
 
-            // Model에 데이터 추가
-            model.addAttribute("postResponse", response);
-            model.addAttribute("posts", response.getPosts());
-            model.addAttribute("categories", Category.values());
-            model.addAttribute("countries", countries); // 국가 목록 추가
-            model.addAttribute("selectedCategory", category);
-            model.addAttribute("selectedCountry", country);
-            model.addAttribute("currentPage", response.getCurrentPage());
-            model.addAttribute("totalPages", response.getTotalPages());
-            model.addAttribute("totalCount", response.getTotalElements());
-            model.addAttribute("hasNext", response.isHasNext());
-            model.addAttribute("hasPrevious", response.isHasPrevious());
+        // Model에 데이터 추가
+        model.addAttribute("postResponse", response);
+        model.addAttribute("posts", response.getPosts());
+        model.addAttribute("categories", Category.values());
+        model.addAttribute("countries", countries); // 국가 목록 추가
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("selectedCountry", country);
+        model.addAttribute("currentPage", response.getCurrentPage());
+        model.addAttribute("totalPages", response.getTotalPages());
+        model.addAttribute("totalCount", response.getTotalElements());
+        model.addAttribute("hasNext", response.isHasNext());
+        model.addAttribute("hasPrevious", response.isHasPrevious());
 
-            // 검색 파라미터 유지
-            model.addAttribute("searchType", searchType);
-            model.addAttribute("searchKeyword", searchKeyword);
-            model.addAttribute("sortBy", sortBy);
+        // 검색 파라미터 유지
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchKeyword", searchKeyword);
+        model.addAttribute("sortBy", sortBy);
 
-            // 페이지네이션을 위한 추가 정보
-            addPaginationInfo(model, condition, response.getTotalPages());
+        // 페이지네이션을 위한 추가 정보
+        addPaginationInfo(model, condition, response.getTotalPages());
 
-            // Layout 연결
-            model.addAttribute("contentPage", "post/postList.jsp");
-            model.addAttribute("activeMenu", "post");
+        // Layout 연결
+        model.addAttribute("contentPage", "post/postList.jsp");
+        model.addAttribute("activeMenu", "post");
 
-
-            log.info("게시글 목록 조회 완료 - 총 {}개, 현재페이지: {}/{}",
-                    response.getTotalElements(), response.getCurrentPage(), response.getTotalPages());
-
-            return "layout/layout";
-
-
+        return "layout/layout";
     }
 
-    // 페이지네이션 정보
+    /**
+     * 페이지네이션 정보 추가
+     * 작성자 : 김동현
+     */
     private void addPaginationInfo(Model model, PostSearchCondition condition, int totalPages) {
         // 페이지 그룹 계산
         int pageGroupStart = condition.getPageGroupStart();
@@ -133,6 +135,10 @@ public class PostListController {
         model.addAttribute("urlParams", params);
     }
 
+    /**
+     * 카테고리별 게시글 개수 조회 API
+     * 작성자 : 김동현
+     */
     @GetMapping("/api/categoryCounts")
     @ResponseBody
     public Map<String, Object> getCategoryCounts() {
@@ -161,8 +167,6 @@ public class PostListController {
             totalCondition.setDefaults();
             response.put("totalCount", postService.getPostCount(totalCondition));
 
-            log.info("카테고리별 개수 조회 완료: {}", categoryCounts);
-
         } catch (Exception e) {
             log.error("카테고리별 개수 조회 중 오류 발생", e);
             response.put("success", false);
@@ -172,7 +176,10 @@ public class PostListController {
         return response;
     }
 
-    // 게시글 작성 페이지
+    /**
+     * 게시글 작성 페이지
+     * 작성자 : 김동현
+     */
     @GetMapping("/write")
     public String postWrite(Model model) {
         log.info("게시글 작성 페이지 요청");
@@ -188,7 +195,10 @@ public class PostListController {
         return "layout/layout";
     }
 
-    // 게시글 작성
+    /**
+     * 게시글 작성 처리
+     * 작성자 : 김동현
+     */
     @PostMapping("/write")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> postWriteProcess(
@@ -274,6 +284,7 @@ public class PostListController {
 
     /**
      * 게시글 상세보기 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/detail/{postId}")
     public String postDetail(@PathVariable Integer postId, Model model, HttpServletRequest request) {
@@ -364,8 +375,10 @@ public class PostListController {
             return "error/500";
         }
     }
+
     /**
      * 게시글 수정 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/edit/{postId}")
     public String postEdit(@PathVariable Integer postId, Model model) {
@@ -413,6 +426,7 @@ public class PostListController {
 
     /**
      * 게시글 수정 처리 (POST)
+     * 작성자 : 김동현
      */
     @PostMapping("/edit/{postId}")
     @ResponseBody
@@ -492,9 +506,6 @@ public class PostListController {
             response.put("message", "게시글이 성공적으로 수정되었습니다.");
             response.put("postId", updatedPost.getPostId());
 
-            log.info("게시글 수정 완료 - postId: {}, 제목: {}, 수정자: {}",
-                    updatedPost.getPostId(), updatedPost.getTitle(), currentUserId);
-
             return ResponseEntity.ok(response);
 
         } catch (IllegalArgumentException e) {
@@ -513,6 +524,7 @@ public class PostListController {
 
     /**
      * 게시글 삭제 처리
+     * 작성자 : 김동현
      */
     @PostMapping("/delete/{postId}")
     @ResponseBody
@@ -566,5 +578,4 @@ public class PostListController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
-
 }

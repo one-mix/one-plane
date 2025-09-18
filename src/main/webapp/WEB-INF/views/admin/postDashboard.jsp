@@ -1,10 +1,10 @@
+<!-- 작성자: 김동현 -->
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <link rel="stylesheet" href="/css/admin/dashboard.css"/>
 <div class="row mb-4">
-    <!-- 전체 -->
     <div class="col-md-4">
         <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
             <div class="d-flex align-items-center">
@@ -15,7 +15,6 @@
         </div>
     </div>
 
-    <!-- 안전 -->
     <div class="col-md-4">
         <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
             <div class="d-flex align-items-center">
@@ -26,7 +25,6 @@
         </div>
     </div>
 
-    <!-- 여행 주의 대상 -->
     <div class="col-md-4">
         <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
             <div class="d-flex align-items-center">
@@ -38,9 +36,7 @@
     </div>
 </div>
 
-<!-- 차트 섹션 -->
 <div class="content row">
-    <!-- 카테고리별 분포 파이차트 -->
     <div class="col-md-6">
         <div class="chart-box equal-height">
             <h7>카테고리별 게시글 분포</h7>
@@ -48,7 +44,6 @@
         </div>
     </div>
 
-    <!-- 월별 작성 추이 라인차트 -->
     <div class="col-md-6">
         <div class="chart-box equal-height">
             <h7>월별 게시글 작성 추이 (최근 6개월)</h7>
@@ -58,7 +53,6 @@
 </div>
 
 <div class="content row">
-    <!-- 최근 7일간 활동 현황 -->
     <div class="col-md-12">
         <div class="chart-box">
             <h7>최근 7일간 활동 현황</h7>
@@ -90,9 +84,6 @@
         // 최근 7일간 활동 현황
         loadDailyActivity();
 
-        /**
-         * 카테고리별 통계 로드
-         */
         function loadCategoryStats() {
             fetch('/admin/api/posts/category-stats')
                 .then(response => {
@@ -220,9 +211,6 @@
                 });
         }
 
-        /**
-         * 일별 활동 현황 로드
-         */
         function loadDailyActivity() {
             fetch('/admin/api/posts/daily-activity')
                 .then(response => {
@@ -248,7 +236,6 @@
                         return (d.getMonth() + 1) + '/' + d.getDate();
                     });
 
-                    // 데이터 매핑
                     const postCounts = dates.map(date => {
                         const found = dailyPosts.find(item => item.DAY === date);
                         return found ? parseInt(found.COUNT) || 0 : 0;
@@ -297,10 +284,6 @@
                 });
         }
 
-
-        /**
-         * 카테고리 표시명 반환 (JavaScript 함수)
-         */
         function getCategoryDisplayName(category) {
             if (!category) return '기타';
 
@@ -324,9 +307,6 @@
                 String(date.getDate()).padStart(2, '0');
         }
 
-        /**
-         * 빈 트렌드 차트 생성
-         */
         function createEmptyTrendChart() {
             new Chart(document.getElementById('monthlyTrendChart'), {
                 type: 'line',
@@ -380,9 +360,6 @@
 </script>
 
 <style>
-    /* 게시물 통계 전용 스타일 */
-
-    /* 통계 카드 아이콘 색상 */
     .stat-card-icon.post {
         background: linear-gradient(135deg, #5A90D2, #30609D);
     }
@@ -398,8 +375,6 @@
     .stat-card-icon.today {
         background: linear-gradient(135deg, #52C41A, #389E0D);
     }
-
-    /* 인기 게시글 테이블 스타일 */
     .table th {
         background-color: var(--gray-100);
         border-bottom: 2px solid var(--gray-200);
@@ -472,12 +447,10 @@
         font-size: 14px;
     }
 
-    /* 테이블 호버 효과 */
     .table-hover tbody tr:hover {
         background-color: var(--gray-100);
     }
 
-    /* 차트 컨테이너 높이 조정 */
     .equal-height {
         height: 35vh;
         min-height: 300px;
@@ -489,10 +462,8 @@
 
     .chart-box canvas {
         height: 100% !important;
-        /*width: 80% !important;*/
     }
 
-    /* 일별 활동 차트 높이 */
     .chart-box:has(#dailyActivityChart) {
         height: auto;
         min-height: 400px;

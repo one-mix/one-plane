@@ -1,3 +1,4 @@
+/* 작성자: 김동현 */
 .page-title {
     font-size: 1.8rem;
     font-weight: var(--font-bold);
@@ -32,7 +33,6 @@
     font-weight: var(--font-medium);
 }
 
-/* Users Table Container */
 .posts-table-container {
     background: white !important;
     border-radius: 8px;
@@ -74,7 +74,6 @@
     background-color: var(--main-50) !important;
 }
 
-/* User Profile Info */
 .user-profile-info {
     display: flex;
     align-items: center;
@@ -142,7 +141,6 @@
     word-break: break-all;
 }
 
-/* Gender Badge */
 .gender-badge {
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
@@ -160,7 +158,6 @@
     color: #ec4899;
 }
 
-/* Grade Badges */
 .grade-badge {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
@@ -201,7 +198,6 @@
     color: var(--gray-500);
 }
 
-/* Health Info Badges */
 .health-info {
     cursor: pointer;
     font-size: 0.7rem;
@@ -211,7 +207,6 @@
     font-size: 0.65rem;
 }
 
-/* Action Buttons */
 .action-buttons .btn {
     font-size: 0.8rem;
     padding: 0.25rem 0.5rem;
@@ -242,7 +237,6 @@
     border-color: var(--semantic-error);
 }
 
-/* Empty State */
 .empty-state {
     padding: 3rem 0;
     text-align: center;
@@ -260,7 +254,6 @@
     margin: 0;
 }
 
-/* Pagination */
 .pagination {
     margin-top: 2rem;
 }
@@ -292,8 +285,6 @@
     font-size: 0.85rem;
 }
 
-
-/* Loading and Transition Effects */
 .post-row {
     transition: all 0.2s ease;
 }

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -8,10 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-
     @Value("${file.upload.path:/uploads/}")
     private String uploadPath;
 
+    /**
+     * 정적 리소스 핸들러 추가
+     * 작성자 : 김동현
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Static 리소스 경로 설정

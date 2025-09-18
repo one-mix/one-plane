@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.domain;
 
 import lombok.AllArgsConstructor;
@@ -22,10 +23,18 @@ public class PostLike {
     private String userNickname;  // 좋아요 누른 사용자 닉네임
     private String postTitle;     // 게시글 제목
 
+    /**
+     * 특정 사용자가 좋아요 눌렀는지 확인
+     * 작성자 : 김동현
+     */
     public boolean isLikedBy(Integer userId) {
         return this.userId != null && this.userId.equals(userId);
     }
 
+    /**
+     * 좋아요 객체 생성 팩토리 메소드
+     * 작성자 : 김동현
+     */
     public static PostLike create(Integer userId, Integer postId) {
         return PostLike.builder()
                 .userId(userId)
