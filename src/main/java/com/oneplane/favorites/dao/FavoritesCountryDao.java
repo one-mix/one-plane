@@ -1,3 +1,4 @@
+// 작성자: 오수경
 package com.oneplane.favorites.dao;
 
 import com.oneplane.favorites.domain.FavoritesCountry;

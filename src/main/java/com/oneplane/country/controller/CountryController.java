@@ -1,3 +1,4 @@
+// 작성자: 오수경
 package com.oneplane.country.controller;
 
 import com.oneplane.country.domain.Country;
@@ -28,15 +29,6 @@ public class CountryController {
     @GetMapping("/all")
     public List<Country> getAllCountries() {
         return countryService.getAllCountries();
-    }
-
-    // 전체 국가 조회
-    @GetMapping("/list")
-    public String list(Model model) {
-        List<Country> countries = countryService.getAllCountries();
-        model.addAttribute("countries", countries);
-        model.addAttribute("contentPage", "country/list.jsp");
-        return "layout/layout";
     }
 
     @GetMapping("/search")

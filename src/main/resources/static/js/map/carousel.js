@@ -1,3 +1,5 @@
+// 작성자: 오수경
+
 window.addEventListener("load", () => {
     const track = document.querySelector(".carousel-track");
     const prevBtn = document.querySelector(".carousel-btn.prev");

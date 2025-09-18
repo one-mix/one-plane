@@ -2,6 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 작성자: 오수경 -->
+
 <mapper namespace="com.oneplane.country.dao.CarbonEmissionDao">
 
     <!-- 단일 연도 탄소 배출량 조회 -->

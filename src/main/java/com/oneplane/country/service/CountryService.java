@@ -1,4 +1,4 @@
-//작성자:방대혁,오수경
+// 공동 작성자: 방대혁, 오수경
 package com.oneplane.country.service;
 
 import com.oneplane.alert.dto.CountryAlertDTO;

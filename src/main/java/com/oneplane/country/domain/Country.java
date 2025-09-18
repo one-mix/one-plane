@@ -1,3 +1,4 @@
+// 작성자: 오수경
 package com.oneplane.country.domain;
 
 import lombok.Data;

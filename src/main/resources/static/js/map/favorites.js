@@ -1,3 +1,5 @@
+// 작성자: 오수경
+
 // id가 1인 유저의 즐겨찾기 국가 목록  api 호출
 fetch("/favorites/api/list/1")
 

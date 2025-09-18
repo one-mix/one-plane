@@ -1,3 +1,5 @@
+// 작성자: 방대혁
+
 document.addEventListener("DOMContentLoaded", function () {
     const feedbackModal = document.getElementById("feedbackModal");
     const closeModal = document.getElementById("closeModal");

@@ -1,3 +1,4 @@
+// 작성자: 오수경
 package com.oneplane.favorites.controller;
 
 import com.oneplane.config.SecurityUtil;
@@ -9,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @Slf4j
 @Controller

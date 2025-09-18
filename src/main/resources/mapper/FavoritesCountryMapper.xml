@@ -3,6 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!-- 작성자: 오수경 -->
+
 <mapper namespace="com.oneplane.favorites.dao.FavoritesCountryDao">
 
     <resultMap id="FavoritesCountryMap" type="com.oneplane.favorites.domain.FavoritesCountry">
