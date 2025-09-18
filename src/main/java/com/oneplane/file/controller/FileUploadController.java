@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.file.controller;
 
 import lombok.extern.slf4j.Slf4j;
@@ -5,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 
 @RestController
 @RequestMapping("/api/upload")
@@ -30,7 +28,10 @@ public class FileUploadController {
     @Value("${file.upload.url:/uploads/}")
     private String uploadUrl;
 
-    // Summernote 에디터 이미지 업로드
+    /**
+     * Summernote 에디터 이미지 업로드
+     * 작성자 : 김동현
+     */
     @PostMapping("/image")
     public ResponseEntity<Map<String, Object>> uploadImage(@RequestParam("image") MultipartFile file) {
         Map<String, Object> response = new HashMap<>();
@@ -78,7 +79,10 @@ public class FileUploadController {
         return ResponseEntity.ok(response);
     }
 
-    // 파일 저장 처리
+    /**
+     * 파일 저장 처리
+     * 작성자 : 김동현
+     */
     private String saveFile(MultipartFile file) throws IOException {
         // 업로드 디렉토리 생성
         createUploadDirectory();
@@ -104,8 +108,10 @@ public class FileUploadController {
         return uniqueFileName;
     }
 
-
-    // 업로드 디렉토리 생성
+    /**
+     * 업로드 디렉토리 생성
+     * 작성자 : 김동현
+     */
     private void createUploadDirectory() throws IOException {
         Path uploadDir = Paths.get(uploadPath);
         if (!Files.exists(uploadDir)) {

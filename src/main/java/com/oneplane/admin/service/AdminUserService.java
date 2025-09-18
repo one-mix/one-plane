@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.service;
 
 import com.oneplane.admin.dao.AdminUserDao;
@@ -20,8 +21,10 @@ public class AdminUserService {
 
     private final AdminUserDao adminUserDao;
 
-
-    // 전체 사용자 목록 조회 (페이징, 검색)
+    /**
+     * 전체 사용자 목록 조회 (페이징, 검색)
+     * 작성자 : 김동현
+     */
     @Transactional(readOnly = true)
     public Map<String, Object> getUserList(int page, int pageSize, String search) {
         log.debug("사용자 목록 조회 - page: {}, pageSize: {}, search: {}", page, pageSize, search);
@@ -67,10 +70,7 @@ public class AdminUserService {
 
     /**
      * 탈퇴 사용자 목록 조회 (페이징, 검색)
-     * @param page 페이지 번호 (1부터 시작)
-     * @param pageSize 페이지 크기
-     * @param search 검색어 (닉네임, 이름)
-     * @return 탈퇴 사용자 목록과 페이징 정보
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public Map<String, Object> getDeletedUserList(int page, int pageSize, String search) {
@@ -116,9 +116,7 @@ public class AdminUserService {
 
     /**
      * 사용자 ID로 단일 사용자 조회
-     *
-     * @param userId 사용자 ID
-     * @return AdminUser 객체 (없으면 null)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public AdminUser getUserById(Integer userId) {
@@ -146,8 +144,7 @@ public class AdminUserService {
 
     /**
      * 사용자 정보 수정
-     * @param user 수정할 사용자 정보
-     * @return 수정된 사용자 정보
+     * 작성자 : 김동현
      */
     public AdminUser updateUser(AdminUser user) {
         log.info("사용자 정보 수정 시작 - userId: {}", user.getUser_id());
@@ -199,7 +196,7 @@ public class AdminUserService {
 
     /**
      * 사용자 논리 삭제
-     * @param userId 삭제할 사용자 ID
+     * 작성자 : 김동현
      */
     public void deleteUser(Integer userId) {
         log.info("사용자 삭제 시작 - userId: {}", userId);
@@ -241,7 +238,7 @@ public class AdminUserService {
 
     /**
      * 닉네임 중복 확인 (특정 사용자 제외)
-     * @return 중복 여부 (true: 중복됨, false: 사용 가능)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public boolean isNicknameDuplicate(String nickname, Integer excludeUserId) {
@@ -266,6 +263,7 @@ public class AdminUserService {
 
     /**
      * 사용자 검색 (닉네임 또는 이름으로)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<AdminUser> searchUsers(String keyword, int limit) {
@@ -289,8 +287,10 @@ public class AdminUserService {
 
         return users;
     }
+
     /**
      * 사용자 통계 대시보드 데이터 조회 (통합 버전)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public Map<String, Object> getUserStats() {
@@ -338,6 +338,7 @@ public class AdminUserService {
 
     /**
      * 성별 통계 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getGenderStats() {
@@ -346,6 +347,7 @@ public class AdminUserService {
 
     /**
      * 연령대별 통계 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getAgeStats() {
@@ -354,6 +356,7 @@ public class AdminUserService {
 
     /**
      * 등급별 통계 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getGradeStats() {
@@ -362,6 +365,7 @@ public class AdminUserService {
 
     /**
      * 건강 정보별 통계 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getHealthStats() {
@@ -370,10 +374,10 @@ public class AdminUserService {
 
     /**
      * 월별 가입 추이 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getMonthlySignupTrend() {
         return adminUserDao.getMonthlySignupTrend();
     }
-
 }

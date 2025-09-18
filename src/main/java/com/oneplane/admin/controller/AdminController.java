@@ -31,17 +31,6 @@ public class AdminController {
     private final TravelHistoryService travelHistoryService;
 
     /**
-     * 관리자 메인 대시보드 페이지
-     */
-    @GetMapping("/dashboard")
-    public String adminMain(Model model) {
-        model.addAttribute("contentPage", "dashboard.jsp");
-        model.addAttribute("activeMenu", "dashboard");
-
-        return "admin/layout/adminLayout";
-    }
-
-    /**
      * 국가 리스트 조회 (경보 단계 + 검색 키워드 필터링 가능)
      * 작성자: 방대혁
      */

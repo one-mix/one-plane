@@ -1,3 +1,4 @@
+<!-- 작성자: 김동현 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -6,7 +7,6 @@
 <link rel="stylesheet" href="/css/admin/postDetail.css"/>
 
 <div class="post-detail-container">
-  <!-- 게시글 헤더 -->
   <div class="post-header">
     <div class="post-category">
       <c:choose>
@@ -38,7 +38,6 @@
       </form>
     </div>
 
-    <!-- 작성자 정보 -->
     <div class="author-info">
       <div class="author-profile">
         <img src="${not empty post.user.profileImg ? post.user.profileImg : '/images/profile.png'}"
@@ -51,7 +50,6 @@
         </div>
       </div>
 
-      <!-- 게시글 통계 -->
       <div class="post-stats">
         <span class="stat-item">
           <i class="bi bi-eye"></i>
@@ -69,7 +67,6 @@
     </div>
   </div>
 
-  <!-- 게시글 내용 -->
   <div class="post-content">
     <c:if test="${not empty post.thumbnailImage}">
       <div class="post-thumbnail">
@@ -88,13 +85,8 @@
   let isLiked = false;
 
   $(document).ready(function() {
-
-    // 댓글 목록 로드
     loadComments(1);
   });
-  /**
-   * 게시글 삭제
-   */
   function deletePost(postId) {
     if (!confirm('게시글을 삭제하시겠습니까?')) return;
 
@@ -109,9 +101,6 @@
             });
   }
 
-  /**
-   * 게시글 공유
-   */
   function sharePost() {
     if (navigator.share) {
       navigator.share({
@@ -125,6 +114,4 @@
       });
     }
   }
-
-
 </script>

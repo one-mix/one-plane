@@ -1,14 +1,13 @@
+<!-- 작성자: 김동현 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <link href="/css/post/postWrite.css" rel="stylesheet">
-<!-- Summernote CSS -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
 <div class="post-write-container">
     <form id="postWriteForm" action="/post/write" method="post">
-        <sec:csrfInput />
 
         <!-- 유형 및 국가 -->
         <div class="form-row">
@@ -30,30 +29,24 @@
             </select>
         </div>
 
-        <!-- 제목 -->
         <div class="form-row">
             <label class="form-label">제목</label>
             <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요" required>
         </div>
 
-        <!-- 내용 -->
         <div class="form-row">
             <label class="form-label">내용</label>
             <textarea id="content" name="content" class="content-editor" required></textarea>
         </div>
 
-        <!-- 등록 버튼 -->
         <div class="button-container">
             <button type="submit" class="btn-submit">등록하기</button>
         </div>
     </form>
 </div>
 
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Summernote JS -->
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js"></script>
 
@@ -102,10 +95,6 @@
                 processData: false,
                 contentType: false,
                 beforeSend: function(xhr) {
-                    const token = $('input[name="_csrf"]').val();
-                    if (token) {
-                        xhr.setRequestHeader('X-CSRF-TOKEN', token);
-                    }
                 },
                 success: function(response) {
                     if (response.success) {

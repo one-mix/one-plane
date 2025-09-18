@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 작성자: 김동현 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oneplane.post.mapper.PostMapper">
 
-    <!-- 게시글 결과 매핑 -->
     <resultMap id="PostResultMap" type="com.oneplane.post.domain.Post">
         <id property="postId" column="post_id"/>
         <result property="userId" column="user_id"/>
@@ -21,7 +21,6 @@
         <result property="updatedAt" column="updated_at"/>
         <result property="deletedAt" column="deleted_at"/>
 
-        <!-- 작성자 정보 매핑 -->
         <association property="user" javaType="com.oneplane.user.domain.User">
             <id property="user_id" column="user_user_id"/>
             <result property="email" column="user_email"/>

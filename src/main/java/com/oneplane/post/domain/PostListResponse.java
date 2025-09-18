@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.domain;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,10 @@ public class PostListResponse {
     private boolean hasNext;             // 다음 페이지 존재 여부
     private boolean hasPrevious;         // 이전 페이지 존재 여부
 
-    // 페이징 정보 계산
+    /**
+     * 페이징 정보를 포함한 응답 객체 생성 팩토리 메소드
+     * 작성자 : 김동현
+     */
     public static PostListResponse of(List<Post> posts, PostSearchCondition condition, long totalElements) {
         int totalPages = (int) Math.ceil((double) totalElements / condition.getSize());
 

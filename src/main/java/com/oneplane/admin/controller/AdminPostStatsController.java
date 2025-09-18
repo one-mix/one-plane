@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.controller;
 
 import com.oneplane.admin.service.PostStatsService;
@@ -24,13 +25,13 @@ public class AdminPostStatsController {
 
     /**
      * 게시물 통계 대시보드 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/dashboard/post")
     public String postStats(Model model) {
         log.info("게시물 통계 대시보드 페이지 요청");
 
         try {
-            // 기본 통계 데이터 조회 (페이지 로드시 표시할 데이터)
             Map<String, Object> basicStats = postStatsService.getBasicStats();
             model.addAttribute("stats", basicStats);
 
@@ -49,7 +50,8 @@ public class AdminPostStatsController {
     }
 
     /**
-     * API: 카테고리별 게시글 분포 통계
+     * 카테고리별 게시글 분포 통계
+     * 작성자 : 김동현
      */
     @GetMapping("/api/posts/category-stats")
     @ResponseBody
@@ -67,7 +69,8 @@ public class AdminPostStatsController {
     }
 
     /**
-     * API: 월별 게시글 작성 추이
+     * 월별 게시글 작성 추이
+     * 작성자 : 김동현
      */
     @GetMapping("/api/posts/monthly-trend")
     @ResponseBody
@@ -85,7 +88,8 @@ public class AdminPostStatsController {
     }
 
     /**
-     * API: 인기 게시글 TOP 10
+     * 인기 게시글 TOP 10
+     * 작성자 : 김동현
      */
     @GetMapping("/api/posts/popular-top10")
     @ResponseBody
@@ -105,7 +109,8 @@ public class AdminPostStatsController {
     }
 
     /**
-     * API: 최근 7일간 활동 현황
+     * 최근 7일간 활동 현황
+     * 작성자 : 김동현
      */
     @GetMapping("/api/posts/daily-activity")
     @ResponseBody
@@ -123,7 +128,8 @@ public class AdminPostStatsController {
     }
 
     /**
-     * API: 전체 통계 데이터 (한번에 모든 차트 데이터)
+     * 전체 통계 데이터
+     * 작성자 : 김동현
      */
     @GetMapping("/api/posts/all-stats")
     @ResponseBody
@@ -141,7 +147,8 @@ public class AdminPostStatsController {
     }
 
     /**
-     * API: 기본 통계 데이터만 (실시간 갱신용)
+     * 기본 통계 데이터만
+     * 작성자 : 김동현
      */
     @GetMapping("/api/posts/basic-stats")
     @ResponseBody
