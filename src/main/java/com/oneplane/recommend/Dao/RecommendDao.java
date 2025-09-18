@@ -1,5 +1,5 @@
 //작성자:방대혁,오수경
-package com.oneplane.recommend.repository;
+package com.oneplane.recommend.Dao;
 
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
@@ -15,7 +15,7 @@ import java.util.Map;
  * - 추천 입력, 이력 조회, 피드백 업데이트, 소프트 삭제 등 관리
  */
 @Mapper
-public interface RecommendRepository {
+public interface RecommendDao {
 
     /**
      * 추천 동의 저장

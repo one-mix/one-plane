@@ -5,7 +5,7 @@ import com.oneplane.myPage.dto.CertificationTimelineDto;
 import com.oneplane.myPage.service.CertificationService;
 import com.oneplane.myPage.service.TravelHistoryService;
 import com.oneplane.recommend.dto.RecommendResultDTO;
-import com.oneplane.recommend.repository.RecommendRepository;
+import com.oneplane.recommend.Dao.RecommendDao;
 import com.oneplane.recommend.service.RecommendService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class MyPageController extends BaseController {
     private RecommendService recommendService;
 
     @Autowired
-    private RecommendRepository recommendRepository;
+    private RecommendDao recommendDao;
 
     /**
      * 마이페이지 대시보드 메인 화면
