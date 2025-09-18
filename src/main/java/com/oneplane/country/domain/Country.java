@@ -12,6 +12,5 @@ public class Country {
     private String img;
     private Double latitude;
     private Double longitude;
-    private String currency;
     private Double distance;
 }
