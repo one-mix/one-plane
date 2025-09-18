@@ -3,17 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 작성자: 오수경 -->
+<!-- 작성자: 오수경
+     FavoritesCountryDao와 매핑되는 MyBatis Mapper
+     즐겨찾기(favorites_country) 및 추천 국가 관련 CRUD/조회 쿼리 포함
+-->
 
 <mapper namespace="com.oneplane.favorites.dao.FavoritesCountryDao">
 
+    <!-- 즐겨찾기 + 국가 객체 매핑 정의
+         작성자: 오수경 -->
     <resultMap id="FavoritesCountryMap" type="com.oneplane.favorites.domain.FavoritesCountry">
         <id property="favoritesCountryId" column="favorites_country_id"/>
         <result property="countryId" column="country_id"/>
         <result property="userId" column="user_id"/>
         <result property="recommendId" column="recommend_id"/>
 
-        <!-- Country 객체 매핑 -->
+        <!-- Country 객체 매핑 (조인 시 사용) -->
         <association property="country" javaType="com.oneplane.country.domain.Country">
             <id property="countryId" column="c_country_id"/>
             <result property="countryName" column="country_name"/>
@@ -27,17 +32,25 @@
         </association>
     </resultMap>
 
+    <!-- 즐겨찾기 추가
+         작성자: 오수경 -->
     <insert id="insertFavorites" parameterType="com.oneplane.favorites.domain.FavoritesCountry">
         INSERT INTO favorites_country (country_id, user_id)
         VALUES (#{countryId}, #{userId})
     </insert>
 
+    <!-- 즐겨찾기 삭제
+         작성자: 오수경 -->
     <delete id="deleteFavorites" parameterType="long">
-        DELETE FROM favorites_country WHERE favorites_country_id = #{favoritesCountryId}
+        DELETE FROM favorites_country
+        WHERE favorites_country_id = #{favoritesCountryId}
     </delete>
 
-    <!-- 즐겨찾기(favorites_country) 목록 + country 정보 + 최신 recommend 국가 목록 -->
-    <select id="selectFavoritesByUser" parameterType="long" resultMap="FavoritesCountryMap">
+    <!-- 사용자별 즐겨찾기 + 추천 국가 목록 조회
+         즐겨찾기 테이블과 recommend 테이블을 합쳐 반환
+         작성자: 오수경 -->
+    <select id="selectFavoritesByUser" parameterType="long"
+            resultMap="FavoritesCountryMap">
         SELECT
         f.favorites_country_id,
         f.country_id,
@@ -78,13 +91,17 @@
         AND r.deleted_at IS NULL
     </select>
 
-    <select id="getTopFavoriteCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
-        SELECT c.country_name AS countryName,
-               COUNT(f.favorites_country_id) AS count
+    <!-- 즐겨찾기 상위 국가 Top 10 조회
+         작성자: 오수경 -->
+    <select id="getTopFavoriteCountries"
+            resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
+        SELECT
+        c.country_name AS countryName,
+        COUNT(f.favorites_country_id) AS count
         FROM favorites_country f
-            JOIN country c ON f.country_id = c.country_id
+        JOIN country c ON f.country_id = c.country_id
         GROUP BY c.country_name
         ORDER BY count DESC
-            FETCH FIRST 10 ROWS ONLY
+        FETCH FIRST 10 ROWS ONLY
     </select>
 </mapper>

@@ -3,140 +3,158 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 작성자: 오수경 -->
-
+<!-- 작성자: 오수경 (방대혁 작성 메서드는 별도 표기) -->
 <mapper namespace="com.oneplane.country.dao.CountryDao">
 
-    <!-- 한글명 OR 영문명으로 조회 가능 -->
-    <select id="findByName" parameterType="string" resultType="com.oneplane.country.domain.Country">
+    <!-- 국가명(한글/영문)으로 단일 국가 조회
+         작성자: 오수경 -->
+    <select id="findByName" parameterType="string"
+            resultType="com.oneplane.country.domain.Country">
         SELECT
-        country_id   AS countryId,
-        country_name AS countryName,      -- 한글 이름
-        country_en_name AS countryEnName, -- 영어 이름
-        iso_code     AS isoCode,
+        country_id      AS countryId,
+        country_name    AS countryName,
+        country_en_name AS countryEnName,
+        iso_code        AS isoCode,
         continent,
         img
         FROM country
-        WHERE country_name = #{name} OR country_en_name = #{name}
+        WHERE country_name = #{name}
+        OR country_en_name = #{name}
     </select>
 
-    <select id="findByIsoCode" parameterType="string" resultType="com.oneplane.country.domain.Country">
-        SELECT country_id   AS countryId,
-        country_name AS countryName,
+    <!-- ISO 코드로 단일 국가 조회
+         작성자: 오수경 -->
+    <select id="findByIsoCode" parameterType="string"
+            resultType="com.oneplane.country.domain.Country">
+        SELECT
+        country_id      AS countryId,
+        country_name    AS countryName,
         country_en_name AS countryEnName,
-        iso_code     AS isoCode,
+        iso_code        AS isoCode,
         continent,
         img
         FROM country
         WHERE iso_code = #{isoCode}
     </select>
 
-    <!-- 국가 상세 조회 -->
-    <!-- 작성자:방대혁 -->
-    <select id="findCountryInfo" parameterType="string" resultType="com.oneplane.recommend.dto.RecommendResultDTO">
+    <!-- 국가 상세 조회(대륙·이미지)
+         작성자: 방대혁 -->
+    <select id="findCountryInfo" parameterType="string"
+            resultType="com.oneplane.recommend.dto.RecommendResultDTO">
         SELECT continent,
         img AS countryImg
         FROM country
         WHERE iso_code = #{isoCode}
     </select>
 
-    <!-- ISO코드로 국가조회 -->
-    <!-- 작성자:방대혁 -->
-    <select id="findCountryIdByIsoCode" parameterType="string" resultType="java.lang.Integer">
+    <!-- ISO 코드로 국가 ID 조회
+         작성자: 방대혁 -->
+    <select id="findCountryIdByIsoCode" parameterType="string"
+            resultType="java.lang.Integer">
         SELECT country_id
         FROM country
         WHERE iso_code = #{isoCode}
     </select>
 
-    <!-- 국가 리스트 조회 -->
-    <!-- 작성자:방대혁 -->
-    <select id="findCountries" resultType="com.oneplane.alert.dto.CountryAlertDTO">
+    <!-- 조건별 국가 리스트 조회 (경보 단계·검색 키워드)
+         작성자: 방대혁 -->
+    <select id="findCountries"
+            resultType="com.oneplane.alert.dto.CountryAlertDTO">
         SELECT c.country_id      AS countryId,
         c.country_name    AS countryName,
         c.country_en_name AS countryEnName,
         c.iso_code        AS isoCode,
         a.level_value     AS levelValue
         FROM country c
-        LEFT JOIN alert_level a
-        ON c.country_id = a.country_id
+        LEFT JOIN alert_level a ON c.country_id = a.country_id
         WHERE 1=1
         <if test="levelValue != null and levelValue != ''">
             AND a.level_value = #{levelValue}
         </if>
         <if test="keyword != null and keyword != ''">
-            AND (c.country_name LIKE '%' || #{keyword} || '%'
+            AND (c.country_name    LIKE '%' || #{keyword} || '%'
             OR c.country_en_name LIKE '%' || #{keyword} || '%'
-            OR c.iso_code LIKE '%' || #{keyword} || '%')
+            OR c.iso_code       LIKE '%' || #{keyword} || '%')
         </if>
         ORDER BY c.country_name
     </select>
 
-    <!-- 단일 국가 조회 -->
-    <!-- 작성자:방대혁 -->
-    <select id="findCountryById" parameterType="long" resultType="com.oneplane.alert.dto.CountryAlertDTO">
-        SELECT c.country_id AS countryId,
-               c.country_name AS countryName,
-               c.country_en_name AS countryEnName,
-               c.iso_code AS isoCode,
-               c.img as countryImg,
-               c.latitude as countryLatitude,
-               c.longitude as countryLongitude,
-               a.level_value AS levelValue
+    <!-- 단일 국가 + 여행경보 단계 조회
+         작성자: 방대혁 -->
+    <select id="findCountryById" parameterType="long"
+            resultType="com.oneplane.alert.dto.CountryAlertDTO">
+        SELECT c.country_id      AS countryId,
+        c.country_name    AS countryName,
+        c.country_en_name AS countryEnName,
+        c.iso_code        AS isoCode,
+        c.img             AS countryImg,
+        c.latitude        AS countryLatitude,
+        c.longitude       AS countryLongitude,
+        a.level_value     AS levelValue
         FROM country c
-                 LEFT JOIN alert_level a ON c.country_id = a.country_id
+        LEFT JOIN alert_level a ON c.country_id = a.country_id
         WHERE c.country_id = #{countryId}
     </select>
 
-    <!-- 국가정보 수정 -->
-    <!-- 작성자:방대혁 -->
-    <update id="updateCountryAdmin" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
+    <!-- 관리자: 국가 정보 수정
+         작성자: 방대혁 -->
+    <update id="updateCountryAdmin"
+            parameterType="com.oneplane.alert.dto.CountryAlertDTO">
         UPDATE country
-        SET country_name = #{countryName},
-            country_en_name = #{countryEnName},
-            iso_code = #{isoCode},
-            latitude = #{countryLatitude},
-            longitude = #{countryLongitude}
-        WHERE country_id = #{countryId}
+        SET country_name    = #{countryName},
+        country_en_name = #{countryEnName},
+        iso_code        = #{isoCode},
+        latitude        = #{countryLatitude},
+        longitude       = #{countryLongitude}
+        WHERE country_id    = #{countryId}
     </update>
 
-    <update id="updateCountryLevel" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
+    <!-- 관리자: 국가 경보 단계 수정
+         작성자: 방대혁 -->
+    <update id="updateCountryLevel"
+            parameterType="com.oneplane.alert.dto.CountryAlertDTO">
         UPDATE alert_level
         SET level_value = #{levelValue}
         WHERE country_id = #{countryId}
     </update>
 
-    <!-- 전체 국가 요약 정보 조회 -->
-    <!-- 작성자:방대혁 -->
-    <select id="getCountrySummary" resultType="com.oneplane.country.dto.CountrySummaryDTO">
+    <!-- 전체 국가 요약 통계 조회
+         작성자: 방대혁 -->
+    <select id="getCountrySummary"
+            resultType="com.oneplane.country.dto.CountrySummaryDTO">
         SELECT
-                (SELECT COUNT(*) FROM alert_level) AS totalCountries,
-                (SELECT COUNT(*) FROM alert_level WHERE level_value IS NULL) AS safeCountries,
-                (SELECT COUNT(*) FROM alert_level WHERE level_value = '여행금지') AS bannedCountries
+        (SELECT COUNT(*) FROM alert_level) AS totalCountries,
+        (SELECT COUNT(*) FROM alert_level WHERE level_value IS NULL) AS safeCountries,
+        (SELECT COUNT(*) FROM alert_level WHERE level_value = '여행금지') AS bannedCountries
         FROM dual
     </select>
 
-    <!-- 모든 국가 조회 -->
-    <select id="selectAllCountries" resultType="com.oneplane.country.domain.Country">
+    <!-- 전체 국가 목록 조회
+         작성자: 오수경 -->
+    <select id="selectAllCountries"
+            resultType="com.oneplane.country.domain.Country">
         SELECT
-            country_id   AS countryId,
-            country_name AS countryName,
-            country_en_name AS countryEnName,
-            iso_code     AS isoCode,
-            continent,
-            img
+        country_id      AS countryId,
+        country_name    AS countryName,
+        country_en_name AS countryEnName,
+        iso_code        AS isoCode,
+        continent,
+        img
         FROM country
         ORDER BY country_name
     </select>
 
-    <!-- ID로 국가 조회 -->
-    <select id="selectCountryById" parameterType="long" resultType="com.oneplane.country.domain.Country">
+    <!-- ID로 국가 단일 조회
+         작성자: 오수경 -->
+    <select id="selectCountryById" parameterType="long"
+            resultType="com.oneplane.country.domain.Country">
         SELECT
-            country_id   AS countryId,
-            country_name AS countryName,
-            country_en_name AS countryEnName,
-            iso_code     AS isoCode,
-            continent,
-            img
+        country_id      AS countryId,
+        country_name    AS countryName,
+        country_en_name AS countryEnName,
+        iso_code        AS isoCode,
+        continent,
+        img
         FROM country
         WHERE country_id = #{id}
     </select>

@@ -3,13 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 작성자: 오수경 -->
-
+<!-- 작성자: 오수경
+     CarbonEmissionDao와 매핑되는 Mapper
+     국가별 연도별 탄소 배출량 조회 쿼리 포함
+-->
 <mapper namespace="com.oneplane.country.dao.CarbonEmissionDao">
 
-    <!-- 단일 연도 탄소 배출량 조회 -->
+    <!-- 단일 연도 탄소 배출량 조회
+         파라미터: isoCode, year
+         결과: 연도(year), 배출량(value) -->
     <select id="findByCountryAndYear" parameterType="map" resultType="map">
-        SELECT ce.year,
+        SELECT
+        ce.year,
         ce.value
         FROM carbon_emission ce
         JOIN country c ON ce.country_id = c.country_id

@@ -13,11 +13,26 @@ html {
     color: #13343B;
 }
 
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.page-wrapper {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    align-items: flex-start;
+    display: flex;
+    gap: 40px;
+}
+
 .main-content {
     margin: 20px 16px 16px 16px;
     padding: 32px;
-    width: 75%;  /* 퍼센트로 설정 */
-    min-width: 900px;  /* 최소 너비 보장 */
+    width: 75%;
+    min-width: 900px;
     background: #FCFCF9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.04);
@@ -37,11 +52,10 @@ html {
     border: 1px solid #e6e6e6;
     border-radius: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    font-family: 'Noto Sans KR', sans-serif;
     margin-left: 45px;
     margin-top: 50px;
     flex: 0 0 240px;
-}
+
 
 .profile-avatar {
     position: relative;

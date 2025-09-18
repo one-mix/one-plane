@@ -13,20 +13,70 @@ import java.util.List;
 @Mapper
 public interface CountryDao {
 
+    /**
+     * PK(ID)로 국가 단일 조회
+     * @param id 국가 PK
+     * @return Country 도메인 객체
+     * 작성자: 오수경
+     */
     Country selectCountryById(Long id);
+
+    /**
+     * 모든 국가 조회
+     * @return 국가 리스트
+     * 작성자: 오수경
+     */
     List<Country> selectAllCountries();
 
+    /**
+     * 국가 정보 신규 등록
+     * @param country Country 객체
+     * @return INSERT된 행 수
+     * 작성자: 오수경
+     */
     int insertCountry(Country country);
+
+    /**
+     * 국가 정보 수정
+     * @param country 수정할 Country 객체
+     * @return UPDATE된 행 수
+     * 작성자: 오수경
+     */
     int updateCountry(Country country);
+
+    /**
+     * 국가 정보 삭제 (단일)
+     * @param id 국가 PK
+     * @return DELETE된 행 수
+     * 작성자: 오수경
+     */
     int deleteCountry(Long id);
+
+    /**
+     * 국가 전체 삭제 (관리자용)
+     * @return DELETE된 행 수
+     * 작성자: 오수경
+     */
     int deleteAllCountries();
 
+    /**
+     * 국가명을 기준으로 단일 국가 조회
+     * @param name 국가명 (예: "Korea")
+     * @return Country 도메인 객체
+     * 작성자: 오수경
+     */
     Country findByName(@Param("name") String name);
+
+    /**
+     * ISO 코드로 단일 국가 조회
+     * @param isoCode ISO 코드 (예: "USA")
+     * @return Country 도메인 객체
+     * 작성자: 오수경
+     */
     Country findByIsoCode(@Param("isoCode") String isoCode);
 
     /**
      * ISO 코드로 국가 ID를 조회합니다.
-     *
      * @param isoCode ISO 코드 (예: "KOR", "JPN")
      * @return 국가 ID (없으면 null)
      * 작성자:방대혁
@@ -36,7 +86,6 @@ public interface CountryDao {
     /**
      * ISO 코드 기준으로 국가 상세 정보를 조회합니다.
      * - 대륙(continent), 국가 이미지(countryImg) 등 추가 정보 포함
-     *
      * @param isoCode ISO 코드 (예: "FRA", "USA")
      * @return RecommendResultDTO (추천 결과용 국가 정보)
      * 작성자:방대혁
