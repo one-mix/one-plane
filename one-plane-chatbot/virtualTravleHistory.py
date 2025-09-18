@@ -1,3 +1,4 @@
+# 작성자: 방대혁
 import pandas as pd
 import random
 import numpy as np
