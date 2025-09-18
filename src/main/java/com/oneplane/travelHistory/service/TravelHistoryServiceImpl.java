@@ -1,7 +1,7 @@
 package com.oneplane.travelHistory.service;
 
 import com.oneplane.favorites.dao.FavoritesCountryDao;
-import com.oneplane.recommend.repository.RecommendRepository;
+import com.oneplane.recommend.Dao.RecommendDao;
 import com.oneplane.travelHistory.dao.TravelHistoryAdminDao;
 import com.oneplane.travelHistory.dto.ContinentStatsDTO;
 import com.oneplane.travelHistory.dto.MonthlyStatsDTO;
@@ -16,7 +16,7 @@ import java.util.List;
 public class TravelHistoryServiceImpl implements TravelHistoryService {
     private final TravelHistoryAdminDao travelHistoryAdminDao;
     private final FavoritesCountryDao favoritesCountryDao;
-    private final RecommendRepository recommendRepository;
+    private final RecommendDao recommendDao;
 
     @Override
     public List<ContinentStatsDTO> getContinentStats() {
@@ -30,7 +30,7 @@ public class TravelHistoryServiceImpl implements TravelHistoryService {
 
     @Override
     public List<TopCountryStatsDTO> getTopRecommendCountries() {
-        return recommendRepository.getTopRecommendCountries();
+        return recommendDao.getTopRecommendCountries();
     }
 
     @Override
