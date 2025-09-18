@@ -1,3 +1,5 @@
+<%-- 작성자: 오수경 --%>
+
 <%@ page contentType="text/html; charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -59,7 +61,7 @@
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: new URLSearchParams({ countryId, userId })
+                    body: new URLSearchParams({ countryId })
                 });
 
                 const result = await res.text();

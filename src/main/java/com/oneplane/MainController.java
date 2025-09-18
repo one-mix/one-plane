@@ -1,3 +1,5 @@
+// 레이아웃 작성자: 오수경
+// 도메인별 작성자: 공동
 package com.oneplane;
 
 import com.oneplane.post.domain.Post;

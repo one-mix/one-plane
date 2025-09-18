@@ -29,13 +29,22 @@
     border: 2px solid var(--gray-100);
     border-radius: 10px;
     background: white;
-    cxt-decoration: none;
+    text-decoration: none;
     font-size: 16px;
     font-weight: var(--font-medium);
     cursor: pointer;
     text-align: center;
-    paolor: var(--gray-500);
-    tedding: 12px 24px;
+    padding: 12px 24px;
+    color: var(--gray-500);
+}
+
+.top-tab a,
+.top-tab a:link,
+.top-tab a:visited,
+.top-tab a:hover,
+.top-tab a:active {
+    text-decoration: none;
+    color: inherit;
 }
 
 .top-tab.active {

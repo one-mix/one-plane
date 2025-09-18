@@ -1,3 +1,4 @@
+// 작성자: 오수경
 package com.oneplane.country.dao;
 
 import org.apache.ibatis.annotations.Mapper;

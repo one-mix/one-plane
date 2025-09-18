@@ -1,4 +1,4 @@
-//작성자: 방대혁
+// 작성자: 방대혁
 package com.oneplane.alert.scheduler;
 
 import com.oneplane.alert.service.AlertLevelService;
