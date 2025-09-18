@@ -1,3 +1,4 @@
+# 작성자: 방대혁
 from flask import Flask, request, jsonify
 from recommend2 import recommend_for_user
 

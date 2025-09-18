@@ -1,3 +1,4 @@
+//작성자:방대혁,오수경
 package com.oneplane.recommend.controller;
 
 import com.oneplane.config.SecurityUtil;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping({"/api/recommend", "/recommend"})
+@RequestMapping({"/api/recommend"})
 public class RecommendController {
 
     private final RecommendService recommendService;
@@ -26,29 +27,33 @@ public class RecommendController {
         this.recommendService = recommendService;
     }
 
+    /**
+     * 로그인 여부 확인
+     * 작성자:방대혁
+     */
     @GetMapping("/check-login")
-    public ResponseEntity<Map<String, Object>> checkLogin(HttpSession session) {
+    public ResponseEntity<Map<String, Object>> checkLogin() {
         Map<String, Object> response = new HashMap<>();
 
-        // 세션에 로그인 정보가 있으면 로그인된 상태
-        if (session.getAttribute("user") != null) {
-            response.put("loggedIn", true);
-        } else {
-            response.put("loggedIn", false);
-        }
-
+        response.put("loggedIn", SecurityUtil.getCurrentUserId() != null);
         return ResponseEntity.ok(response);
     }
 
-    /** 추천 메인 */
+    /**
+     * 추천 동의 여부 확인 (Y / N / null)
+     * 작성자:방대혁
+     */
     @GetMapping("/agreement")
     @ResponseBody
     public String getAgreement() {
         Integer userId = SecurityUtil.getCurrentUserId();
-        return recommendService.getLatestAgreement(userId); // Y / N / null
+        return recommendService.getLatestAgreement(userId);
     }
 
-    /** 동의 저장 */
+    /**
+     * 추천 동의 저장
+     * 작성자:방대혁
+     */
     @PostMapping("/agreement")
     @ResponseBody
     public String saveAgreement() {
@@ -57,16 +62,22 @@ public class RecommendController {
         return "동의 완료";
     }
 
-    /** 여행 목적 + 동행자 저장 */
+    /**
+     * 여행 목적 + 동행자 저장
+     * 작성자:방대혁
+     */
     @PostMapping("/input")
     @ResponseBody
-
     public String saveInput(@RequestBody RecommendDTO dto) {
         dto.setUserId(SecurityUtil.getCurrentUserId());
         recommendService.insertInput(dto);
         return "여행 목적/동행자 저장 완료";
     }
 
+    /**
+     * 최신 여행 목적 + 동행자 조회
+     * 작성자:방대혁
+     */
     @GetMapping("/latest-input")
     @ResponseBody
     public RecommendDTO checkLatestInput() {
@@ -74,6 +85,10 @@ public class RecommendController {
         return recommendService.getLatestInput(userId);
     }
 
+    /**
+     * 추천 로딩 → Flask 호출 후 결과 상위 3개 추출 → result 페이지로 redirect
+     * 작성자:방대혁
+     */
     @GetMapping("/loading")
     public String recommendLoading(RedirectAttributes redirectAttributes) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -86,7 +101,7 @@ public class RecommendController {
         );
 
         if (recs.size() > 3) {
-            recs = recs.subList(0, 3); // 상위 3개만
+            recs = recs.subList(0, 3);
         }
 
         redirectAttributes.addFlashAttribute("user", SecurityUtil.getCurrentUserDetails());
@@ -95,25 +110,30 @@ public class RecommendController {
         return "redirect:/recommend/result";
     }
 
-    // 국가 도시 선택 저장
+    /**
+     * 국가/도시 선택 저장
+     * 작성자:방대혁
+     */
     @PostMapping("/saveCountry")
-    public ResponseEntity<?> saveCountry(@RequestBody Map<String, String> request,
-                                         HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
+    public ResponseEntity<Map<String, Object>> saveCountry(@RequestBody Map<String, String> request) {
+        Integer userId = SecurityUtil.getCurrentUserId();
         String countryIso3 = request.get("countryIso3");
         String city = request.get("city");
 
-        // ISO3 코드로 countryId 조회 후 저장
-        // 디버깅
-        System.out.printf("saveCountry 호출: iso3=%s, city=%s%n", countryIso3, city);
         Integer recommendId = recommendService.saveSelectedCountry(userId, countryIso3, city);
 
-        return ResponseEntity.ok(Map.of("recommendId", recommendId, "message", "국가/도시 저장 완료"));
+        return ResponseEntity.ok(Map.of(
+                "recommendId", recommendId,
+                "message", "국가/도시 저장 완료"
+        ));
     }
 
-    // 피드백 업데이트
+    /**
+     * 추천 피드백 업데이트
+     * 작성자:방대혁
+     */
     @PostMapping("/updateFeedback")
-    public ResponseEntity<?> updateFeedback(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<String> updateFeedback(@RequestBody Map<String, Object> request) {
         Integer recommendId = (Integer) request.get("recommendId");
         Integer rating = (Integer) request.get("recommendRating");
         String content = (String) request.get("ratingContent");
@@ -122,7 +142,11 @@ public class RecommendController {
 
         return ResponseEntity.ok("피드백 저장 완료");
     }
-    /** 추천 삭제 (soft delete: deleted_at 갱신) */
+
+    /**
+     * 추천 삭제 (soft delete: deleted_at 갱신)
+     * 작성자:오수경
+     */
     @PostMapping("/remove")
     public ResponseEntity<?> removeRecommend(@RequestParam Integer recommendId) {
         Integer userId = SecurityUtil.getCurrentUserId();
@@ -130,6 +154,10 @@ public class RecommendController {
         return ResponseEntity.ok(Map.of("message", "추천 삭제 완료"));
     }
 
+    /**
+     * 추천 삭제 (마이페이지 전용 soft delete)
+     * 작성자:방대혁
+     */
     @PostMapping("/delete/{id}")
     public ResponseEntity<String> softDeleteRecommend(@PathVariable("id") Long id) {
         boolean success = recommendService.softDeleteRecommendMyPage(id);

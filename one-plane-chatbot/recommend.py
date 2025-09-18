@@ -1,3 +1,4 @@
+# 작성자: 방대혁
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -90,8 +91,3 @@ def recommend_for_user(user_id:int, purpose:str, companion:str, topk:int=10, exc
     cc = cc.assign(score=proba)
     recs = cc.sort_values("score", ascending=False).head(topk).reset_index(drop=True)
     return recs[["country_name_ko","country_iso3","city","score"]]
-
-if __name__ == "__main__":
-    recs = recommend_for_user(user_id=1, purpose="휴식", companion="가족", topk=10)
-    print("\n추천 결과(상위 10):")
-    print(recs)

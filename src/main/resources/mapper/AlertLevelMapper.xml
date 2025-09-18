@@ -44,7 +44,8 @@
         WHERE iso_code = #{isoCode}
     </select>
 
-    <!-- update -->
+    <!-- update 국가경보 -->
+    <!-- 작성자:방대혁 -->
     <update id="updateAlertLevel" parameterType="com.oneplane.alert.dto.AlertLevelDTO">
         UPDATE alert_level
         SET level_value = #{levelValue}
@@ -52,19 +53,22 @@
     </update>
 
     <!-- country_id 존재 여부 -->
+    <!-- 작성자:방대혁 -->
     <select id="existsByCountryId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT COUNT(*)
         FROM alert_level
         WHERE country_id = #{countryId}
     </select>
 
-    <!-- insert -->
+    <!-- insert 국가경보 -->
+    <!-- 작성자:방대혁 -->
     <insert id="insertAlertLevel" parameterType="com.oneplane.alert.dto.AlertLevelDTO">
         INSERT INTO alert_level (country_id, level_value)
         VALUES (#{countryId}, #{levelValue})
     </insert>
 
     <!-- iso_code를 기준으로 alert_level 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="findByIsoCode" resultType="com.oneplane.alert.dto.AlertLevelDTO" parameterType="java.lang.String">
         SELECT
             al.country_id AS countryId,
@@ -74,6 +78,8 @@
         WHERE c.iso_code = #{isoCode}
     </select>
 
+    <!-- 관리자 페이지에서 국가별 여행경보 수정 -->
+    <!-- 작성자:방대혁 -->
     <update id="updateCountryLevelAdmin" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
         UPDATE alert_level
         SET level_value = #{levelValue}
