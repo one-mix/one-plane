@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.domain;
 
 import com.oneplane.user.domain.User;

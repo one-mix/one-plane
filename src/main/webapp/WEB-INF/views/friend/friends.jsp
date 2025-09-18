@@ -1,3 +1,4 @@
+<!-- 작성자: 김동현 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -11,9 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>친구 관리 - OnePlane</title>
 
-    <!-- CSRF 토큰 메타태그 -->
-    <meta name="_csrf" content="${_csrf.token}">
-    <meta name="_csrf_header" content="${_csrf.headerName}">
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userDetails" />
         <meta name="user-id" content="${userDetails.userId}">
@@ -52,11 +50,9 @@
             </div>
         </div>
 
-        <!-- 친구 목록 -->
         <div class="friends-grid">
             <c:choose>
                 <c:when test="${tab == 'search'}">
-                    <!-- 검색 결과 -->
                     <c:choose>
                         <c:when test="${not empty searchResults}">
                             <c:forEach var="friend" items="${searchResults}" varStatus="status">
@@ -91,7 +87,6 @@
                     </c:choose>
                 </c:when>
                 <c:otherwise>
-                    <!-- 일반 친구 목록 -->
                     <c:choose>
                         <c:when test="${not empty friendList}">
                             <c:forEach var="friend" items="${friendList}" varStatus="status">
@@ -161,7 +156,6 @@
             </c:choose>
         </div>
 
-        <!-- 페이지네이션 -->
         <c:if test="${totalPages > 1}">
             <div class="pagination">
                 <c:if test="${currentPage > 1}">
@@ -191,7 +185,6 @@
     </main>
 </div>
 
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
 <script>
@@ -282,11 +275,6 @@
                 targetUserId: targetUserId
             },
             beforeSend: function(xhr) {
-                const token = $('meta[name="_csrf"]').attr('content');
-                const header = $('meta[name="_csrf_header"]').attr('content');
-                if (token && header) {
-                    xhr.setRequestHeader(header, token);
-                }
             },
             success: function(response) {
                 if (response.success) {

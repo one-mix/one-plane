@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.controller;
 
 import com.oneplane.config.SecurityUtil;
@@ -85,10 +86,6 @@ public class PostListController {
             model.addAttribute("contentPage", "post/postList.jsp");
             model.addAttribute("activeMenu", "post");
 
-
-            log.info("게시글 목록 조회 완료 - 총 {}개, 현재페이지: {}/{}",
-                    response.getTotalElements(), response.getCurrentPage(), response.getTotalPages());
-
             return "layout/layout";
 
 
@@ -160,8 +157,6 @@ public class PostListController {
             PostSearchCondition totalCondition = new PostSearchCondition();
             totalCondition.setDefaults();
             response.put("totalCount", postService.getPostCount(totalCondition));
-
-            log.info("카테고리별 개수 조회 완료: {}", categoryCounts);
 
         } catch (Exception e) {
             log.error("카테고리별 개수 조회 중 오류 발생", e);
@@ -491,9 +486,6 @@ public class PostListController {
             response.put("success", true);
             response.put("message", "게시글이 성공적으로 수정되었습니다.");
             response.put("postId", updatedPost.getPostId());
-
-            log.info("게시글 수정 완료 - postId: {}, 제목: {}, 수정자: {}",
-                    updatedPost.getPostId(), updatedPost.getTitle(), currentUserId);
 
             return ResponseEntity.ok(response);
 

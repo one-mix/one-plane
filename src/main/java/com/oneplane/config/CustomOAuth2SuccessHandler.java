@@ -1,3 +1,4 @@
+// 작성자 : 김동현
 package com.oneplane.config;
 
 import com.oneplane.user.domain.Role;
@@ -68,7 +69,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     private String determineTargetUrl(CustomUserDetails userDetails, HttpServletRequest request) {
         // 1. 관리자라면 관리자 대시보드 페이지로 이동
         if (userDetails.isAdmin()) {
-            return "/admin/dashboard";
+            return "/admin/userList";
         }
 
         // 2. 프로필 미완성 → 프로필 완성 페이지로 이동
@@ -85,10 +86,13 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                 String targetUrl = savedRequest.getRedirectUrl();
                 log.info("SavedRequest 감지: {}", targetUrl);
 
-                // 로그인 페이지나 OAuth2 관련 주소는 제외
-                if (!targetUrl.contains("/login") && !targetUrl.contains("/oauth2")) {
+                // 유효한 URL인지 검증
+                if (isValidRedirectUrl(targetUrl)) {
                     session.removeAttribute("SPRING_SECURITY_SAVED_REQUEST");
                     return targetUrl;
+                } else {
+                    log.warn("유효하지 않은 SavedRequest URL 무시: {}", targetUrl);
+                    session.removeAttribute("SPRING_SECURITY_SAVED_REQUEST");
                 }
             }
         }
@@ -96,6 +100,34 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         return "/";
     }
 
+    private boolean isValidRedirectUrl(String url) {
+        if (url == null || url.trim().isEmpty()) {
+            return false;
+        }
+
+        // 내부 JSP 파일 경로는 제외
+        if (url.contains("/WEB-INF/") || url.contains(".jsp")) {
+            return false;
+        }
+
+        // 로그인 관련 페이지는 제외
+        if (url.contains("/login") || url.contains("/oauth2")) {
+            return false;
+        }
+
+        // 에러 페이지는 제외
+        if (url.contains("/error")) {
+            return false;
+        }
+
+        // 상대 경로만 허용 (보안상 외부 URL 제외)
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            // 현재 도메인인지 확인
+            return url.contains("localhost:8080") || url.contains("127.0.0.1:8080");
+        }
+
+        return true;
+    }
     /**
      * 회원 정보 필수값 누락 여부 확인
      */

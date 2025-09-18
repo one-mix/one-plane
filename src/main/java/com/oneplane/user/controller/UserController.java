@@ -1,10 +1,10 @@
+// 작성자: 김동현
 package com.oneplane.user.controller;
 
 import com.oneplane.config.SecurityUtil;
 import com.oneplane.user.dto.ProfileCompleteRequestDto;
 import com.oneplane.user.service.CustomOAuth2UserService;
 import com.oneplane.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +25,6 @@ import java.util.Map;
 public class UserController {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final UserService userService;
-
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        return "redirect:/";
-    }
 
     // 프로필 완성 페이지 (카카오 로그인 후)
     @GetMapping("/profile/complete")

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.repository;
 
 import com.oneplane.post.dao.CommentDao;

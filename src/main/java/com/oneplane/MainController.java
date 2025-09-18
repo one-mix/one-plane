@@ -2,12 +2,17 @@ package com.oneplane;
 
 import com.oneplane.post.domain.Post;
 import com.oneplane.post.service.PostService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -67,14 +72,6 @@ public class MainController {
         return "layout/layout";
     }
 
-    // 추천 페이지
-    @GetMapping("/recommend/loading")
-    public String recommend_loading(Model model) {
-        model.addAttribute("contentPage", "recommend/loading.jsp");
-        model.addAttribute("activeMenu", "recommend");
-
-        return "layout/layout";
-    }
 
     // 추천 결과 페이지
     @GetMapping("/recommend/result")
@@ -100,10 +97,4 @@ public class MainController {
         return "layout/layout";
     }
 
-    // 로그인 페이지
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("contentPage", "login/main.jsp");
-        return "layout/layout";
-    }
 }

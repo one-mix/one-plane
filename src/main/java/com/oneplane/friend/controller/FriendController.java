@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.friend.controller;
 
 import com.oneplane.config.SecurityUtil;

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.domain;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class AdminUser {
     private String name;
     private String nickname;
     private Integer age;
-    private String role;            // ROLE_USER, ROLE_ADMIN
+    private String role;
     private String grade;           // ECONOMY, STANDARD, BUSINESS, FIRST, ELITE
     private String gender;          // male, female
     private String disease;         // true, false
@@ -27,9 +28,6 @@ public class AdminUser {
     private LocalDateTime createdAt;    // 생성일시
     private LocalDateTime updatedAt;    // 수정일시
     private LocalDateTime deletedAt;    // 삭제일시
-
-
-    // 편의 메서드들
 
     /**
      * 계정이 삭제되었는지 확인

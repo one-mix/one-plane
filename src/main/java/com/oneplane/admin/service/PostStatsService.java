@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.service;
 
 import com.oneplane.post.dao.CommentDao;
@@ -195,9 +196,8 @@ public class PostStatsService {
         if (post.getLikeCount() == null) post.setLikeCount(0);
         if (post.getCommentCount() == null) post.setCommentCount(0);
 
-        // 카테고리 한글명 설정 (필요한 경우)
+        // 카테고리 한글명 설정
         if (post.getCategory() != null) {
-            // Category enum의 displayName이 있다면 사용, 없다면 위의 메서드 사용
         }
     }
 }

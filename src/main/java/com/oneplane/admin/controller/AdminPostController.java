@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.controller;
 
 import com.oneplane.config.SecurityUtil;
@@ -61,7 +62,6 @@ public class AdminPostController {
 
             condition.setDefaults();
 
-            // 게시글 목록 조회
             PostListResponse response = postService.getPostsWithPaging(condition);
 
             // 검색 파라미터 생성

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.config;
 
 import org.springframework.beans.factory.annotation.Value;

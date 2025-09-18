@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.domain;
 
 import com.oneplane.user.domain.User;
@@ -6,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -21,7 +21,7 @@ public class Post {
     private String content;              // Summernote HTML 콘텐츠
     private String thumbnailImage;       // 썸네일 이미지 URL
     private Category category;
-    private Long countryId;           // 국가 ID (외래키)
+    private Long countryId;
     private String countryName;
     private Integer viewCount;
     private Integer likeCount;
@@ -30,7 +30,7 @@ public class Post {
     private Date updatedAt;
     private Date deletedAt;
 
-    private User user;                   // 작성자 정보
+    private User user;
 //    private List<PostFile> files;        // 첨부파일 목록
 
     public boolean isDeleted() {

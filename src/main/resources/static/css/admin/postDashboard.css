@@ -1,4 +1,4 @@
-/* 기존 스타일 유지 */
+/* 작성자: 김동현 */
 .stats-cards .stat-card {
     background: var(--gray-0);
     border-radius: 12px;
@@ -92,15 +92,14 @@
     color: var(--gray-600);
 }
 
-/* 차트 박스 스타일 수정 */
 .chart-box {
     background: var(--gray-0);
     border-radius: 12px;
     padding: 1.5rem;
     border: 1px solid var(--gray-100);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-    margin-bottom: 1.5rem; /* 차트 박스 간 여백 추가 */
-    overflow: hidden; /* 내용물이 넘치지 않도록 */
+    margin-bottom: 1.5rem;
+    overflow: hidden;
 }
 
 .chart-box h7 {
@@ -113,9 +112,8 @@
     padding-bottom: 0.5rem;
 }
 
-/* 차트 컨테이너 높이 조정 */
 .equal-height {
-    height: 400px; /* 고정 높이로 변경 */
+    height: 400px;
     min-height: 350px;
 }
 
@@ -127,10 +125,9 @@
 
 .equal-height canvas {
     flex: 1;
-    max-height: 300px !important; /* 캔버스 최대 높이 제한 */
+    max-height: 300px !important;
 }
 
-/* 일별 활동 차트 전용 스타일 */
 .daily-activity-chart {
     height: auto;
     min-height: 450px;
@@ -141,13 +138,11 @@
     max-height: 400px !important;
 }
 
-/* 인기 게시글 테이블 차트 박스 */
 .popular-posts-chart {
     height: auto;
     min-height: auto;
 }
 
-/* 테이블 스타일 */
 .table th {
     background-color: var(--gray-100);
     border-bottom: 2px solid var(--gray-200);
@@ -222,33 +217,10 @@
     font-size: 14px;
 }
 
-/* 테이블 호버 효과 */
 .table-hover tbody tr:hover {
     background-color: var(--gray-100);
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .equal-height {
-        height: auto;
-        min-height: 300px;
-    }
-
-    .equal-height canvas {
-        max-height: 250px !important;
-    }
-
-    .daily-activity-chart {
-        min-height: 350px;
-    }
-
-    .daily-activity-chart canvas {
-        height: 300px !important;
-        max-height: 300px !important;
-    }
-}
-
-/* 로딩 상태 */
 .chart-loading {
     display: flex;
     align-items: center;
@@ -274,7 +246,6 @@
     100% { transform: rotate(360deg); }
 }
 
-/* 에러 상태 */
 .chart-error {
     display: flex;
     align-items: center;

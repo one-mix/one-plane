@@ -1,10 +1,10 @@
+<!-- 작성자: 김동현 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <link rel="stylesheet" href="/css/admin/userDeleted.css"/>
 
-<!-- 검색 및 필터 섹션 -->
 <div class="search-filter-section">
     <div class="d-flex justify-content-between align-items-center">
         <div class="result-summary">
@@ -20,7 +20,6 @@
     </div>
 </div>
 
-<!-- 탈퇴 사용자 테이블 -->
 <div class="deleted-users-table-container">
     <div class="table-responsive">
         <table class="table table-hover align-middle" id="deletedUsersTable">

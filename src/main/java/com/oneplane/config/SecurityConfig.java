@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.config;
 
 import com.oneplane.user.service.CustomOAuth2UserService;
@@ -58,6 +59,7 @@ public class SecurityConfig {
                         .failureHandler(customOAuth2FailureHandler)
                 )
 
+
                 // 로그아웃 설정
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -65,31 +67,33 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .clearAuthentication(true)
+                        .permitAll()
                 )
 
                 // URL별 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                        // 1. 정적 리소스
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**",
+                                "/favicon.ico", "/webjars/**", "/uploads/**").permitAll()
 
-                        // 2. 공개 페이지 - 로그인 없이 접근 가능
-                        .requestMatchers("/**", "/main", "/index", "/user/login", "/error").permitAll()
+                        .requestMatchers("/", "/main", "/index", "/home").permitAll()
+                        .requestMatchers("/error", "/error/**").permitAll()
+                        .requestMatchers("/login").permitAll()
 
-                        // 3. OAuth2 관련
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers("/logout").permitAll()
 
-                        // 4. 특정 사용자 페이지
-                        .requestMatchers("/user/check-nickname").permitAll()
-                        .requestMatchers("/user/profile/complete").authenticated()
+                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/countries/list").permitAll()
 
-                        // 5. 관리자 페이지
-                        .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/post/list", "/post/detail/**").permitAll()
+                        .requestMatchers("/post/**").authenticated()
 
-                        // 6. 일반 사용자 페이지
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/board/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/recommend/**").permitAll()
 
-                        // 7. 나머지는 모두 인증 필요
+                        .requestMatchers("/mypage/**").authenticated()
+                        .requestMatchers("/user/**").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 );
         return http.build();
@@ -110,7 +114,12 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Ajax 요청을 위한 CORS 설정
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:8080",
+                "http://127.0.0.1:8080",
+                "http://localhost:5001/recommend",
+                "http://127.0.0.1:5001/recommend"
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.repository;
 
 import com.oneplane.admin.dao.AdminUserDao;

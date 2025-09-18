@@ -1,10 +1,9 @@
+<!-- 작성자: 김동현 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <link rel="stylesheet" href="/css/admin/userDetail.css"/>
-
-<!-- Page Header -->
 <div class="page-header">
   <div class="d-flex justify-content-between align-items-center">
     <div>
@@ -13,7 +12,6 @@
       <c:if test="${not user.admin}">
         <form method="post" action="/admin/users/${user.user_id}/delete" class="d-inline"
               onsubmit="return confirm('정말로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.');">
-          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
           <button type="submit" class="btn btn-outline-danger">
             <i class="bi bi-trash"></i> 계정 삭제
           </button>
@@ -26,7 +24,6 @@
 <c:choose>
   <c:when test="${not empty user}">
     <div class="row">
-      <!-- 사용자 정보 카드 -->
     <div class="col-lg-7">
       <div class="col-12">
         <div class="user-info-card">
@@ -116,10 +113,8 @@
         </div>
       </div>
     </div>
-      <!-- 프로필 및 건강정보 카드 -->
       <div class="col-lg-4">
 
-        <!-- 건강 정보 -->
         <div class="user-detail-card">
           <div class="card-header">
             <h5 class="card-title">
@@ -183,7 +178,6 @@
               </div>
             </div>
 
-            <!-- 여행 주의 알림 -->
             <c:if test="${user.needsTravelCaution()}">
               <div class="alert alert-warning mt-3">
                 <i class="bi bi-exclamation-triangle-fill"></i>
@@ -197,7 +191,6 @@
     </div>
   </c:when>
   <c:otherwise>
-    <!-- 사용자 정보 없음 -->
     <div class="error-state">
       <div class="error-icon">
         <i class="bi bi-person-x"></i>

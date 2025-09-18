@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.controller;
 
 import com.oneplane.admin.domain.AdminUser;
@@ -41,7 +42,6 @@ public class AdminUserController {
 
             Map<String, Object> result = adminUserService.getUserList(page, pageSize, search);
 
-            // 통계 정보 조회 (우선 기본값으로 설정)
             Map<String, Object> stats = new HashMap<>();
             try {
                 stats = adminUserService.getUserStats();

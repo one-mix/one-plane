@@ -1,10 +1,10 @@
+<!-- 작성자: 김동현 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<!-- 사용자 정보를 JavaScript에 전달하기 위한 메타태그 -->
 <sec:authorize access="isAuthenticated()">
   <sec:authentication property="principal" var="userDetails" />
   <meta name="user-id" content="${userDetails.userId}">
@@ -15,10 +15,6 @@
   <meta name="user-id" content="">
   <meta name="user-nickname" content="">
 </sec:authorize>
-
-<!-- CSRF 토큰 메타태그 -->
-<meta name="_csrf" content="${_csrf.token}">
-<meta name="_csrf_header" content="${_csrf.headerName}">
 
 <link href="/css/post/postDetail.css" rel="stylesheet">
 
@@ -41,7 +37,6 @@
     </c:if>
   </div>
 
-  <!-- 게시글 헤더 -->
   <div class="post-header">
     <h1 class="post-title">${post.title}</h1>
 
@@ -71,9 +66,7 @@
           </div>
         </div>
       </div>
-
       <div class="post-actions-right">
-        <!-- 팔로우 버튼 -->
         <sec:authorize access="isAuthenticated()">
           <c:if test="${post.userId != userDetails.userId}">
             <button type="button" class="follow-btn" id="followBtn" onclick="toggleFollow(${post.userId})">
@@ -86,14 +79,12 @@
     </div>
   </div>
 
-  <!-- 게시글 내용 -->
   <div class="post-content">
     <div class="content-body">
       ${post.content}
     </div>
   </div>
 
-  <!-- 게시글 푸터 (좋아요, 공유 등) -->
   <div class="post-footer">
     <div class="post-reactions">
       <button type="button" class="reaction-btn like-btn" onclick="toggleLike(${post.postId})">
@@ -104,12 +95,10 @@
     </div>
   </div>
 
-  <!-- 댓글 섹션 -->
   <div class="post-additional">
     <div class="comments-section">
       <h3 class="section-title">댓글 <span class="comment-count-text">${post.commentCount}</span></h3>
 
-      <!-- 댓글 작성 섹션 -->
       <sec:authorize access="isAuthenticated()">
         <div class="comment-write">
           <textarea class="comment-input" placeholder="댓글을 작성해주세요..." maxlength="100"></textarea>
@@ -126,7 +115,6 @@
         </div>
       </sec:authorize>
 
-      <!-- 댓글 목록 -->
       <div class="comments-list" id="comments-list">
         <div class="loading" style="display: none;">
           <p>댓글을 불러오는 중...</p>
@@ -136,20 +124,15 @@
         </div>
       </div>
 
-      <!-- 댓글 페이지네이션 -->
       <div class="comment-pagination" id="comment-pagination"></div>
     </div>
   </div>
 </main>
 
-<!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
 <script>
-  // 전역 변수
   let currentPostId = null;
   let currentUserId = null;
   let currentPage = 1;
@@ -504,11 +487,6 @@
         content: content
       },
       beforeSend: function(xhr) {
-        const token = $('meta[name="_csrf"]').attr('content');
-        const header = $('meta[name="_csrf_header"]').attr('content');
-        if (token && header) {
-          xhr.setRequestHeader(header, token);
-        }
       },
       success: function(response) {
         if (response.success) {
@@ -546,11 +524,6 @@
       url: '/comment/' + commentId,
       type: 'DELETE',
       beforeSend: function(xhr) {
-        const token = $('meta[name="_csrf"]').attr('content');
-        const header = $('meta[name="_csrf_header"]').attr('content');
-        if (token && header) {
-          xhr.setRequestHeader(header, token);
-        }
       },
       success: function(response) {
         if (response.success) {
@@ -624,11 +597,6 @@
       url: '/post/delete/' + postId,
       type: 'POST',
       beforeSend: function(xhr) {
-        const token = $('meta[name="_csrf"]').attr('content');
-        const header = $('meta[name="_csrf_header"]').attr('content');
-        if (token && header) {
-          xhr.setRequestHeader(header, token);
-        }
       },
       success: function(response) {
         if (response.success) {
@@ -687,11 +655,6 @@
       url: '/api/post/like/' + postId,
       type: 'POST',
       beforeSend: function(xhr) {
-        const token = $('meta[name="_csrf"]').attr('content');
-        const header = $('meta[name="_csrf_header"]').attr('content');
-        if (token && header) {
-          xhr.setRequestHeader(header, token);
-        }
       },
       success: function(response) {
         if (response.success) {
@@ -739,11 +702,6 @@
         targetUserId: targetUserId
       },
       beforeSend: function(xhr) {
-        const token = $('meta[name="_csrf"]').attr('content');
-        const header = $('meta[name="_csrf_header"]').attr('content');
-        if (token && header) {
-          xhr.setRequestHeader(header, token);
-        }
       },
       success: function(response) {
         if (response.success) {
@@ -823,11 +781,6 @@
         targetUserId: targetUserId
       },
       beforeSend: function(xhr) {
-        const token = $('meta[name="_csrf"]').attr('content');
-        const header = $('meta[name="_csrf_header"]').attr('content');
-        if (token && header) {
-          xhr.setRequestHeader(header, token);
-        }
       },
       success: function(response) {
         if (response.success) {

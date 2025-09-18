@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.friend.repository;
 
 import com.oneplane.friend.dao.FriendDao;

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.controller;
 
 import com.oneplane.admin.service.PostStatsService;
@@ -30,7 +31,6 @@ public class AdminPostStatsController {
         log.info("게시물 통계 대시보드 페이지 요청");
 
         try {
-            // 기본 통계 데이터 조회 (페이지 로드시 표시할 데이터)
             Map<String, Object> basicStats = postStatsService.getBasicStats();
             model.addAttribute("stats", basicStats);
 

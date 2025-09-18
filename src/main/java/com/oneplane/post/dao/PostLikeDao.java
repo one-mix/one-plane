@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.dao;
 
 import com.oneplane.post.domain.PostLike;

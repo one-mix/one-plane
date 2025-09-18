@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.dao;
 
 import com.oneplane.admin.domain.AdminUser;

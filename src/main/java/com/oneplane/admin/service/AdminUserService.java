@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.service;
 
 import com.oneplane.admin.dao.AdminUserDao;
@@ -67,10 +68,6 @@ public class AdminUserService {
 
     /**
      * 탈퇴 사용자 목록 조회 (페이징, 검색)
-     * @param page 페이지 번호 (1부터 시작)
-     * @param pageSize 페이지 크기
-     * @param search 검색어 (닉네임, 이름)
-     * @return 탈퇴 사용자 목록과 페이징 정보
      */
     @Transactional(readOnly = true)
     public Map<String, Object> getDeletedUserList(int page, int pageSize, String search) {
@@ -116,9 +113,6 @@ public class AdminUserService {
 
     /**
      * 사용자 ID로 단일 사용자 조회
-     *
-     * @param userId 사용자 ID
-     * @return AdminUser 객체 (없으면 null)
      */
     @Transactional(readOnly = true)
     public AdminUser getUserById(Integer userId) {
@@ -146,8 +140,6 @@ public class AdminUserService {
 
     /**
      * 사용자 정보 수정
-     * @param user 수정할 사용자 정보
-     * @return 수정된 사용자 정보
      */
     public AdminUser updateUser(AdminUser user) {
         log.info("사용자 정보 수정 시작 - userId: {}", user.getUser_id());
@@ -199,7 +191,6 @@ public class AdminUserService {
 
     /**
      * 사용자 논리 삭제
-     * @param userId 삭제할 사용자 ID
      */
     public void deleteUser(Integer userId) {
         log.info("사용자 삭제 시작 - userId: {}", userId);
@@ -241,7 +232,6 @@ public class AdminUserService {
 
     /**
      * 닉네임 중복 확인 (특정 사용자 제외)
-     * @return 중복 여부 (true: 중복됨, false: 사용 가능)
      */
     @Transactional(readOnly = true)
     public boolean isNicknameDuplicate(String nickname, Integer excludeUserId) {

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.service;
 
 import com.oneplane.post.dao.PostDao;
