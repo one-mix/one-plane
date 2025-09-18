@@ -26,7 +26,10 @@ public class Friend {
     private String followingName;
     private String followingProfileImg;
 
-    // 팔로우 관계 생성
+    /**
+     * 팔로우 관계 생성 팩토리 메소드
+     * 작성자 : 김동현
+     */
     public static Friend create(Integer followerId, Integer followingId) {
         return Friend.builder()
                 .followerId(followerId)

@@ -24,6 +24,7 @@ public class PostLikeController {
 
     /**
      * 좋아요 토글 (좋아요/취소)
+     * 작성자 : 김동현
      */
     @PostMapping("/{postId}")
     public ResponseEntity<Map<String, Object>> togglePostLike(@PathVariable Integer postId) {
@@ -74,6 +75,7 @@ public class PostLikeController {
 
     /**
      * 게시글의 좋아요 상태 및 수 조회
+     * 작성자 : 김동현
      */
     @GetMapping("/status/{postId}")
     public ResponseEntity<Map<String, Object>> getPostLikeStatus(@PathVariable Integer postId) {
@@ -105,6 +107,7 @@ public class PostLikeController {
 
     /**
      * 게시글의 좋아요 목록 조회 (최근 순)
+     * 작성자 : 김동현
      */
     @GetMapping("/list/{postId}")
     public ResponseEntity<Map<String, Object>> getPostLikeList(
@@ -137,6 +140,7 @@ public class PostLikeController {
 
     /**
      * 사용자가 좋아요한 게시글 목록 조회
+     * 작성자 : 김동현
      */
     @GetMapping("/my-likes")
     public ResponseEntity<Map<String, Object>> getMyLikedPosts(
@@ -183,6 +187,7 @@ public class PostLikeController {
 
     /**
      * 여러 게시글의 좋아요 상태 일괄 조회 (목록 페이지용)
+     * 작성자 : 김동현
      */
     @PostMapping("/batch-status")
     public ResponseEntity<Map<String, Object>> getBatchLikeStatus(

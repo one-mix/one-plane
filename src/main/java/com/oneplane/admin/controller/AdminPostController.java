@@ -32,6 +32,7 @@ public class AdminPostController {
 
     /**
      * 전체 게시글 목록
+     * 작성자 : 김동현
      */
     @GetMapping("/posts")
     public String adminPostList(
@@ -99,6 +100,7 @@ public class AdminPostController {
     }
     /**
      * 게시글 상세보기 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/postDetail/{postId}")
     public String postDetail(@PathVariable Integer postId, Model model, HttpServletRequest request) {
@@ -144,6 +146,7 @@ public class AdminPostController {
 
     /**
      * 게시물 삭제 (논리 삭제)
+     * 작성자 : 김동현
      */
     @PostMapping("/post/{postId}/delete")
     public String deleteUser(@PathVariable Integer postId, Integer userId) {
@@ -154,6 +157,7 @@ public class AdminPostController {
 
     /**
      * 인기 게시글 목록 (조회수, 좋아요수, 댓글수 기준)
+     * 작성자 : 김동현
      */
     @GetMapping("/posts/popularity")
     public String adminPopularPosts(
@@ -225,6 +229,7 @@ public class AdminPostController {
 
     /**
      * 전체 댓글 목록 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/comments")
     public String adminCommentList(

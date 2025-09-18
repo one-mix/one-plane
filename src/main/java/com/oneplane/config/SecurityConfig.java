@@ -27,6 +27,10 @@ public class SecurityConfig {
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
 
+    /**
+     * Spring Security 필터 체인 설정
+     * 작성자 : 김동현
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -58,7 +62,6 @@ public class SecurityConfig {
                         .successHandler(customOAuth2SuccessHandler)
                         .failureHandler(customOAuth2FailureHandler)
                 )
-
 
                 // 로그아웃 설정
                 .logout(logout -> logout
@@ -99,16 +102,28 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * 세션 레지스트리 빈 등록
+     * 작성자 : 김동현
+     */
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }
 
+    /**
+     * HTTP 세션 이벤트 퍼블리셔 빈 등록
+     * 작성자 : 김동현
+     */
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }
 
+    /**
+     * CORS 설정 소스 빈 등록
+     * 작성자 : 김동현
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

@@ -20,6 +20,10 @@ import java.io.IOException;
 @Slf4j
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
+    /**
+     * OAuth2 인증 성공 처리
+     * 작성자 : 김동현
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -65,6 +69,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
     /**
      * 로그인 후 이동할 URL 결정
+     * 작성자 : 김동현
      */
     private String determineTargetUrl(CustomUserDetails userDetails, HttpServletRequest request) {
         // 1. 관리자라면 관리자 대시보드 페이지로 이동
@@ -100,6 +105,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         return "/";
     }
 
+    /**
+     * 리다이렉트 URL 유효성 검증
+     * 작성자 : 김동현
+     */
     private boolean isValidRedirectUrl(String url) {
         if (url == null || url.trim().isEmpty()) {
             return false;
@@ -128,8 +137,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         return true;
     }
+
     /**
      * 회원 정보 필수값 누락 여부 확인
+     * 작성자 : 김동현
      */
     private boolean isProfileIncomplete(CustomUserDetails userDetails) {
         return userDetails.getUser().getName() == null ||

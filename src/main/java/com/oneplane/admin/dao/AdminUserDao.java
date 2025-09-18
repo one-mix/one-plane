@@ -11,6 +11,7 @@ public interface AdminUserDao {
 
     /**
      * 사용자 목록 조회 (페이징, 검색)
+     * 작성자 : 김동현
      */
     List<AdminUser> findUserList(@Param("offset") int offset,
                                  @Param("pageSize") int pageSize,
@@ -18,11 +19,13 @@ public interface AdminUserDao {
 
     /**
      * 전체 사용자 수 조회 (검색 조건 포함)
+     * 작성자 : 김동현
      */
     int getTotalUserCount(@Param("search") String search);
 
     /**
      * 탈퇴 사용자 목록 조회 (페이징, 검색)
+     * 작성자 : 김동현
      */
     List<AdminUser> findDeletedUserList(@Param("offset") int offset,
                                         @Param("pageSize") int pageSize,
@@ -30,21 +33,25 @@ public interface AdminUserDao {
 
     /**
      * 전체 탈퇴 사용자 수 조회 (검색 조건 포함)
+     * 작성자 : 김동현
      */
     int getTotalDeletedUserCount(@Param("search") String search);
 
     /**
      * 사용자 ID로 조회
+     * 작성자 : 김동현
      */
     AdminUser findUserById(@Param("userId") Integer userId);
 
     /**
      * 사용자 정보 수정
+     * 작성자 : 김동현
      */
     int updateUser(AdminUser user);
 
     /**
      * 사용자 삭제 (논리 삭제)
+     * 작성자 : 김동현
      */
     int deleteUser(@Param("userId") Integer userId);
 
@@ -56,51 +63,61 @@ public interface AdminUserDao {
 
     /**
      * 오늘 가입한 사용자 수
+     * 작성자 : 김동현
      */
     int getTodaySignupCount();
 
     /**
      * 이번달 가입한 사용자 수
+     * 작성자 : 김동현
      */
     int getMonthlySignupCount();
 
     /**
      * 사용자 역할별 통계
+     * 작성자 : 김동현
      */
     List<Map<String, Object>> getUserRoleStats();
 
     /**
      * 사용자 등급별 통계
+     * 작성자 : 김동현
      */
     List<Map<String, Object>> getUserGradeStats();
 
     /**
      * 전체 활성 사용자 수 (deleted_at이 null)
+     * 작성자 : 김동현
      */
     int getActiveUserCount();
 
     /**
      * 성별별 통계
+     * 작성자 : 김동현
      */
     List<Map<String, Object>> getUserGenderStats();
 
     /**
      * 연령대별 통계
+     * 작성자 : 김동현
      */
     List<Map<String, Object>> getUserAgeStats();
 
     /**
      * 건강 정보별 통계
+     * 작성자 : 김동현
      */
     List<Map<String, Object>> getUserHealthStats();
 
     /**
      * 여행 주의 대상자 수 (65세 이상 또는 건강 정보 보유)
+     * 작성자 : 김동현
      */
     int getTravelCautionUserCount();
 
     /**
      * 월별 가입 추이 (최근 12개월)
+     * 작성자 : 김동현
      */
     List<Map<String, Object>> getMonthlySignupTrend();
 }

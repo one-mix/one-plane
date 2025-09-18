@@ -16,11 +16,11 @@ import java.util.List;
 @Transactional
 public class FriendService {
 
-
     private final FriendDao friendDao;
 
     /**
      * 팔로우
+     * 작성자 : 김동현
      */
     public void follow(Integer followerId, Integer followingId) {
         log.info("팔로우 요청: {} -> {}", followerId, followingId);
@@ -45,6 +45,7 @@ public class FriendService {
 
     /**
      * 언팔로우
+     * 작성자 : 김동현
      */
     public void unfollow(Integer followerId, Integer followingId) {
         log.info("언팔로우 요청: {} -> {}", followerId, followingId);
@@ -64,6 +65,7 @@ public class FriendService {
 
     /**
      * 팔로우 상태 확인
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public boolean isFollowing(Integer followerId, Integer followingId) {
@@ -75,6 +77,7 @@ public class FriendService {
 
     /**
      * 내가 팔로우한 사람들 목록 조회 (페이징)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Friend> getFollowingList(Integer userId, int page, int size) {
@@ -87,6 +90,7 @@ public class FriendService {
 
     /**
      * 나를 팔로우한 사람들 목록 조회 (페이징)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Friend> getFollowerList(Integer userId, int page, int size) {
@@ -99,6 +103,7 @@ public class FriendService {
 
     /**
      * 팔로잉 수 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getFollowingCount(Integer userId) {
@@ -107,6 +112,7 @@ public class FriendService {
 
     /**
      * 팔로워 수 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getFollowerCount(Integer userId) {
@@ -115,6 +121,7 @@ public class FriendService {
 
     /**
      * 사용자 검색 (닉네임)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Friend> searchUsers(String nickname, Integer currentUserId, int page, int size) {
@@ -131,6 +138,7 @@ public class FriendService {
 
     /**
      * 검색 결과 총 개수
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getSearchResultCount(String nickname, Integer currentUserId) {

@@ -23,10 +23,18 @@ public class PostFile {
     private String fileType;             // jpeg, png
     private Date createdAt;
 
+    /**
+     * 이미지 파일 여부 확인
+     * 작성자 : 김동현
+     */
     public boolean isImage() {
         return fileType != null && fileType.startsWith("image/");
     }
 
+    /**
+     * 파일 크기를 읽기 쉬운 형태로 포맷팅
+     * 작성자 : 김동현
+     */
     public String getFormattedFileSize() {
         if (fileSize == null) return "0 B";
 
@@ -42,12 +50,20 @@ public class PostFile {
         return String.format("%.1f %s", size, units[unitIndex]);
     }
 
+    /**
+     * 파일 확장자 반환
+     * 작성자 : 김동현
+     */
     public String getFileExtension() {
         if (originalFilename == null) return "";
         int lastDot = originalFilename.lastIndexOf('.');
         return lastDot > 0 ? originalFilename.substring(lastDot + 1).toLowerCase() : "";
     }
 
+    /**
+     * 임시 파일 여부 확인
+     * 작성자 : 김동현
+     */
     public boolean isTemporary() {
         return postId == null;
     }

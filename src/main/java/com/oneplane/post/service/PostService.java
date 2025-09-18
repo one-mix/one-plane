@@ -26,6 +26,7 @@ public class PostService {
 
     /**
      * 게시글 전체 목록 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Post> getAllPosts() {
@@ -42,6 +43,7 @@ public class PostService {
 
     /**
      * 페이징된 게시글 목록 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public PostListResponse getPostsWithPaging(PostSearchCondition condition) {
@@ -83,6 +85,7 @@ public class PostService {
 
     /**
      * 카테고리별 게시글 목록 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public PostListResponse getPostsByCategory(String category, int page, int size) {
@@ -128,6 +131,7 @@ public class PostService {
 
     /**
      * 게시글 데이터 후처리
+     * 작성자 : 김동현
      */
     private void processPostData(Post post) {
         // 내용이 너무 길면 요약
@@ -160,6 +164,7 @@ public class PostService {
 
     /**
      * HTML에서 텍스트만 추출
+     * 작성자 : 김동현
      */
     private String extractTextFromHtml(String html) {
         if (html == null) return "";
@@ -174,6 +179,7 @@ public class PostService {
 
     /**
      * HTML에서 첫 번째 이미지 URL 추출
+     * 작성자 : 김동현
      */
     private String extractFirstImageFromHtml(String html) {
         if (html == null) return null;
@@ -190,6 +196,7 @@ public class PostService {
 
     /**
      * 게시글 개수 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getPostCount() {
@@ -200,6 +207,7 @@ public class PostService {
 
     /**
      * 검색 조건에 따른 게시글 개수 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getPostCount(PostSearchCondition condition) {
@@ -209,6 +217,7 @@ public class PostService {
 
     /**
      * 게시글 작성
+     * 작성자 : 김동현
      */
     public Post createPost(Post post) {
         log.info("게시글 작성 처리 시작 - 제목: {}, 작성자: {}", post.getTitle(), post.getUserId());
@@ -251,6 +260,7 @@ public class PostService {
 
     /**
      * 게시글 유효성 검사
+     * 작성자 : 김동현
      */
     private void validatePost(Post post) {
         if (post.getUserId() == null) {
@@ -304,6 +314,7 @@ public class PostService {
 
     /**
      * 게시글 상세 조회
+     * 작성자 : 김동현
      */
     @Transactional
     public Post getPostDetail(Integer postId) {
@@ -343,6 +354,7 @@ public class PostService {
 
     /**
      * 게시글 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public Post getPostById(Integer postId) {
@@ -358,6 +370,7 @@ public class PostService {
 
     /**
      * 조회수 증가
+     * 작성자 : 김동현
      */
     @Transactional
     public boolean increaseViewCount(Integer postId) {
@@ -374,6 +387,7 @@ public class PostService {
 
     /**
      * 게시글 삭제
+     * 작성자 : 김동현
      */
     @Transactional
     public boolean deletePost(Integer postId, Integer userId) {
@@ -409,6 +423,7 @@ public class PostService {
 
     /**
      * 게시글 수정
+     * 작성자 : 김동현
      */
     @Transactional
     public Post updatePost(Integer postId, Post updatePost) {
@@ -455,7 +470,10 @@ public class PostService {
         }
     }
 
-    // 메인페이지용 최신글 조회 (5개)
+    /**
+     * 메인페이지용 최신글 조회 (5개)
+     * 작성자 : 김동현
+      */
     @Transactional(readOnly = true)
     public List<Post> getLatestPostsForMain() {
         try {
@@ -477,6 +495,7 @@ public class PostService {
     /**
      * 메인페이지용 인기글 조회 (5개)
      * 인기도 = 조회수 + 좋아요수 + 댓글수
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Post> getPopularPostsForMain() {
@@ -497,7 +516,10 @@ public class PostService {
         }
     }
 
-    // 메인페이지용 인기 후기 조회 (9개)
+    /**
+     * 메인페이지용 인기 후기 조회 (9개)
+     * 작성자 : 김동현
+     */
     @Transactional(readOnly = true)
     public List<Post> getPopularReviewsForMain() {
         try {
@@ -519,6 +541,7 @@ public class PostService {
 
     /**
      * 게시글의 좋아요 수 업데이트
+     * 작성자 : 김동현
      */
     @Transactional
     public void updatePostLikeCount(Integer postId) {
@@ -533,6 +556,7 @@ public class PostService {
 
     /**
      * 게시글의 댓글 수 업데이트
+     * 작성자 : 김동현
      */
     @Transactional
     public void updatePostCommentCount(Integer postId) {
@@ -547,6 +571,7 @@ public class PostService {
 
     /**
      * 게시글의 모든 카운트 업데이트 (좋아요 수 + 댓글 수)
+     * 작성자 : 김동현
      */
     @Transactional
     public void updatePostCounts(Integer postId) {
@@ -560,6 +585,7 @@ public class PostService {
     }
     /**
      * 인기 게시글 페이징 조회 (관리자용)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public PostListResponse getPopularPostsWithPaging(PostSearchCondition condition, int period) {

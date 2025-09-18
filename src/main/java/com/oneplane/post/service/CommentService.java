@@ -19,7 +19,10 @@ public class CommentService {
     @Autowired
     private PostService postService;
 
-    // 댓글 작성
+    /**
+     * 댓글 작성
+     * 작성자 : 김동현
+     */
     public Integer createComment(Comment comment) {
         // 댓글 내용 검증
         if (comment.getContent() == null || comment.getContent().trim().isEmpty()) {
@@ -51,7 +54,10 @@ public class CommentService {
         }
     }
 
-    // 댓글 삭제
+    /**
+     * 댓글 삭제
+     * 작성자 : 김동현
+     */
     public boolean deleteComment(Integer commentId, Integer userId) {
         if (commentId == null) {
             throw new IllegalArgumentException("댓글 ID가 필요합니다.");
@@ -79,7 +85,10 @@ public class CommentService {
         return deleted;
     }
 
-    // 댓글 1건 조회
+    /**
+     * 댓글 1건 조회
+     * 작성자 : 김동현
+     */
     @Transactional(readOnly = true)
     public Comment getComment(Integer commentId) {
         if (commentId == null) {
@@ -89,7 +98,11 @@ public class CommentService {
         return commentDao.findCommentById(commentId);
     }
 
-    // 게시글의 댓글 목록 조회 (페이징)
+    /**
+     * 게시글의 댓글 목록 조회 (페이징)
+     *  작성자 : 김동현
+     */
+
     @Transactional(readOnly = true)
     public List<Comment> getCommentsByPostId(Integer postId, int page, int size) {
         if (postId == null) {
@@ -108,7 +121,10 @@ public class CommentService {
         return commentDao.findCommentsByPostId(postId, offset, size);
     }
 
-    // 게시글의 총 댓글 수 조회
+    /**
+     * 게시글의 총 댓글 수 조회
+     * 작성자 : 김동현
+     */
     @Transactional(readOnly = true)
     public int getCommentCount(Integer postId) {
         if (postId == null) {
@@ -120,10 +136,7 @@ public class CommentService {
 
     /**
      * 사용자의 댓글 목록 조회 (페이징)
-     * @param userId 사용자 ID
-     * @param page 페이지 번호 (1부터 시작)
-     * @param size 페이지 크기
-     * @return 댓글 목록
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Comment> getCommentsByUserId(Integer userId, int page, int size) {
@@ -143,7 +156,11 @@ public class CommentService {
         return commentDao.findCommentsByUserId(userId, offset, size);
     }
 
-    // 사용자의 총 댓글 수 조회
+    /**
+     * 사용자의 총 댓글 수 조회
+     * 작성자 : 김동현
+     */
+
     @Transactional(readOnly = true)
     public int getCommentCountByUserId(Integer userId) {
         if (userId == null) {
@@ -154,7 +171,8 @@ public class CommentService {
     }
 
     /**
-     * 관리자용 - 전체 댓글 목록 조회 (페이징)
+     * 관리자용 - 전체 댓글 목록 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<Comment> getAllComments(int page, int size, String search) {
@@ -172,6 +190,7 @@ public class CommentService {
 
     /**
      * 관리자용 - 전체 댓글 수 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getAllCommentCount(String search) {
@@ -180,6 +199,7 @@ public class CommentService {
 
     /**
      * 관리자용 - 댓글 강제 삭제
+     * 작성자 : 김동현
      */
     public boolean adminDeleteComment(Integer commentId) {
         if (commentId == null) {

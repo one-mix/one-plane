@@ -31,6 +31,7 @@ public class AdminUser {
 
     /**
      * 계정이 삭제되었는지 확인
+     * 작성자 : 김동현
      */
     public boolean isDeleted() {
         return deletedAt != null;
@@ -38,6 +39,7 @@ public class AdminUser {
 
     /**
      * 관리자인지 확인
+     * 작성자 : 김동현
      */
     public boolean isAdmin() {
         return "ROLE_ADMIN".equals(role);
@@ -45,6 +47,7 @@ public class AdminUser {
 
     /**
      * 일반 사용자인지 확인
+     * 작성자 : 김동현
      */
     public boolean isUser() {
         return "ROLE_USER".equals(role);
@@ -52,6 +55,7 @@ public class AdminUser {
 
     /**
      * 프로필이 완성되었는지 확인
+     * 작성자 : 김동현
      */
     public boolean isProfileComplete() {
         return name != null && !name.trim().isEmpty() &&
@@ -65,6 +69,7 @@ public class AdminUser {
 
     /**
      * 건강 정보를 보유한 사용자인지 확인
+     * 작성자 : 김동현
      */
     public boolean hasHealthInfo() {
         return "true".equals(disease) ||
@@ -74,6 +79,7 @@ public class AdminUser {
 
     /**
      * 여행 시 주의가 필요한 사용자인지 확인
+     * 작성자 : 김동현
      */
     public boolean needsTravelCaution() {
         return hasHealthInfo() || (age != null && age >= 65);
@@ -81,6 +87,7 @@ public class AdminUser {
 
     /**
      * 한국어 성별 반환
+     * 작성자 : 김동현
      */
     public String getGenderKorean() {
         if ("male".equals(gender)) {
@@ -93,6 +100,7 @@ public class AdminUser {
 
     /**
      * 한국어 역할 반환
+     * 작성자 : 김동현
      */
     public String getRoleKorean() {
         if ("ROLE_ADMIN".equals(role)) {
@@ -105,6 +113,7 @@ public class AdminUser {
 
     /**
      * 등급을 한국어로 반환
+     * 작성자 : 김동현
      */
     public String getGradeKorean() {
         if (grade == null) return "미설정";
@@ -121,6 +130,7 @@ public class AdminUser {
 
     /**
      * Boolean 타입으로 질병 여부 반환
+     * 작성자 : 김동현
      */
     public Boolean getDiseaseAsBoolean() {
         return "true".equals(disease);
@@ -128,6 +138,7 @@ public class AdminUser {
 
     /**
      * Boolean 타입으로 장애 여부 반환
+     * 작성자 : 김동현
      */
     public Boolean getDisabilityAsBoolean() {
         return "true".equals(disability);
@@ -135,6 +146,7 @@ public class AdminUser {
 
     /**
      * Boolean 타입으로 복용약물 여부 반환
+     * 작성자 : 김동현
      */
     public Boolean getMedicationAsBoolean() {
         return "true".equals(medication);
@@ -142,6 +154,7 @@ public class AdminUser {
 
     /**
      * 건강 정보 요약
+     * 작성자 : 김동현
      */
     public String getHealthSummary() {
         if (!hasHealthInfo()) {
@@ -158,6 +171,7 @@ public class AdminUser {
 
     /**
      * JSP에서 admin 속성 접근을 위한 getter
+     * 작성자 : 김동현
      */
     public boolean getAdmin() {
         return isAdmin();

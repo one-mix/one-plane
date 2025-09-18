@@ -21,7 +21,10 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    // 댓글 작성
+    /**
+     * 댓글 작성
+     * 작성자 : 김동현
+     */
     @PostMapping("/write")
     public ResponseEntity<Map<String, Object>> writeComment(
             @RequestParam Integer postId,
@@ -74,7 +77,10 @@ public class CommentController {
         }
     }
 
-    // 게시글의 댓글 목록 조회
+    /**
+     * 게시글의 댓글 목록 조회
+     * 작성자 : 김동현
+     */
     @GetMapping("/list/{postId}")
     public ResponseEntity<Map<String, Object>> getCommentList(
             @PathVariable Integer postId,
@@ -117,7 +123,10 @@ public class CommentController {
         }
     }
 
-    // 댓글 삭제
+    /**
+     * 댓글 삭제
+     * 작성자 : 김동현
+     */
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable Integer commentId) {
 
@@ -164,8 +173,10 @@ public class CommentController {
         }
     }
 
-
-    // 댓글 상세 조회
+    /**
+     * 댓글 상세 조회
+     * 작성자 : 김동현
+     */
     @GetMapping("/{commentId}")
     public ResponseEntity<Map<String, Object>> getComment(@PathVariable Integer commentId) {
 
@@ -194,7 +205,10 @@ public class CommentController {
         }
     }
 
-    // 게시글의 댓글 수 조회
+    /**
+     * 게시글의 댓글 수 조회
+     * 작성자 : 김동현
+     */
     @GetMapping("/count/{postId}")
     public ResponseEntity<Map<String, Object>> getCommentCount(@PathVariable Integer postId) {
 
@@ -219,7 +233,10 @@ public class CommentController {
         }
     }
 
-    // 사용자가 작성한 댓글 목록 조회
+    /**
+     * 사용자가 작성한 댓글 목록 조회
+     * 작성자 : 김동현
+     */
     @GetMapping("/my-comments")
     public ResponseEntity<Map<String, Object>> getMyComments(
             @RequestParam(defaultValue = "1") int page,

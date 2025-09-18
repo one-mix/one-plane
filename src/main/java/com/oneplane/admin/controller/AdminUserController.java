@@ -25,6 +25,7 @@ public class AdminUserController {
 
     /**
      * 전체 사용자 목록 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/userList")
     public String userList(
@@ -103,6 +104,7 @@ public class AdminUserController {
 
     /**
      * 사용자 상세보기 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/userDetail/{userId}")
     public String userDetail(@PathVariable Integer userId, Model model) {
@@ -117,6 +119,7 @@ public class AdminUserController {
 
     /**
      * 사용자 삭제 (논리 삭제)
+     * 작성자 : 김동현
      */
     @PostMapping("/users/{userId}/delete")
     public String deleteUser(@PathVariable Integer userId) {
@@ -127,6 +130,7 @@ public class AdminUserController {
 
     /**
      * 탈퇴 사용자 목록 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/userDeleted")
     public String deletedUsers(
@@ -161,6 +165,7 @@ public class AdminUserController {
 
     /**
      * 사용자 통계 대시보드 페이지
+     * 작성자 : 김동현
      */
     @GetMapping("/dashboard/user")
     public String userDashboard(Model model) {
@@ -186,7 +191,8 @@ public class AdminUserController {
     }
 
     /**
-     * 성별별 통계 API
+     * 성별별 통계
+     * 작성자 : 김동현
      */
     @GetMapping("/api/users/gender-stats")
     @ResponseBody
@@ -210,7 +216,8 @@ public class AdminUserController {
     }
 
     /**
-     * 연령대별 통계 API
+     * 연령대별 통계
+     * 작성자 : 김동현
      */
     @GetMapping("/api/users/age-stats")
     @ResponseBody
@@ -227,7 +234,8 @@ public class AdminUserController {
     }
 
     /**
-     * 등급별 통계 API
+     * 등급별 통계
+     * 작성자 : 김동현
      */
     @GetMapping("/api/users/grade-stats")
     @ResponseBody
@@ -244,7 +252,8 @@ public class AdminUserController {
     }
 
     /**
-     * 건강 정보별 통계 API
+     * 건강 정보별 통계
+     * 작성자 : 김동현
      */
     @GetMapping("/api/users/health-stats")
     @ResponseBody
@@ -261,7 +270,8 @@ public class AdminUserController {
     }
 
     /**
-     * 월별 가입 추이 API
+     * 월별 가입 추이
+     * 작성자 : 김동현
      */
     @GetMapping("/api/users/monthly-trend")
     @ResponseBody

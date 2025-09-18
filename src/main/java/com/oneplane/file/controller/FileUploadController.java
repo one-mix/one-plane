@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
 @RestController
 @RequestMapping("/api/upload")
 @Slf4j
@@ -29,7 +28,10 @@ public class FileUploadController {
     @Value("${file.upload.url:/uploads/}")
     private String uploadUrl;
 
-    // Summernote 에디터 이미지 업로드
+    /**
+     * Summernote 에디터 이미지 업로드
+     * 작성자 : 김동현
+     */
     @PostMapping("/image")
     public ResponseEntity<Map<String, Object>> uploadImage(@RequestParam("image") MultipartFile file) {
         Map<String, Object> response = new HashMap<>();
@@ -77,7 +79,10 @@ public class FileUploadController {
         return ResponseEntity.ok(response);
     }
 
-    // 파일 저장 처리
+    /**
+     * 파일 저장 처리
+     * 작성자 : 김동현
+     */
     private String saveFile(MultipartFile file) throws IOException {
         // 업로드 디렉토리 생성
         createUploadDirectory();
@@ -103,8 +108,10 @@ public class FileUploadController {
         return uniqueFileName;
     }
 
-
-    // 업로드 디렉토리 생성
+    /**
+     * 업로드 디렉토리 생성
+     * 작성자 : 김동현
+     */
     private void createUploadDirectory() throws IOException {
         Path uploadDir = Paths.get(uploadPath);
         if (!Files.exists(uploadDir)) {
