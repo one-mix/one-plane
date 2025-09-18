@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * 사용자 상세 프로필 관리 컨트롤러
  * 프로필 수정, 탈퇴(Soft Delete) 기능 제공
  *
- * @author 허겸
+ * 작성자: 허겸
  */
 @Controller
 @RequestMapping("/mypage/profile")

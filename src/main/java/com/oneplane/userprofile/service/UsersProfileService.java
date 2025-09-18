@@ -13,7 +13,7 @@ import java.time.LocalDate;
  * 사용자 프로필 비즈니스 로직 처리 서비스
  * 프로필 조회, 수정, 탈퇴(Soft Delete) 기능 제공
  *
- * @author 허겸
+ * 작성자: 허겸
  */
 @Service
 @RequiredArgsConstructor

@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
- * @author 허겸
+ * 작성자: 허겸
  * 마이페이지 관련 컨트롤러들의 공통 기능을 제공하는 추상 베이스 컨트롤러
  * 모든 하위 컨트롤러에서 사용자 프로필 정보를 자동으로 모델에 추가
  */
@@ -19,7 +19,7 @@ public abstract class BaseController {
     protected UserProfileService userProfileService;
 
     /**
-     * @author 허겸
+     * 작성자: 허겸
      * 모든 컨트롤러 메서드 실행 전에 공통으로 실행되는 메서드
      * 세션에서 사용자 ID를 가져와서 사용자 프로필 정보를 모델에 추가
      *
@@ -39,7 +39,7 @@ public abstract class BaseController {
     }
 
     /**
-     * @author 허겸
+     * 작성자: 허겸
      * HTTP 세션에서 사용자 ID를 안전하게 추출하는 유틸리티 메서드
      * 다양한 타입(Long, Integer, String)으로 저장된 userId를 Long 타입으로 변환
      *

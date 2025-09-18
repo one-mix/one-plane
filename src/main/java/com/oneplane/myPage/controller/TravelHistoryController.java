@@ -19,7 +19,7 @@ import java.util.List;
  * 여행 기록 관리 컨트롤러
  * 사용자의 여행 이력 조회, 추가, 수정, 삭제 및 이미지 서빙 기능 제공
  *
- * @author 허겸
+ * 작성자: 허겸
  */
 @Controller
 @RequestMapping("/mypage/travelHistory")

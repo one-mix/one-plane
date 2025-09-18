@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 사용자 프로필 관리 컨트롤러
  * 프로필 조회, 수정 폼 제공 및 AJAX 프로필 이미지 업로드 기능 제공
  *
- * @author 허겸
+ * 작성자: 허겸
  */
 @Controller
 public class UserProfileController extends BaseController {

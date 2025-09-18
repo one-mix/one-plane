@@ -16,7 +16,7 @@ import java.util.List;
  * 사용자 개인 및 팔로워 게시글 조회 컨트롤러
  * 내 게시글 및 팔로워 게시글 목록을 카테고리별로 표시
  *
- * @author 허겸
+ * 작성자: 허겸
  */
 @Controller
 @RequestMapping("/myPost") // 클래스 레벨 매핑

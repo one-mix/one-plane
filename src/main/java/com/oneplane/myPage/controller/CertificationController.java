@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 국가 인증 관련 요청을 처리하는 컨트롤러
  * 사용자의 여행 인증 정보 등록, 조회, 타임라인 관리 기능 제공
- * @author 허겸
+ * 작성자: 허겸
  */
 @Controller
 @RequestMapping("/mypage/certification")
