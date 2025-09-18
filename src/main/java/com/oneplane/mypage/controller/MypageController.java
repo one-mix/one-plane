@@ -1,7 +1,6 @@
 //작성자:방대혁,허겸
 package com.oneplane.myPage.controller;
 
-import com.oneplane.myPage.controller.BaseController;
 import com.oneplane.myPage.dto.CertificationTimelineDto;
 import com.oneplane.myPage.service.CertificationService;
 import com.oneplane.myPage.service.TravelHistoryService;
