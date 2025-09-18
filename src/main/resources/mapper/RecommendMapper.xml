@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oneplane.recommend.repository.RecommendRepository">
+<mapper namespace="com.oneplane.recommend.Dao.RecommendDao">
 
     <!-- 동의 저장 -->
     <!-- 작성자:방대혁 -->

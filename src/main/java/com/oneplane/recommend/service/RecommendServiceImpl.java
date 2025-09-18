@@ -4,11 +4,9 @@ package com.oneplane.recommend.service;
 import com.oneplane.alert.dao.AlertLevelDao;
 import com.oneplane.country.dao.CountryDao;
 import com.oneplane.alert.dto.AlertLevelDTO;
-import com.oneplane.country.domain.Country;
 import com.oneplane.recommend.dto.RecommendDTO;
 import com.oneplane.recommend.dto.RecommendResultDTO;
-import com.oneplane.recommend.repository.RecommendRepository;
-import com.oneplane.recommend.service.RecommendService;
+import com.oneplane.recommend.Dao.RecommendDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RecommendServiceImpl implements RecommendService {
 
-    private final RecommendRepository recommendRepository;
+    private final RecommendDao recommendDao;
     private final CountryDao countryDao;
     private final AlertLevelDao alertLevelDao;
     private final RestTemplate restTemplate = new RestTemplate();
@@ -35,7 +33,7 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     @Transactional
     public Integer saveAgreement(Integer userId) {
-        return recommendRepository.insertAgreement(userId);
+        return recommendDao.insertAgreement(userId);
     }
 
     /**
@@ -44,7 +42,7 @@ public class RecommendServiceImpl implements RecommendService {
      */
     @Override
     public String getLatestAgreement(Integer userId) {
-        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
+        RecommendDTO latestRecommend = recommendDao.getLatestRecommend(userId);
         return latestRecommend != null ? latestRecommend.getAgreement() : null;
     }
 
@@ -55,12 +53,12 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     @Transactional
     public void insertInput(RecommendDTO dto) {
-        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(dto.getUserId());
+        RecommendDTO latestRecommend = recommendDao.getLatestRecommend(dto.getUserId());
         if (latestRecommend == null) {
             throw new IllegalStateException("추천 정보를 찾을 수 없습니다.");
         }
         dto.setRecommendId(latestRecommend.getRecommendId());
-        recommendRepository.insertInput(dto);
+        recommendDao.insertInput(dto);
     }
 
     /**
@@ -69,7 +67,7 @@ public class RecommendServiceImpl implements RecommendService {
      */
     @Override
     public RecommendDTO getLatestInput(Integer userId) {
-        return recommendRepository.getLatestRecommend(userId);
+        return recommendDao.getLatestRecommend(userId);
     }
 
     /**
@@ -131,7 +129,7 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     @Transactional
     public Integer saveSelectedCountry(Integer userId, String country, String city) {
-        RecommendDTO latestRecommend = recommendRepository.getLatestRecommend(userId);
+        RecommendDTO latestRecommend = recommendDao.getLatestRecommend(userId);
         if (latestRecommend == null) {
             throw new IllegalStateException("추천 정보를 찾을 수 없습니다.");
         }
@@ -141,7 +139,7 @@ public class RecommendServiceImpl implements RecommendService {
             throw new IllegalArgumentException("유효하지 않은 국가 코드입니다: " + country);
         }
 
-        recommendRepository.updateCountryAndCity(latestRecommend.getRecommendId(), countryId, city);
+        recommendDao.updateCountryAndCity(latestRecommend.getRecommendId(), countryId, city);
         return latestRecommend.getRecommendId();
     }
 
@@ -152,7 +150,7 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     @Transactional
     public void updateFeedback(Integer recommendId, Integer rating, String content) {
-        recommendRepository.updateFeedback(recommendId, rating, content);
+        recommendDao.updateFeedback(recommendId, rating, content);
     }
 
     /**
@@ -162,7 +160,7 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     public List<RecommendResultDTO> getRecommendHistory(Integer userId, int page) {
         int offset = (page - 1) * PAGE_SIZE;
-        return recommendRepository.findRecommendHistoryByUserId(userId, offset, PAGE_SIZE);
+        return recommendDao.findRecommendHistoryByUserId(userId, offset, PAGE_SIZE);
     }
 
     /**
@@ -171,7 +169,7 @@ public class RecommendServiceImpl implements RecommendService {
      */
     @Override
     public int getTotalRecommendHistoryCount(Integer userId) {
-        return recommendRepository.getTotalRecommendHistoryCount(userId);
+        return recommendDao.getTotalRecommendHistoryCount(userId);
     }
 
     /**
@@ -204,7 +202,7 @@ public class RecommendServiceImpl implements RecommendService {
         Map<String, Object> params = new HashMap<>();
         params.put("recommendId", recommendId);
         params.put("userId", userId);
-        recommendRepository.softDeleteRecommend(params);
+        recommendDao.softDeleteRecommend(params);
     }
 
     /**
@@ -214,6 +212,6 @@ public class RecommendServiceImpl implements RecommendService {
     @Override
     @Transactional
     public boolean softDeleteRecommendMyPage(Long recommendId) {
-        return recommendRepository.softDeleteRecommendMyPage(recommendId) > 0;
+        return recommendDao.softDeleteRecommendMyPage(recommendId) > 0;
     }
 }
