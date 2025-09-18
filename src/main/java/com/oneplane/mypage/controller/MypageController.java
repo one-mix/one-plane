@@ -28,8 +28,6 @@ import java.util.stream.Collectors;
  * 사용자의 여행 통계, 타임라인, 추천 여행지 등 종합적인 정보를 제공
  *
  * 작성자: 허겸
- * 버전: 1.0
- * 작성일: 2025
  */
 @Controller
 @RequestMapping("/mypage/dashboard")
