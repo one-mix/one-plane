@@ -75,29 +75,41 @@ public class SecurityConfig {
 
                 // URL별 권한 설정
                 .authorizeHttpRequests(auth -> auth
+                        // 정적 리소스 허용
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**",
                                 "/favicon.ico", "/webjars/**", "/uploads/**").permitAll()
 
+                        // 메인 페이지 허용
                         .requestMatchers("/", "/main", "/index", "/home").permitAll()
-                        .requestMatchers("/error", "/error/**").permitAll()
-                        .requestMatchers("/login").permitAll()
 
+                        // 에러 페이지 허용
+                        .requestMatchers("/error", "/error/**").permitAll()
+
+                        // 로그인 관련 허용
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .requestMatchers("/logout").permitAll()
 
+                        // 공개 API 허용
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/countries/list").permitAll()
 
+                        // 게시판 - 목록/상세는 누구나, 작성/수정은 로그인 필요
                         .requestMatchers("/post/list", "/post/detail/**").permitAll()
                         .requestMatchers("/post/**").authenticated()
 
+                        // 추천 시스템 허용
                         .requestMatchers("/recommend/**").permitAll()
 
+                        // 마이페이지는 로그인 필요
                         .requestMatchers("/mypage/**").authenticated()
                         .requestMatchers("/user/**").authenticated()
+
+                        // 관리자 페이지
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated()
+                        // 나머지는 모두 허용 (기본적으로 공개)
+                        .anyRequest().permitAll()
                 );
         return http.build();
     }
