@@ -27,7 +27,7 @@
 <head>
     <meta charset="UTF-8">
     <title>방문한 여행지</title>
-    <link rel="stylesheet" href="/css/mypage/dasdas.css" />
+    <link rel="stylesheet" href="/css/mypage/historyMain.css" />
     <link rel="stylesheet" href="/css/mypage/history.css" />
     <%--    <link rel="stylesheet" href="/css/history.css" />--%>
 </head>
