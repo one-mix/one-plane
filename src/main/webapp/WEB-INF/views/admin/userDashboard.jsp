@@ -1,3 +1,4 @@
+<!-- 작성자: 김동현 -->
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -5,7 +6,6 @@
 <link rel="stylesheet" href="/css/admin/dashboard.css"/>
 
 <div class="row mb-4">
-    <!-- 전체 -->
     <div class="col-md-4">
         <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
             <div class="d-flex align-items-center">
@@ -15,8 +15,6 @@
             <h2 id="totalCountries" class="fw-bold my-2"><fmt:formatNumber value="${stats.totalUsers != null ? stats.totalUsers : 0}" /></h2>
         </div>
     </div>
-
-    <!-- 안전 -->
     <div class="col-md-4">
         <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
             <div class="d-flex align-items-center">
@@ -27,7 +25,6 @@
         </div>
     </div>
 
-    <!-- 여행 주의 대상 -->
     <div class="col-md-4">
         <div class="card shadow-sm p-3 d-flex flex-column justify-content-between">
             <div class="d-flex align-items-center">
@@ -39,10 +36,7 @@
     </div>
 
 </div>
-
-<!-- 세부 통계 차트 섹션 -->
 <div class="content row">
-    <!-- 성별 분포 파이차트 -->
     <div class="col-md-6">
         <div class="chart-box equal-height">
             <h7>성별 분포</h7>
@@ -50,7 +44,6 @@
         </div>
     </div>
 
-    <!-- 연령대별 분포 -->
     <div class="col-md-6">
         <div class="chart-box equal-height">
             <h7>연령대별 분포</h7>
@@ -60,15 +53,12 @@
 </div>
 
 <div class="content row">
-    <!-- 등급별 분포 -->
     <div class="col-md-6">
         <div class="chart-box">
             <h7>회원 등급별 분포</h7>
             <canvas id="gradeBarChart"></canvas>
         </div>
     </div>
-
-    <!-- 건강 정보 분포 -->
     <div class="col-md-6">
         <div class="chart-box">
             <h7>건강 정보 보유 현황</h7>
@@ -78,7 +68,6 @@
 </div>
 
 <div class="content row">
-    <!-- 월별 가입 추이 -->
     <div class="col-12">
         <div class="chart-box">
             <h7>월별 가입 추이</h7>
@@ -512,7 +501,6 @@
         font-weight: 700;
     }
 
-    /* 로딩 상태 */
     .chart-loading {
         display: flex;
         justify-content: center;
@@ -521,7 +509,6 @@
         color: var(--gray-500);
     }
 
-    /* 에러 상태 */
     .chart-error {
         display: flex;
         justify-content: center;
@@ -536,7 +523,6 @@
         margin-bottom: 0.5rem;
     }
 
-    /* 차트 애니메이션 */
     .chart-box canvas {
         opacity: 0;
         animation: fadeIn 0.6s ease-in-out forwards;

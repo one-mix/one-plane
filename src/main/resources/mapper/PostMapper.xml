@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 작성자: 김동현 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oneplane.post.mapper.PostMapper">
 
-    <!-- 게시글 결과 매핑 -->
     <resultMap id="PostResultMap" type="com.oneplane.post.domain.Post">
         <id property="postId" column="post_id"/>
         <result property="userId" column="user_id"/>
@@ -12,7 +12,7 @@
         <result property="content" column="content"/>
         <result property="thumbnailImage" column="thumbnail_image"/>
         <result property="category" column="category" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
-        <result property="countryId" column="country"/>
+        <result property="countryId" column="country_id"/>
         <result property="countryName" column="country_name"/>
         <result property="viewCount" column="view_count"/>
         <result property="likeCount" column="like_count"/>
@@ -21,7 +21,6 @@
         <result property="updatedAt" column="updated_at"/>
         <result property="deletedAt" column="deleted_at"/>
 
-        <!-- 작성자 정보 매핑 -->
         <association property="user" javaType="com.oneplane.user.domain.User">
             <id property="user_id" column="user_user_id"/>
             <result property="email" column="user_email"/>
@@ -60,7 +59,7 @@
 
             FROM posts p
             LEFT JOIN users u ON p.user_id = u.user_id
-            LEFT JOIN country c ON p.country = c.country_id
+            LEFT JOIN country c ON p.country_id = c.country_id
             WHERE p.deleted_at IS NULL
     ]]>
 
@@ -144,7 +143,7 @@
 
         FROM posts p
                  LEFT JOIN users u ON p.user_id = u.user_id
-                 LEFT JOIN country c ON p.country = c.country_id
+                 LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.deleted_at IS NULL
         ORDER BY p.created_at DESC, p.post_id DESC
     </select>
@@ -154,7 +153,7 @@
         SELECT COUNT(*)
         FROM posts p
         LEFT JOIN users u ON p.user_id = u.user_id
-        LEFT JOIN country c ON p.country = c.country_id
+        LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.deleted_at IS NULL
 
         <!-- 카테고리 필터 -->
@@ -226,7 +225,7 @@
 
                                                          FROM posts p
                                                                   LEFT JOIN users u ON p.user_id = u.user_id
-                                                                  LEFT JOIN country c ON p.country = c.country_id
+                                                                  LEFT JOIN country c ON p.country_id = c.country_id
                                                          WHERE p.deleted_at IS NULL
                                                            AND p.category = #{category}
                                                          ORDER BY p.created_at DESC, p.post_id DESC
@@ -284,7 +283,7 @@
 
         FROM posts p
                  LEFT JOIN users u ON p.user_id = u.user_id
-                 LEFT JOIN country c ON p.country = c.country_id
+                 LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.post_id = #{postId}
     </select>
 
@@ -346,7 +345,7 @@
 
                           FROM posts p
                                    LEFT JOIN users u ON p.user_id = u.user_id
-                                   LEFT JOIN country c ON p.country = c.country_id
+                                   LEFT JOIN country c ON p.country_id = c.country_id
                           WHERE p.deleted_at IS NULL
                           ORDER BY p.created_at DESC, p.post_id DESC
                       )
@@ -405,7 +404,7 @@
 
                  FROM posts p
                           LEFT JOIN users u ON p.user_id = u.user_id
-                          LEFT JOIN country c ON p.country = c.country_id
+                          LEFT JOIN country c ON p.country_id = c.country_id
                  WHERE p.deleted_at IS NULL
                    AND p.created_at >= SYSDATE - 30  -- 최근 30일 내 게시글만
                  ORDER BY
@@ -468,7 +467,7 @@
 
                  FROM posts p
                           LEFT JOIN users u ON p.user_id = u.user_id
-                          LEFT JOIN country c ON p.country = c.country_id
+                          LEFT JOIN country c ON p.country_id = c.country_id
                  WHERE p.deleted_at IS NULL
                    AND p.category = 'REVIEW'
                    AND p.created_at >= SYSDATE - 30  -- 최근 30일 내 게시글만
@@ -534,7 +533,7 @@
 
             FROM posts p
             LEFT JOIN users u ON p.user_id = u.user_id
-            LEFT JOIN country c ON p.country = c.country_id
+            LEFT JOIN country c ON p.country_id = c.country_id
             WHERE p.deleted_at IS NULL
     ]]>
 
@@ -584,7 +583,7 @@
         SELECT COUNT(*)
         FROM posts p
         LEFT JOIN users u ON p.user_id = u.user_id
-        LEFT JOIN country c ON p.country = c.country_id
+        LEFT JOIN country c ON p.country_id = c.country_id
         WHERE p.deleted_at IS NULL
 
         <!-- 기간 필터 -->
@@ -700,7 +699,7 @@
 
                           FROM posts p
                                    LEFT JOIN users u ON p.user_id = u.user_id
-                                   LEFT JOIN country c ON p.country = c.country_id
+                                   LEFT JOIN country c ON p.country_id = c.country_id
                           WHERE p.deleted_at IS NULL
                           ORDER BY
                               (NVL(p.view_count, 0) * 2 + NVL(p.like_count, 0) * 3 + NVL(p.comment_count, 0) * 1) DESC,

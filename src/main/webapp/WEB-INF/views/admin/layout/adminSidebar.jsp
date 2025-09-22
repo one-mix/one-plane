@@ -1,3 +1,4 @@
+<!-- 작성자: 김동현 -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -49,9 +50,6 @@
       <div class="nav-submenu">
         <a href="/admin/countries" class="${activeMenu eq 'countries' ? 'active' : ''}">
           전체국가
-        </a>
-        <a href="/admin/countries/risk" class="${activeMenu eq 'country-risk' ? 'active' : ''}">
-          위험도 국가
         </a>
       </div>
     </div>

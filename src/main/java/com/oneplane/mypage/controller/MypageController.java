@@ -1,10 +1,11 @@
+//작성자:방대혁,허겸
 package com.oneplane.myPage.controller;
 
 import com.oneplane.myPage.dto.CertificationTimelineDto;
 import com.oneplane.myPage.service.CertificationService;
 import com.oneplane.myPage.service.TravelHistoryService;
 import com.oneplane.recommend.dto.RecommendResultDTO;
-import com.oneplane.recommend.repository.RecommendRepository;
+import com.oneplane.recommend.Dao.RecommendDao;
 import com.oneplane.recommend.service.RecommendService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,6 @@ import java.util.stream.Collectors;
  * 사용자의 여행 통계, 타임라인, 추천 여행지 등 종합적인 정보를 제공
  *
  * 작성자: 허겸
- * 버전: 1.0
- * 작성일: 2025
  */
 @Controller
 @RequestMapping("/mypage/dashboard")
@@ -43,7 +42,7 @@ public class MyPageController extends BaseController {
     private RecommendService recommendService;
 
     @Autowired
-    private RecommendRepository recommendRepository;
+    private RecommendDao recommendDao;
 
     /**
      * 마이페이지 대시보드 메인 화면
@@ -183,6 +182,7 @@ public class MyPageController extends BaseController {
      * @param session HTTP 세션 (사용자 인증)
      * @param model 뷰 데이터 모델
      * @return 추천 이력 페이지 또는 로그인 리다이렉트
+     * 작성자:방대혁
      */
     @GetMapping("/recommend")
     public String getRecommendationHistory(

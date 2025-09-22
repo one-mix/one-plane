@@ -3,9 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!-- 작성자: 오수경 (방대혁 작성 메서드는 별도 표기)
+     AlertLevelDao와 매핑되는 Mapper
+     국가별 여행경보 조회·수정 및 Country 조인 정보 포함
+-->
 <mapper namespace="com.oneplane.alert.dao.AlertLevelDao">
 
-    <!-- AlertLevel + Country 조인 -->
+    <!-- AlertLevel + Country 조인 전체 조회
+         작성자: 오수경 -->
     <select id="selectAllAlerts" resultMap="AlertWithCountryMap">
         SELECT
         a.alert_id,
@@ -21,12 +26,12 @@
         JOIN country c ON a.country_id = c.country_id
     </select>
 
-    <!-- resultMap 정의 -->
+    <!-- resultMap: AlertLevel + Country 매핑
+         작성자: 오수경 -->
     <resultMap id="AlertWithCountryMap" type="com.oneplane.alert.domain.AlertLevel">
         <id property="alertId" column="alert_id"/>
         <result property="countryId" column="country_id"/>
         <result property="levelValue" column="level_value"/>
-
         <association property="country" javaType="com.oneplane.country.domain.Country">
             <id property="countryId" column="c_id"/>
             <result property="countryName" column="c_name"/>
@@ -37,43 +42,50 @@
         </association>
     </resultMap>
 
-    <!-- iso_code로 countryId 조회 -->
+    <!-- iso_code로 countryId 조회
+         작성자: 오수경 -->
     <select id="findCountryIdByIsoCode" resultType="java.lang.Long" parameterType="java.lang.String">
         SELECT country_id
         FROM country
         WHERE iso_code = #{isoCode}
     </select>
 
-    <!-- update -->
+    <!-- 국가경보 업데이트
+         작성자: 방대혁 -->
     <update id="updateAlertLevel" parameterType="com.oneplane.alert.dto.AlertLevelDTO">
         UPDATE alert_level
         SET level_value = #{levelValue}
         WHERE country_id = #{countryId}
     </update>
 
-    <!-- country_id 존재 여부 -->
+    <!-- country_id 존재 여부 확인
+         작성자: 방대혁 -->
     <select id="existsByCountryId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT COUNT(*)
         FROM alert_level
         WHERE country_id = #{countryId}
     </select>
 
-    <!-- insert -->
+    <!-- 국가경보 신규 입력
+         작성자: 방대혁 -->
     <insert id="insertAlertLevel" parameterType="com.oneplane.alert.dto.AlertLevelDTO">
         INSERT INTO alert_level (country_id, level_value)
         VALUES (#{countryId}, #{levelValue})
     </insert>
 
-    <!-- iso_code를 기준으로 alert_level 조회 -->
+    <!-- iso_code 기준 여행경보 조회
+         작성자: 방대혁 -->
     <select id="findByIsoCode" resultType="com.oneplane.alert.dto.AlertLevelDTO" parameterType="java.lang.String">
         SELECT
-            al.country_id AS countryId,
-            al.level_value AS levelValue
+        al.country_id AS countryId,
+        al.level_value AS levelValue
         FROM alert_level al
-                 INNER JOIN country c ON al.country_id = c.country_id
+        INNER JOIN country c ON al.country_id = c.country_id
         WHERE c.iso_code = #{isoCode}
     </select>
 
+    <!-- 관리자 페이지에서 국가별 여행경보 수정
+         작성자: 방대혁 -->
     <update id="updateCountryLevelAdmin" parameterType="com.oneplane.alert.dto.CountryAlertDTO">
         UPDATE alert_level
         SET level_value = #{levelValue}

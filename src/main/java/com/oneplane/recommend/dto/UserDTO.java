@@ -1,3 +1,4 @@
+//작성자:방대혁
 package com.oneplane.recommend.dto;
 
 import lombok.AllArgsConstructor;
@@ -6,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -49,11 +51,11 @@ public class UserDTO {
     private String profileImg;
 
     /** 삭제 시각 (soft delete) */
-    private LocalDateTime deletedAt;
+    private Date deletedAt;
 
     /** 생성 시각 */
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     /** 수정 시각 */
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 }

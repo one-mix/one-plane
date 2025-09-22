@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.admin.service;
 
 import com.oneplane.post.dao.CommentDao;
@@ -23,9 +24,9 @@ public class PostStatsService {
     private final CommentDao commentDao;
     private final PostLikeDao postLikeDao;
 
-
     /**
      * 게시물 통계 대시보드용 기본 통계 데이터 조회
+     * 작성자 : 김동현
      */
     public Map<String, Object> getBasicStats() {
         log.info("게시물 기본 통계 데이터 조회 시작");
@@ -50,6 +51,7 @@ public class PostStatsService {
 
     /**
      * 카테고리별 게시글 분포 통계
+     * 작성자 : 김동현
      */
     public List<Map<String, Object>> getCategoryStats() {
         log.info("카테고리별 게시글 분포 통계 조회");
@@ -73,6 +75,7 @@ public class PostStatsService {
 
     /**
      * 월별 게시글 작성 추이 (최근 6개월)
+     * 작성자 : 김동현
      */
     public List<Map<String, Object>> getMonthlyPostTrend() {
         log.info("월별 게시글 작성 추이 조회");
@@ -87,6 +90,7 @@ public class PostStatsService {
 
     /**
      * 인기 게시글 TOP 10
+     * 작성자 : 김동현
      */
     public List<Post> getTop10PopularPosts() {
         log.info("인기 게시글 TOP 10 조회");
@@ -107,6 +111,7 @@ public class PostStatsService {
 
     /**
      * 최근 7일간 활동 현황 (게시글 + 댓글)
+     * 작성자 : 김동현
      */
     public Map<String, Object> getDailyActivityStats() {
         log.info("최근 7일간 활동 현황 조회");
@@ -130,6 +135,7 @@ public class PostStatsService {
 
     /**
      * 전체 통계 데이터 조회 (대시보드용)
+     * 작성자 : 김동현
      */
     public Map<String, Object> getAllStats() {
         log.info("전체 게시물 통계 데이터 조회");
@@ -163,6 +169,7 @@ public class PostStatsService {
 
     /**
      * 카테고리 코드를 한글 표시명으로 변환
+     * 작성자 : 김동현
      */
     private String getCategoryDisplayName(String category) {
         if (category == null) return "기타";
@@ -183,6 +190,7 @@ public class PostStatsService {
 
     /**
      * 게시글 표시용 데이터 후처리
+     * 작성자 : 김동현
      */
     private void processPostForDisplay(Post post) {
         // 제목이 너무 길면 줄임
@@ -195,9 +203,8 @@ public class PostStatsService {
         if (post.getLikeCount() == null) post.setLikeCount(0);
         if (post.getCommentCount() == null) post.setCommentCount(0);
 
-        // 카테고리 한글명 설정 (필요한 경우)
+        // 카테고리 한글명 설정
         if (post.getCategory() != null) {
-            // Category enum의 displayName이 있다면 사용, 없다면 위의 메서드 사용
         }
     }
 }

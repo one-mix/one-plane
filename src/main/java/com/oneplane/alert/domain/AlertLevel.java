@@ -1,3 +1,4 @@
+// 공동 작성자: 방대혁, 오수경
 package com.oneplane.alert.domain;
 
 import lombok.Data;
@@ -16,7 +17,7 @@ public class AlertLevel {
     /** 국가 ID (FK: Country.countryId) */
     private Long countryId;
 
-    /** 여행경보 단계 값 (예: 1단계, 2단계, ... 혹은 LOW/MEDIUM/HIGH) */
+    /** 여행경보 단계 값 */
     private String levelValue;
 
     // 조인 시 Country 객체까지 가져올 수 있도록

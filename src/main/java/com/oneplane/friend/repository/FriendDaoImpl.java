@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.friend.repository;
 
 import com.oneplane.friend.dao.FriendDao;
@@ -19,14 +20,20 @@ public class FriendDaoImpl implements FriendDao {
     private SqlSession sqlSession;
     private final String namespace = "com.oneplane.friend.mapper.FriendMapper.";
 
-    // 팔로우 하기
+    /**
+     * 팔로우 하기
+     * 작성자 : 김동현
+     */
     @Override
     public int insertFriend(Friend friend) {
         log.debug("팔로우 관계 생성: {} -> {}", friend.getFollowerId(), friend.getFollowingId());
         return sqlSession.insert(namespace + "insertFriend", friend);
     }
 
-    // 팔로우 삭제
+    /**
+     * 팔로우 삭제
+     * 작성자 : 김동현
+     */
     @Override
     public int deleteFriend(Integer followerId, Integer followingId) {
         log.debug("팔로우 관계 삭제: {} -> {}", followerId, followingId);
@@ -36,7 +43,10 @@ public class FriendDaoImpl implements FriendDao {
         return sqlSession.delete(namespace + "deleteFriend", params);
     }
 
-    // 팔로우 상태 확인
+    /**
+     * 팔로우 상태 확인
+     * 작성자 : 김동현
+     */
     @Override
     public boolean isFollowing(Integer followerId, Integer followingId) {
         log.debug("팔로우 상태 확인: {} -> {}", followerId, followingId);
@@ -47,7 +57,10 @@ public class FriendDaoImpl implements FriendDao {
         return count != null && count > 0;
     }
 
-    // 내가 팔로우한 사람들 목록 (페이징)
+    /**
+     * 내가 팔로우한 사람들 목록 (페이징)
+     * 작성자 : 김동현
+     */
     @Override
     public List<Friend> findFollowingList(Integer userId, int offset, int limit) {
         log.debug("팔로잉 목록 조회: userId={}, offset={}, limit={}", userId, offset, limit);
@@ -58,7 +71,10 @@ public class FriendDaoImpl implements FriendDao {
         return sqlSession.selectList(namespace + "findFollowingList", params);
     }
 
-    // 내가 팔로우한 사람들 목록 (페이징)
+    /**
+     * 나를 팔로우한 사람들 목록 (페이징)
+     * 작성자 : 김동현
+     */
     @Override
     public List<Friend> findFollowerList(Integer userId, int offset, int limit) {
         log.debug("팔로워 목록 조회: userId={}, offset={}, limit={}", userId, offset, limit);
@@ -69,19 +85,30 @@ public class FriendDaoImpl implements FriendDao {
         return sqlSession.selectList(namespace + "findFollowerList", params);
     }
 
-    // 내가 팔로우한 사람 수
+    /**
+     * 내가 팔로우한 사람 수
+     * 작성자 : 김동현
+     */
     @Override
     public int countFollowing(Integer userId) {
         log.debug("팔로잉 수 조회: {}", userId);
         return sqlSession.selectOne(namespace + "countFollowing", userId);
     }
-    // 나를 팔로우한 사람 수
+
+    /**
+     * 나를 팔로우한 사람 수
+     * 작성자 : 김동현
+     */
     @Override
     public int countFollower(Integer userId) {
         log.debug("팔로워 수 조회: {}", userId);
         return sqlSession.selectOne(namespace + "countFollower", userId);
     }
-    // 닉네임으로 사용자 검색 (친구 기능용)
+
+    /**
+     * 닉네임으로 사용자 검색 (친구 기능용)
+     * 작성자 : 김동현
+     */
     @Override
     public List<Friend> searchUsersByNickname(String nickname, Integer currentUserId, int offset, int limit) {
         log.debug("사용자 검색: nickname={}, currentUserId={}", nickname, currentUserId);
@@ -92,7 +119,11 @@ public class FriendDaoImpl implements FriendDao {
         params.put("limit", limit);
         return sqlSession.selectList(namespace + "searchUsersByNickname", params);
     }
-    // 닉네임 검색 결과 총 개수
+
+    /**
+     * 닉네임 검색 결과 총 개수
+     * 작성자 : 김동현
+     */
     @Override
     public int countSearchResults(String nickname, Integer currentUserId) {
         log.debug("검색 결과 수 조회: nickname={}, currentUserId={}", nickname, currentUserId);

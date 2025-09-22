@@ -3,15 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oneplane.recommend.repository.RecommendRepository">
+<mapper namespace="com.oneplane.recommend.Dao.RecommendDao">
 
     <!-- 동의 저장 -->
+    <!-- 작성자:방대혁 -->
     <insert id="insertAgreement" parameterType="int">
         INSERT INTO recommend (user_id, agreement, created_at)
         VALUES (#{userId}, 'Y', SYSDATE)
     </insert>
 
     <!-- 최신 recommend_id 정보 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="getLatestRecommend" parameterType="int" resultType="com.oneplane.recommend.dto.RecommendDTO">
         SELECT recommend_id,
                user_id,
@@ -25,12 +27,14 @@
     </select>
 
     <!-- 여행 목적 + 동행자 업데이트 -->
+    <!-- 작성자:방대혁 -->
     <insert id="insertInput" parameterType="com.oneplane.recommend.dto.RecommendDTO">
         INSERT INTO recommend (user_id, agreement, travel_purpose, companion, created_at)
         VALUES (#{userId}, 'Y', #{travelPurpose}, #{companion}, SYSDATE)
     </insert>
 
     <!-- country, city 업데이트 -->
+    <!-- 작성자:방대혁 -->
     <update id="updateCountryAndCity">
         UPDATE recommend
         SET country_id = #{countryId},
@@ -39,6 +43,7 @@
     </update>
 
     <!-- 피드백 업데이트 -->
+    <!-- 작성자:방대혁 -->
     <update id="updateFeedback">
         UPDATE recommend
         SET recommend_rating = #{recommendRating},
@@ -47,6 +52,7 @@
     </update>
 
     <!-- 추천 이력 조회 쿼리 (Oracle 페이징 처리) -->
+    <!-- 작성자:방대혁 -->
     <select id="findRecommendHistoryByUserId" resultType="com.oneplane.recommend.dto.RecommendResultDTO">
         SELECT *
         FROM (
@@ -79,6 +85,7 @@
     </select>
 
     <!-- 추천 이력 데이터의 총 개수 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="getTotalRecommendHistoryCount" resultType="int">
         SELECT COUNT(*)
         FROM recommend
@@ -93,6 +100,8 @@
           AND deleted_at IS NULL
     </select>
 
+    <!-- 사용자 추천 이력 전체 개수 조회 -->
+    <!-- 작성자:방대혁 -->
     <select id="getTopRecommendCountries" resultType="com.oneplane.travelHistory.dto.TopCountryStatsDTO">
         SELECT c.country_name AS countryName,
                COUNT(r.recommend_id) AS count
@@ -112,6 +121,8 @@
         AND user_id = #{userId}
     </update>
 
+    <!-- 추천 Soft Delete (마이페이지 전용) -->
+    <!-- 작성자:방대혁 -->
     <update id="softDeleteRecommendMyPage" parameterType="java.lang.Long">
         UPDATE RECOMMEND
         SET DELETED_AT = SYSDATE

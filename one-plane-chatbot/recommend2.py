@@ -1,3 +1,4 @@
+# 작성자: 방대혁
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -28,11 +29,11 @@ pop_ctx = pos.groupby(["country_iso3","purpose","companion"]).size().rename("pop
 u_purpose = hist.groupby(["user_id","purpose"]).size().rename("u_purpose")
 u_ctx = hist.groupby(["user_id","purpose","companion"]).size().rename("u_ctx")
 
-# ✅ 3) 사용자 긍정 경험 (새로 추가)
+# 3) 사용자 긍정 경험
 u_purpose_pos = pos.groupby(["user_id","purpose"]).size().rename("u_purpose_pos")
 u_ctx_pos     = pos.groupby(["user_id","purpose","companion"]).size().rename("u_ctx_pos")
 
-# ✅ 긍정률 (전체 대비)
+# 긍정률 (전체 대비)
 u_purpose_all = hist.groupby(["user_id","purpose"]).size().rename("u_purpose_all")
 u_ctx_all     = hist.groupby(["user_id","purpose","companion"]).size().rename("u_ctx_all")
 
@@ -66,8 +67,8 @@ feat["pop_country_log"]   = np.log1p(feat["pop_country"])
 feat["pop_ctx_log"]       = np.log1p(feat["pop_ctx"])
 feat["u_purpose_log"]     = np.log1p(feat["u_purpose"])
 feat["u_ctx_log"]         = np.log1p(feat["u_ctx"])
-feat["u_purpose_pos_log"] = np.log1p(feat["u_purpose_pos"])   # ✅ 추가
-feat["u_ctx_pos_log"]     = np.log1p(feat["u_ctx_pos"])       # ✅ 추가
+feat["u_purpose_pos_log"] = np.log1p(feat["u_purpose_pos"])
+feat["u_ctx_pos_log"]     = np.log1p(feat["u_ctx_pos"])
 
 # --- 피처 목록 ---
 cat_cols, num_cols = [], []
@@ -158,7 +159,7 @@ def recommend_for_user(user_id:int, purpose:str, companion:str, topk:int=10, exc
     cnt_up = hist[(hist["user_id"]==user_id) & (hist["purpose"]==purpose)].shape[0]
     cnt_uc = hist[(hist["user_id"]==user_id) & (hist["purpose"]==purpose) & (hist["companion"]==companion)].shape[0]
 
-    # ✅ 개인 긍정 경험
+    # 개인 긍정 경험
     cnt_up_pos = hist[(hist["user_id"]==user_id) & (hist["purpose"]==purpose) & (hist["rating"]>=4)].shape[0]
     cnt_uc_pos = hist[(hist["user_id"]==user_id) & (hist["purpose"]==purpose) & (hist["companion"]==companion) & (hist["rating"]>=4)].shape[0]
 
@@ -167,10 +168,10 @@ def recommend_for_user(user_id:int, purpose:str, companion:str, topk:int=10, exc
 
     cc["u_purpose_log"]     = np.log1p(cnt_up)
     cc["u_ctx_log"]         = np.log1p(cnt_uc)
-    cc["u_purpose_pos_log"] = np.log1p(cnt_up_pos)  # ✅ 추가
-    cc["u_ctx_pos_log"]     = np.log1p(cnt_uc_pos)  # ✅ 추가
-    cc["u_purpose_ratio"]   = ratio_up              # ✅ 추가
-    cc["u_ctx_ratio"]       = ratio_uc              # ✅ 추가
+    cc["u_purpose_pos_log"] = np.log1p(cnt_up_pos)
+    cc["u_ctx_pos_log"]     = np.log1p(cnt_uc_pos)
+    cc["u_purpose_ratio"]   = ratio_up
+    cc["u_ctx_ratio"]       = ratio_uc
 
     # 후보 중 기방문지 제거
     if exclude_visited:

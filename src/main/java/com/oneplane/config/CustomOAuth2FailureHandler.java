@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.config;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,10 @@ import java.net.URLEncoder;
 @Slf4j
 public class CustomOAuth2FailureHandler implements AuthenticationFailureHandler {
 
+    /**
+     * OAuth2 인증 실패 처리
+     * 작성자 : 김동현
+     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
@@ -28,8 +33,10 @@ public class CustomOAuth2FailureHandler implements AuthenticationFailureHandler 
         response.sendRedirect("/login?error=" + encodedMessage);
     }
 
-
-    // 예외 타입에 따른 에러 메시지 결정
+    /**
+     * 예외 타입에 따른 에러 메시지 결정
+     * 작성자 : 김동현
+     */
     private String determineErrorMessage(AuthenticationException exception) {
         if (exception instanceof OAuth2AuthenticationException) {
             OAuth2AuthenticationException oauth2Exception = (OAuth2AuthenticationException) exception;
@@ -78,6 +85,10 @@ public class CustomOAuth2FailureHandler implements AuthenticationFailureHandler 
         return "로그인에 실패했습니다. 다시 시도해 주세요.";
     }
 
+    /**
+     * 실패 상세 정보 로깅
+     * 작성자 : 김동현
+     */
     private void logFailureDetails(HttpServletRequest request, AuthenticationException exception) {
         String clientIP = getClientIP(request);
         String userAgent = request.getHeader("User-Agent");
@@ -96,6 +107,10 @@ public class CustomOAuth2FailureHandler implements AuthenticationFailureHandler 
         }
     }
 
+    /**
+     * 클라이언트 IP 주소 추출
+     * 작성자 : 김동현
+     */
     private String getClientIP(HttpServletRequest request) {
         String xForwardedFor = request.getHeader("X-Forwarded-For");
         if (xForwardedFor != null && !xForwardedFor.isEmpty()) {

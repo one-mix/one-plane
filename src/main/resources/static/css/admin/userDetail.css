@@ -1,5 +1,4 @@
-/* User Detail Page Styles */
-
+/* 작성자: 김동현 */
 .page-title {
     font-size: 1.8rem;
     font-weight: var(--font-bold);
@@ -84,7 +83,6 @@
     padding: 1.5rem;
 }
 
-/* Info Groups */
 .info-group {
     margin-bottom: 1.5rem;
 }
@@ -130,7 +128,6 @@
     color: white;
 }
 
-/* Grade Badges */
 .grade-badge {
     font-size: 0.8rem;
     padding: 0.3rem 0.8rem;
@@ -161,7 +158,6 @@
     background: linear-gradient(135deg, #8b5cf6, #7c3aed);
 }
 
-/* Role Badge */
 .role-badge {
     font-size: 0.8rem;
     padding: 0.3rem 0.8rem;
@@ -169,7 +165,6 @@
     font-weight: var(--font-semibold);
 }
 
-/* Date Display */
 .join-date {
     font-size: 1rem;
     color: var(--gray-800);
@@ -182,7 +177,6 @@
     color: var(--gray-500);
 }
 
-/* Profile Image */
 .profile-image-container {
     display: flex;
     justify-content: center;
@@ -249,7 +243,6 @@
     font-size: 0.7rem;
 }
 
-/* Management Actions */
 .management-actions {
     display: flex;
     flex-direction: column;
@@ -288,7 +281,6 @@
     transition: all 0.2s ease;
 }
 
-/* Error State */
 .error-state {
     text-align: center;
     padding: 4rem 2rem;

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.friend.controller;
 
 import com.oneplane.config.SecurityUtil;
@@ -22,7 +23,10 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    // 친구 목록 페이지
+    /**
+     * 친구 목록 페이지
+     * 작성자 : 김동현
+     */
     @GetMapping
     public String friendsPage(@RequestParam(defaultValue = "following") String tab,
                               @RequestParam(defaultValue = "1") int page,
@@ -118,7 +122,10 @@ public class FriendController {
         return "layout/layout";
     }
 
-    // 팔로우/언팔로우 처리 (AJAX)
+    /**
+     * 팔로우/언팔로우 처리 (AJAX)
+     * 작성자 : 김동현
+     */
     @PostMapping("/toggle")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> toggleFollow(@RequestParam Integer targetUserId) {
@@ -165,7 +172,10 @@ public class FriendController {
         return ResponseEntity.ok(response);
     }
 
-    // 팔로우 상태 확인 (AJAX)
+    /**
+     * 팔로우 상태 확인 (AJAX)
+     * 작성자 : 김동현
+     */
     @GetMapping("/status/{targetUserId}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getFollowStatus(@PathVariable Integer targetUserId) {
@@ -188,7 +198,10 @@ public class FriendController {
         return ResponseEntity.ok(response);
     }
 
-    // 팔로우 통계 정보 조회 (AJAX)
+    /**
+     * 팔로우 통계 정보 조회 (AJAX)
+     * 작성자 : 김동현
+     */
     @GetMapping("/stats")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getFollowStats() {
@@ -216,6 +229,7 @@ public class FriendController {
 
     /**
      * 사용자 검색 자동완성 (AJAX)
+     * 작성자 : 김동현
      */
     @GetMapping("/search/autocomplete")
     @ResponseBody

@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.domain;
 
 import com.oneplane.user.domain.User;
@@ -30,12 +31,18 @@ public class Comment {
     // 사용자 객체
     private User user;
 
-
+    /**
+     * 댓글 삭제 여부 확인
+     * 작성자 : 김동현
+     */
     public boolean isDeleted() {
         return deletedAt != null;
     }
 
-    // 작성자 표시명 반환
+    /**
+     * 작성자 표시명 반환
+     * 작성자 : 김동현
+     */
     public String getDisplayName() {
         if (nickname != null && !nickname.trim().isEmpty()) {
             return nickname;
@@ -46,7 +53,10 @@ public class Comment {
         return "익명";
     }
 
-    // 프로필 이미지 URL 반환
+    /**
+     * 프로필 이미지 URL 반환
+     * 작성자 : 김동현
+     */
     public String getProfileImageUrl() {
         if (profileImg != null && !profileImg.trim().isEmpty()) {
             return profileImg;

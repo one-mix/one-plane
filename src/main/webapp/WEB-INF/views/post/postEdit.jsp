@@ -1,19 +1,17 @@
+<!-- 작성자: 김동현 -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <link href="/css/post/postWrite.css" rel="stylesheet">
-<!-- Summernote CSS -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
 <div class="post-write-container">
     <h2 style="margin-bottom: 30px; color: var(--gray-700); font-weight: var(--font-semibold);">게시글 수정</h2>
 
     <form id="postEditForm" action="/post/edit/${post.postId}" method="post">
-        <sec:csrfInput />
         <input type="hidden" name="postId" value="${post.postId}" />
 
-        <!-- 유형 및 국가 -->
         <div class="form-row">
             <label class="form-label">유형</label>
             <select name="category" class="form-select" required>
@@ -35,21 +33,17 @@
                 </c:forEach>
             </select>
         </div>
-
-        <!-- 제목 -->
         <div class="form-row">
             <label class="form-label">제목</label>
             <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요"
                    value="${post.title}" required>
         </div>
 
-        <!-- 내용 -->
         <div class="form-row">
             <label class="form-label">내용</label>
             <textarea id="content" name="content" class="content-editor" required>${post.content}</textarea>
         </div>
 
-        <!-- 버튼 컨테이너 -->
         <div class="button-container">
             <a href="/post/detail/${post.postId}" class="btn-cancel"
                style="background: white; color: var(--gray-700); border: 1px solid var(--gray-200); padding: 12px var(--spacing-lg);
@@ -62,11 +56,8 @@
     </form>
 </div>
 
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Summernote JS -->
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js"></script>
 
@@ -115,11 +106,6 @@
                 processData: false,
                 contentType: false,
                 beforeSend: function(xhr) {
-                    // CSRF 토큰 설정
-                    const token = $('input[name="_csrf"]').val();
-                    if (token) {
-                        xhr.setRequestHeader('X-CSRF-TOKEN', token);
-                    }
                 },
                 success: function(response) {
                     if (response.success) {

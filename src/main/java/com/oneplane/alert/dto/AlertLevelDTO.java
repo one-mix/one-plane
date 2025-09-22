@@ -1,3 +1,4 @@
+// 작성자: 방대혁
 package com.oneplane.alert.dto;
 
 import lombok.Data;

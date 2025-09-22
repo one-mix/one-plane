@@ -1,3 +1,4 @@
+//작성자: 방대혁
 package com.oneplane.admin.controller;
 
 import com.oneplane.alert.dto.CountryAlertDTO;
@@ -30,18 +31,8 @@ public class AdminController {
     private final TravelHistoryService travelHistoryService;
 
     /**
-     * 관리자 메인 대시보드 페이지
-     */
-    @GetMapping("/dashboard")
-    public String adminMain(Model model) {
-        model.addAttribute("contentPage", "dashboard.jsp");
-        model.addAttribute("activeMenu", "dashboard");
-
-        return "admin/layout/adminLayout";
-    }
-
-    /**
      * 국가 리스트 조회 (경보 단계 + 검색 키워드 필터링 가능)
+     * 작성자: 방대혁
      */
     @GetMapping("/countries")
     public String countryList(
@@ -62,6 +53,7 @@ public class AdminController {
 
     /**
      * 특정 국가 상세 조회
+     * 작성자: 방대혁
      */
     @GetMapping("/countries/{id}")
     public String countryDetail(@PathVariable("id") Long countryId, Model model) {
@@ -78,6 +70,7 @@ public class AdminController {
 
     /**
      * 국가 정보 수정 (POST 요청)
+     * 작성자: 방대혁
      */
     @PostMapping("/countries/update")
     public String updateCountry(@ModelAttribute CountryAlertDTO country) {
@@ -88,6 +81,7 @@ public class AdminController {
 
     /**
      * 대시보드 내 국가별 페이지
+     * 작성자: 방대혁
      */
     @GetMapping("/dashboard/country")
     public String countryDashboard(Model model) {
@@ -99,6 +93,7 @@ public class AdminController {
 
     /**
      * 대륙별 여행 통계 (JSON 반환)
+     * 작성자: 방대혁
      */
     @GetMapping("/continent")
     public ResponseEntity<List<ContinentStatsDTO>> getContinentStats() {
@@ -107,6 +102,7 @@ public class AdminController {
 
     /**
      * 월별 여행 통계 (JSON 반환)
+     * 작성자: 방대혁
      */
     @GetMapping("/monthly")
     public ResponseEntity<List<MonthlyStatsDTO>> getMonthlyStats() {
@@ -115,6 +111,7 @@ public class AdminController {
 
     /**
      * 추천 국가 TOP 리스트 (JSON 반환)
+     * 작성자: 방대혁
      */
     @GetMapping("/top-recommend")
     public ResponseEntity<List<TopCountryStatsDTO>> getTopRecommendCountries() {
@@ -123,6 +120,7 @@ public class AdminController {
 
     /**
      * 인기 국가 TOP 리스트 (JSON 반환)
+     * 작성자: 방대혁
      */
     @GetMapping("/top-favorite")
     public ResponseEntity<List<TopCountryStatsDTO>> getTopFavoriteCountries() {
@@ -131,6 +129,7 @@ public class AdminController {
 
     /**
      * 국가 요약 통계 (JSON 반환)
+     * 작성자: 방대혁
      */
     @GetMapping("/country-summary")
     public ResponseEntity<CountrySummaryDTO> getCountrySummary() {

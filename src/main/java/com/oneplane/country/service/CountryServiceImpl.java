@@ -1,3 +1,4 @@
+// 공동 작성자: 방대혁, 오수경
 package com.oneplane.country.service;
 
 import com.oneplane.alert.dao.AlertLevelDao;
@@ -9,20 +10,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.util.*;
 
+/**
+ * CountryService 구현체
+ * 방대혁 작성 메서드 주석 유지, 그 외 메서드 작성자: 오수경
+ */
 @Slf4j
 @Service
 public class CountryServiceImpl implements CountryService {
+
     private final CountryDao countryDao;
     private final AlertLevelDao alertLevelDao;
 
-    // application-secret.yml 에 저장된 API 키 (원본 키, 인코딩 전 값)
+    /** 외부 API Key – 작성자: 오수경 */
     @Value("${api.country.key}")
     private String apiKey;
 
-    // 외부 API 호출용 WebClient (기본 baseUrl 세팅)
+    /** 외부 공공데이터 API 호출용 WebClient – 작성자: 오수경 */
     private final WebClient webClient =
             WebClient.create("https://apis.data.go.kr/1262000/CountryBasicService");
 
@@ -31,87 +36,75 @@ public class CountryServiceImpl implements CountryService {
         this.alertLevelDao = alertLevelDao;
     }
 
+    /** ID로 국가 조회 – 작성자: 오수경 */
     @Override
     public Country getCountryById(Long id) {
         return countryDao.selectCountryById(id);
     }
 
+    /** 전체 국가 조회 – 작성자: 오수경 */
     @Override
     public List<Country> getAllCountries() {
         return countryDao.selectAllCountries();
     }
 
+    /** 국가 신규 등록 – 작성자: 오수경 */
     @Override
     public int addCountry(Country country) {
         return countryDao.insertCountry(country);
     }
 
+    /** 국가 정보 수정 – 작성자: 오수경 */
     @Override
     public int updateCountry(Country country) {
         return countryDao.updateCountry(country);
     }
 
+    /** 국가 삭제 – 작성자: 오수경 */
     @Override
     public int deleteCountry(Long id) {
         return countryDao.deleteCountry(id);
     }
 
+    /** 국가명으로 단일 조회 – 작성자: 오수경 */
     @Override
     public Country getCountryByName(String name) {
         return countryDao.findByName(name);
     }
 
+    /** 국가명으로 ISO 코드 조회 – 작성자: 오수경 */
     @Override
     public String getIsoCodeByName(String name) {
         Country country = countryDao.findByName(name);
         return country != null ? country.getIsoCode() : null;
     }
 
+    /** 국가명으로 단일 조회(별칭) – 작성자: 오수경 */
     @Override
     public Country findByName(String name) {
         return countryDao.findByName(name);
     }
 
-    /**
-     * 여행경보 레벨 및 검색 키워드 조건에 따라 국가 목록 조회
-     *
-     * @param levelValue 여행경보 단계 필터
-     * @param keyword    국가명 검색 키워드
-     * @return 국가 리스트
-     */
+    /** 여행경보 조건으로 국가 목록 조회 – 작성자: 방대혁 */
     @Override
     public List<CountryAlertDTO> getCountries(String levelValue, String keyword) {
         return countryDao.findCountries(levelValue, keyword);
     }
 
-    /**
-     * 국가 ID로 특정 국가 상세 조회
-     *
-     * @param countryId 국가 ID
-     * @return 국가 정보
-     */
+    /** 관리자용 국가 상세 조회 – 작성자: 방대혁 */
     @Override
     public CountryAlertDTO getCountryByIdAdmin(Long countryId) {
         return countryDao.findCountryById(countryId);
     }
 
-    /**
-     * 국가 및 여행경보 정보 업데이트
-     * - CountryDao 와 AlertLevelDao 모두 업데이트
-     *
-     * @param country 업데이트할 국가 DTO
-     */
+    /** 국가·경보 정보 업데이트 – 작성자: 방대혁 */
     @Override
     public void updateCountry(CountryAlertDTO country) {
         countryDao.updateCountryAdmin(country);
         alertLevelDao.updateCountryLevelAdmin(country);
     }
 
-    /**
-     * 전체 국가 요약 통계 조회
-     *
-     * @return CountrySummaryDTO (총 국가 수, 안전 국가 수, 여행금지 국가 수)
-     */
+    /** 전체 국가 요약 통계 – 작성자: 방대혁 */
     @Override
     public CountrySummaryDTO getCountrySummary() {
         return countryDao.getCountrySummary();

@@ -1,4 +1,4 @@
-/* 게시글 상세페이지 스타일 */
+/* 작성자: 김동현 */
 .post-detail-container {
     /*max-width: 1200px;*/
     margin: 0 auto;
@@ -6,7 +6,6 @@
     background: var(--gray-0);
 }
 
-/* 게시글 헤더 */
 .post-header {
     margin-bottom: var(--spacing-lg);
     padding-bottom: var(--spacing-lg);
@@ -72,21 +71,17 @@
     word-break: keep-all;
 }
 
-/* 제목과 삭제 버튼을 한 줄에 */
 .post-title-bar {
     display: flex;
     align-items: center;
-    /* 필요하면 간격 조절 */
     gap: var(--spacing-sm);
     margin-bottom: var(--spacing-md);
 }
 
-/* 이 줄에서만 제목의 아래 여백 제거하고 줄바꿈 최소화 */
 .post-title-bar .post-title {
     margin: 0;
 }
 
-/* 작성자 정보 */
 .author-info {
     display: flex;
     justify-content: space-between;
@@ -127,7 +122,6 @@
     font-weight: var(--font-bold);
 }
 
-/* 게시글 통계 */
 .post-stats {
     display: flex;
     align-items: center;
@@ -151,7 +145,6 @@
     color: var(--gray-700);
 }
 
-/* 게시글 내용 */
 .post-content {
     margin-bottom: var(--spacing-lg);
 }
@@ -169,7 +162,6 @@
 }
 
 .post-body {
-
     font-size: 15px;
     line-height: 1.7;
     color: var(--gray-800);
@@ -198,7 +190,6 @@
 
 }
 
-/* 액션 버튼들 */
 .post-actions {
     display: flex;
     align-items: center;
@@ -290,7 +281,6 @@
     color: var(--semantic-error);
 }
 
-/* 댓글 섹션 */
 .comments-section {
     margin-bottom: var(--spacing-lg);
 }
@@ -311,7 +301,6 @@
     color: var(--main-600);
 }
 
-/* 댓글 작성 폼 */
 .comment-form {
     margin-bottom: var(--spacing-lg);
     padding: var(--spacing-lg);
@@ -404,7 +393,6 @@
     text-decoration: underline;
 }
 
-/* 댓글 목록 */
 .comments-list {
     margin-bottom: var(--spacing-lg);
 }
@@ -470,7 +458,6 @@
     color: var(--semantic-error);
 }
 
-/* 댓글 페이지네이션 */
 .comments-pagination {
     text-align: center;
     margin-top: var(--spacing-lg);
@@ -494,7 +481,6 @@
     transform: translateY(-1px);
 }
 
-/* 네비게이션 */
 .post-navigation {
     margin-top: var(--spacing-lg);
     text-align: center;
@@ -523,7 +509,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* 로딩 상태 */
 .loading {
     display: flex;
     align-items: center;
@@ -550,7 +535,6 @@
     }
 }
 
-/* 에러 상태 */
 .error-message {
     padding: var(--spacing-md);
     background: rgba(255, 77, 79, 0.1);
@@ -562,7 +546,6 @@
     text-align: center;
 }
 
-/* 빈 상태 */
 .empty-state {
     text-align: center;
     padding: var(--spacing-lg);
@@ -576,7 +559,6 @@
     opacity: 0.5;
 }
 
-/* 애니메이션 */
 .fade-in {
     animation: fadeIn 0.3s ease-in-out;
 }
@@ -592,7 +574,6 @@
     }
 }
 
-/* 포커스 스타일 개선 */
 button:focus,
 a:focus,
 input:focus,

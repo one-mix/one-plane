@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.user.repository;
 
 import com.oneplane.user.dao.UserDao;
@@ -15,36 +16,60 @@ public class UserDaoImpl implements UserDao {
     private SqlSession sqlSession;
     private final String namespace = "com.oneplane.user.mapper.UserMapper.";
 
+    /**
+     * 이메일로 사용자 조회
+     * 작성자 : 김동현
+     */
     @Override
     public User findByEmail(String email) {
         log.debug("이메일로 사용자 조회: {}", email);
         return sqlSession.selectOne(namespace + "findByEmail", email);
     }
 
+    /**
+     * ID로 사용자 조회
+     * 작성자 : 김동현
+     */
     @Override
     public User findById(Integer userId) {
         log.debug("ID로 사용자 조회: {}", userId);
         return sqlSession.selectOne(namespace + "findById", userId);
     }
 
+    /**
+     * 새 사용자 생성
+     * 작성자 : 김동현
+     */
     @Override
     public int insertUser(User user) {
         log.debug("새 사용자 생성: {}", user.getEmail());
         return sqlSession.insert(namespace+"insertUser", user);
     }
 
+    /**
+     * 사용자 정보 업데이트
+     * 작성자 : 김동현
+     */
     @Override
     public int updateUser(User user) {
         log.debug("사용자 정보 업데이트: {}", user.getEmail());
         return sqlSession.update(namespace + "updateUser", user);
     }
 
+    /**
+     * 사용자 논리 삭제
+     * 작성자 : 김동현
+     */
     @Override
     public int deleteUser(Integer userId) {
         log.debug("사용자 논리 삭제: {}", userId);
         return sqlSession.update(namespace + "deleteUser", userId);
     }
 
+    /**
+     * 닉네임 중복 확인
+     * 작성자 : 김동현
+     */
     @Override
     public boolean existsByNickname(String nickname) {
         log.debug("닉네임 중복 확인: {}", nickname);

@@ -1,3 +1,5 @@
+// 작성자: 방대혁
+
 document.addEventListener("DOMContentLoaded", function() {
     const consentCheck = document.getElementById("consentCheck");
     const startBtn = document.getElementById("startBtn");

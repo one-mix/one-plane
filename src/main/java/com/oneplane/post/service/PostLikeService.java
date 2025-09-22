@@ -1,3 +1,4 @@
+// 작성자: 김동현
 package com.oneplane.post.service;
 
 import com.oneplane.post.dao.PostDao;
@@ -23,6 +24,7 @@ public class PostLikeService {
 
     /**
      * 좋아요 토글 (좋아요/취소)
+     * 작성자 : 김동현
      */
     public boolean togglePostLike(Integer userId, Integer postId) {
         log.info("좋아요 토글 요청 - userId: {}, postId: {}", userId, postId);
@@ -70,6 +72,7 @@ public class PostLikeService {
 
     /**
      * 특정 사용자가 특정 게시글에 좋아요를 눌렀는지 확인
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public boolean isPostLikedByUser(Integer userId, Integer postId) {
@@ -81,6 +84,7 @@ public class PostLikeService {
 
     /**
      * 게시글의 총 좋아요 수 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getPostLikeCount(Integer postId) {
@@ -89,6 +93,7 @@ public class PostLikeService {
 
     /**
      * 게시글의 좋아요 목록 조회 (최근 순)
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<PostLike> getPostLikes(Integer postId, int limit) {
@@ -97,6 +102,7 @@ public class PostLikeService {
 
     /**
      * 사용자가 좋아요한 게시글 목록 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public List<PostLike> getUserLikedPosts(Integer userId, int page, int size) {
@@ -106,6 +112,7 @@ public class PostLikeService {
 
     /**
      * 사용자가 좋아요한 게시글 수 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public int getUserLikedPostCount(Integer userId) {
@@ -114,6 +121,7 @@ public class PostLikeService {
 
     /**
      * 게시글별 좋아요 상태 및 수 정보 조회
+     * 작성자 : 김동현
      */
     @Transactional(readOnly = true)
     public PostLikeInfo getPostLikeInfo(Integer postId, Integer userId) {

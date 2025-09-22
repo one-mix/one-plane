@@ -1,10 +1,10 @@
+// 작성자: 김동현
 package com.oneplane.user.controller;
 
 import com.oneplane.config.SecurityUtil;
 import com.oneplane.user.dto.ProfileCompleteRequestDto;
 import com.oneplane.user.service.CustomOAuth2UserService;
 import com.oneplane.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +26,10 @@ public class UserController {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final UserService userService;
 
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        return "redirect:/";
-    }
-
-    // 프로필 완성 페이지 (카카오 로그인 후)
+    /**
+     * 프로필 완성 페이지 (카카오 로그인 후)
+     * 작성자 : 김동현
+     */
     @GetMapping("/profile/complete")
     public String profileCompletePage(Model model, HttpSession session) {
         // 인증된 사용자인지 확인
@@ -56,6 +50,10 @@ public class UserController {
         return "user/profileComplete";
     }
 
+    /**
+     * 프로필 업데이트
+     * 작성자 : 김동현
+     */
     @PostMapping("/profile/complete")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> completeProfile(
@@ -120,6 +118,10 @@ public class UserController {
         }
     }
 
+    /**
+     * 세션 업데이트
+     * 작성자 : 김동현
+     */
     private void updateSessionAfterProfileComplete(HttpSession session, ProfileCompleteRequestDto profileRequest) {
         session.setAttribute("userName", profileRequest.getName());
         session.setAttribute("userNickname", profileRequest.getNickname());
@@ -139,6 +141,10 @@ public class UserController {
         log.debug("세션 업데이트 완료 - 건강정보: {}, 여행주의: {}", hasHealthInfo, needsTravelCaution);
     }
 
+    /**
+     * 닉네임 중복 확인
+     * 작성자 : 김동현
+     */
     @GetMapping("/check-nickname")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> checkNickname(
