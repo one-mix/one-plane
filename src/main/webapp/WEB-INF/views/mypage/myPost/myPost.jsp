@@ -23,7 +23,7 @@
 </style>
 
 
-<link href="/css/postList.css" rel="stylesheet">
+<link href="/css/post/postList.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/mypage/mypageContent.css" />
 
 

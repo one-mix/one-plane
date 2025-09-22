@@ -6,19 +6,29 @@
 <style>
     /* 부모 컨테이너 */
     .container {
-        width: 1000px;
+        width: 1200px;
         margin: 0 auto;
         padding: 0;
     }
 
-    /* 2. 자식 .page-wrapper */
+    /* 1. .page-wrapper에 중앙 정렬 속성 추가 */
     .page-wrapper {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        align-items: flex-start;  /* 높이를 강제로 맞추지 않고 위쪽 기준 정렬 */
         display: flex;
-        gap: 40px;  /* <-- 여기서 간격 제어 */
+        justify-content: center;   /* 가로 중앙 정렬 */
+        align-items: flex-start;   /* 세로는 상단 정렬(필요 시 center로 변경 가능) */
+        gap: 40px;
+    }
+
+    /* 2. .main-container에 너비 및 내부 여백 지정 */
+    .main-container {
+        width: 800px;              /* 원하는 고정 너비 */
+        max-width: 100%;           /* 모바일 등 좁은 화면 대응 */
+        padding: 40px;             /* 내부 여백 확대 */
+        background: #fff;          /* 배경색 (선택) */
+        border: 1px solid #ddd;    /* 테두리 (선택) */
+        border-radius: 8px;        /* 모서리 둥글게 */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        margin-top: 70px;
     }
 </style>
 
