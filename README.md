@@ -10,14 +10,14 @@ JSP와 JAVA를 활용한 여행 위험도 관리/시각화 및 AI 국가 추천 
 
 ## 🗂️ 프로젝트 구성
 
-### 로그인/회원가입 화면
-
-<img width="1246" height="1314" alt="image" src="https://github.com/user-attachments/assets/a1005b2b-0fdc-4090-8442-104f54e1aff4" />
-
 ### 지도 화면
 
 <img width="2530" height="1369" alt="image" src="https://github.com/user-attachments/assets/fa905b4d-c2f4-42e6-808f-0c0eaf530a6b" />
 <img width="2448" height="1177" alt="image" src="https://github.com/user-attachments/assets/e5827197-89b3-4ff5-b72c-76090ac82cd8" />
+
+### 로그인/회원가입 화면
+
+<img width="1246" height="1314" alt="image" src="https://github.com/user-attachments/assets/a1005b2b-0fdc-4090-8442-104f54e1aff4" />
 
 ### AI 추천 화면
 
